@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            /* 
+
+             */
+        </style>
+    </head>
+
+    <body>
+        <script>
+            //字符串方法
+            //字符串是常量,所有的字符串方法不可能改变字符串本身,单单靠方法本身无法改变字符串本身,但是可以利用赋值给变量将改变的字符串保存
+            // 所以要改变字符串本身 str = str.方法返回值;
+            var str = "0*&^123456abcdefg123456789";
+
+            console.log(str.charAt(2));  // 记住
+            //功能 : 获取下标位置的字符
+            //参数 : 下标
+
+            console.log(str.indexOf("234",10));  // 记住
+            // 功能:遍历字符串,返回第一个目标字符串的下标起始位置
+            // 参数:目标字符  查找的起始下标位置 不写默认为0;
+            // 返回目标字符的下标起始位置(字符串首位置) 没有找到则返回-1
+            // 从下标10开始查找 字符串"234";
+
+            console.log(str.lastIndexOf("234",10));  // 记住
+            // 功能: 倒序 遍历字符串,返回第一个目标字符串的下标起始位置
+            // 参数:第一个参数 目标字符, 第二个参数 查找的起始下标位置 不写默认为末尾;
+            // 返回目标字符的下标起始位置(字符串首位置) 
+            // 从下标10开始 倒序 查找 字符串"234";
+
+            console.log(str.replace("23","===")); //记住
+            // 功能: 将匹配第一个子串 替换成 另一个子串
+            // 参数: 被替换子串  替换子串
+            // 返回: 被替换后的字符串
+            // console.log(str.match());
+            // console.log(str.search()); //replace match search需要搭配正则表达式  才能完整使用
+
+
+            console.log(str.slice(-4,-1)); //记住
+            // 功能: 抽出指定下标之间的字符串 
+            // 参数: 起始字符下标 结束下标 支持负数,负数就是倒叙的意思, 抽离的字符串 包含起始字符 不包含结束字符
+            // 返回: 抽离出来的字符串
+            console.log(str.substr(2,5));//记住
+             // 功能: 抽出指定下标之间的字符串 
+            // 参数: 起始字符下标 抽离长度  
+            // 返回: 抽离出来的字符串
+
+            var str1 =  "123456789123456789";
+            //console.log(str1.split()) //记住
+            // 功能: 以指定字符为间隔切割字符串 并转化为数组;
+            // 参数: 不写则整个原串成为数组的一个数组元素 , ""空串则原串中每一个字符成为数组的一个数组元素 , "s"普通子串则以子串为切割点,切割原串,子串's'消失.
+            // 返回: 被切割后字符串数组
+            console.log(str1.split()); //无形参 整体成 数组元素
+            console.log(str1.split('')); //空串 每个字符成数组元素
+            console.log(str1.split('2345')); //子串 砍掉子串 剩余每部分成为数组元素 
+
+            var str2 = "123ABCabc"; 
+            console.log(str2.toLowerCase()); //全体转化成小写
+            console.log(str2.toUpperCase()); //全体转化成大写
+
+           
+
+            // ES6的四种额外方法 
+            //  includes(str); 判断是否包含指定的字符串 是返回ture 否则返回false
+            console.log(str2.includes("123"));
+
+            //  startsWith(str); 判断是否以指定字符串开头  是返回ture,不是返回false
+            console.log(str2.startsWith("abc")); 
+
+            //  endsWith(str);  判断是否以指定字符串结尾 是返回ture 不是返回false
+            console.log(str2.endsWith("abc")); 
+
+            //  repeat(count); 将原串重复打印 参数要求自然数
+            console.log(str2.repeat(5));
+
+
+
+
+            var num = 12456;
+            console.log(num.toString());  // 转化为字符串 原数据不变
+
+
+            console.log(str.charCodeAt(2)); // 了解
+            // 功能 : 返回下标位置字符的unicode 编码
+            //参数 : 下标位置
+
+            console.log(str.concat("拼接字符串"));  //了解 还不如直接 + 字符串拼接 
+            //功能:复制一份原字符串,尾部进行凭借字符串,原字符串不变
+            //参数:需要拼接的字符串
+            // 返回值: 拼接完的复制字符串
+
+            console.log(String.fromCharCode(100)); //不用
+            // 功能 将unicode码转换成字符,其方法是构造函数String的方法
+            //  参数 unicode
+            // 返回值 unicode代表的字符
+            
+            console.log(str.localeCompare("字符串")); //不用 还不如直接 >< 字符串比较
+            // 功能 unicode逐位比较法 比较字符串大小
+            // 参数 比较的字符串大小
+            // 返回值 1原串>字串  0= -1<
+
+        </script>
+        <img src="./img/es5字符串方法.png" alt="">
+    </body>
+</html>

@@ -1,0 +1,47 @@
+<!-- 
+    老师版本
+ -->
+ <!-- 
+        基本数字运算(表达式的值)
+        1同种数据类型运算,比较
+            数字和数字
+
+                数字与数字之间,该怎么算就怎么算,不会进行数据转化
+  
+        2字符串和字符串     字符串有数字型字符串和不是数字型的,还有空字符串
+            + 拼接字符串
+            其余运算全部转化为数字,注意(两个字符串比较的时候,是比较字符的Unicode编码,不会转换成数字进行比较)
+
+        3boolean 和boolea
+            判别的时候不需要转化,其余的全部转数字
+
+        4Undefined 和 Undefined
+            判别的时候不需要转化,其余的全部转数字
+        5 null 和 null
+            判别的时候不需要转化,其余全部转数字
+  -->
+  <!-- 
+        1不同数字类型
+
+
+
+   -->
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            console.log(1/0); //Infinity 无限 
+            console.log(0/1); // 0 呗
+            console.log(0/0); // NaN not a Number
+            console.log(-1/0); // -Infinity
+            console.log(1%0); //NaN 
+        </script>
+    </body>
+</html>

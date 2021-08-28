@@ -1,0 +1,71 @@
+<!-- 
+    js的标识符规则: 
+    1只能由 大小写英文字母+数字+下划线_+美元符号$ 组成
+    2不能以数字开头 
+    3不能和关键字及保留字同名 
+
+    命名规范: 大驼峰、小驼峰、下划线
+
+    大驼峰 : var PersonName; 每个语义单词首字母大写(少用)
+    小驼峰 : var personName; 除了首个语义单词,其余单词首字母都大写(前端常用)
+    下划线 : var person_name; 每个语义单词之间隔着下划线;(后端用的多,前端用得不多)
+    变量名字:只能用英文 不许拼音
+
+    
+		javascript的关键字
+ 
+		break   case   catch   continue   default   delete   do
+		else   finally   for   function   if   in   instanceof
+		new   return   switch   this   throw   try   typeof
+		var   void   while   with
+ 
+		javascript的保留字
+ 
+		abstract   boolean   byte   char   class   const   debugger   double
+		enum     export    extends       final   float   goto       implements
+		import     int       interface     long    native  package    private
+		protected  public    short         static  super   synchronized
+		throws    transient  volatile
+
+
+ -->
+
+ 
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            var PersonName1 = "周杰伦 ";
+            var personName2 = "林俊杰 ";
+            var person_name3 = "陈奕迅 ";
+            var $personname = "王菲 "
+            alert(PersonName1+personName2+person_name3+$personname);
+            console.log(PersonName1+personName2+person_name3+$personname);
+
+            // 经典的两者交换问题,由于变量名的本质是内存地址,所以需要第三方内存地址(变量) 来存储值来完成交换值。
+            var num1,num2,temp;
+            num1=1; num2=2; 
+            console.log("交换前:  num1:"+num1+" num2:"+num2);
+            temp = num1;
+            num1 = num2;
+            num2 = temp;
+            console.log("交换后:  num1:"+num1+" num2:"+num2);
+            // 两变量交换值方法 第二种,交替代数法 先将 a,b的和 存储在a ,利用a-b 分别将原本a的值和原本b的值存储在 b 和 a 中
+            var a,b;
+            a=1;b=2;
+            console.log("交换前:  a:"+a+" b:"+b);
+            a = a + b;
+            b = a - b;
+            a = a - b;
+            console.log("交换后:  a:"+a+" b:"+b);
+        </script>
+    </body>
+</html>
+

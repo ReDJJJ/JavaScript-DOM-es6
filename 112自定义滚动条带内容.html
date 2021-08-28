@@ -1,0 +1,142 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,li {
+            list-style: none;
+        }
+
+        img {
+            display: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 基础的滑槽滑块 样式模拟*/
+        #wrap .scrollBar {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            width: 30px;
+            height: 100%;
+            border-left: 2px solid yellowgreen;
+            border-right: 2px solid yellowgreen;
+        }
+
+        #wrap .scrollBar .scrollIn {
+            position: absolute;
+				left: 50%;
+				top: 0;
+				transform: translateX(-50%);
+				width: 26px;
+				/*height: 60px; 滚动条滑块的高度不能写死*/
+				background-color: gold;
+        }
+        #wrap .content{
+            position:absolute;
+            top: 0;
+            left: 0;
+            /* !!!!!!!!!!!!!!内容区域一定要开绝对定位,否则就不能通过操作top 来移动了.*/
+            /* 并且content不限高,上下滚动由top决定 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="content">
+            个人思路:拖拽滚动条的同时,滚动条的offsetTop在改变,将此改变映射到div#wrap.scrollTop(模拟盒子的内容的滑动距离); //错误的,直接通过修改绝对定位的top值来移动
+自定义滚动条的万能比例:
+        滑块的高度/滑槽的高度 = 滑槽的高度/内容的高度 =滑块滚动距离/内容滚动距离
+关键思路: 中间比例  滑槽的高度/内容的高度  scale = document.documentElement.clientHeight / content.offsetHieght ;
+          注意,修改高度和内容滚动距离 都是通过行内式方式进行修改;
+         内容滚动距离 用公式算出来之后,存入一个变量,将变量负向 然后赋值给 content.sytle.top来达到内容向上位移;
+        </div>
+        <div class="scrollBar">
+            <div class="scrollIn"></div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            var scrollIn = document.querySelector("#wrap .scrollBar .scrollIn");
+            var content = document.querySelector("#wrap .content");
+            for (var i = 0; i < 200; i++) { //添加内容
+                content.innerHTML += i + "<br>";
+            } 
+            //注意事项: 滑块的高度不能写死,需要根据网页内容的多少动态伸缩,所以滑块高度需要在内容加载完成之后写(或者放在window.onresize事件里?,文档大小变了就更新滑块高度);
+            // 滑块的高度/滑槽的高度 = 滑槽的高度/内容的高度 =滑块滚动距离/内容滚动距离
+            // 滑槽高度:滑槽height设置100%,所以滑槽高度=body高度=html高度(body,html,#wrap三位一体,并且=视口大小);
+            // 内容高度:内容的clientHeight;
+            // 内容滚动距离:content.sytle.top = -xpx;
+            // 滑块滚动距离:srcollIn.offsetTop / srcollIn.getBoudingClientRect().top;
+            // 用一个变量scale保存 滑槽的高度/内容的高度 这一比例,在求滑块高度和滑块滚动距离都能使用得上;
+            
+            var scale = document.documentElement.clientHeight / content.offsetHeight;//求出中间比例
+            scrollIn.style.height = scale * document.documentElement.clientHeight +"px";//求滑块距离
+
+
+            scrollIn.onmousedown = function (event) {
+                
+                event = event || window.event;
+                var eleY = scrollIn.offsetTop;
+                var startY = event.pageY;
+              
+                document.onmousemove = function (event) {
+                    event = event || window.event;
+                    var endY = event.pageY;
+                    var disY = endY - startY;
+                    var lastY = eleY + disY;
+                    //临界值判定
+                    if(lastY < 0){
+                        lastY = 0;
+                    }else if(lastY > document.documentElement.clientHeight - scrollIn.offsetHeight){
+                        lastY = document.documentElement.clientHeight - scrollIn.offsetHeight;
+                    }
+                    scrollIn.style.top = lastY + "px";
+
+                    //当滑块移动的时候,内容也进行移动
+                    // content.offsetTop = -( scale * scrollIn.offsetTop);  offsetTop只读不写 记住写要通过行内式,而且行内式要带单位!,读取通过那十二个变量!
+                    var contentsDis =  lastY / scale
+                    content.style.top ="-" + contentsDis +"px";
+                    
+                }
+                document.onmouseup = function () {
+                    document.onmousemove = null;
+                }
+                return false;
+            }
+        }
+    </script>
+</body>
+
+</html>

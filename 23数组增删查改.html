@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        // 数组的增删查改
+        
+        // 查 :  数组名[元素下标]  arr[1] ......
+
+
+        // 改 : 若知道需要修改的下标 直接赋值覆盖掉就好了  arr[x] = value; 
+        //      若不知道下标,则需要取查找,并进行替换
+
+        // 修改用户指定的数 修改为x  遍历查找
+        var value = prompt("请输入需要修改的值(0-10-20-30-40-50-60-70-80")
+        var arr = new Array(0,10,20,30,40,50,60,70,80);
+        for(var i=0; i < arr.length ; i++){
+            if(arr[i] == value){ //隐式转换
+                arr[i]= 'X';break;
+                // 这个break 很重要 ,可以用来判断 有没有符合的值,若没有符合的值,没有break过,那么i=arr.length,若break过,那么i<arr.length
+            }
+        }
+        console.log(arr);
+
+
+        // 数组的末尾增加一个元素 
+        var arr1 = new Array(100, 200, 300, 400, "洪江", "RedJJJ");
+        // arr1 数组长度是6,最大数组下标是5, C语言中,查询arr1[6]属于越界查询,会报错.而js中不会报错,越界元素都是undefined类型的undefined值。
+        document.write(arr1[6]); //js 越界查询 undefined;
+
+        //  由上可知,js中的数组长度实际上指的是"有效长度",数组未定义的后面可以有无数多个undefined待使用
+        //  因此,在数组末尾增加数组元素 则 arr[arr.length] = 值 即可
+        var arr2 = [1, 2, 3, 'HJ']; //数组长度为4 , 最大下标为3
+        arr2[arr2.length] = "ass_hole"; //在arr2的尾部追加一个数组元素,值为'ass_hole' , 数组长度自动+1
+
+        // 数组插入元素过程 
+        // 将循环变量ijk 与 数组下标 关联
+        var arr3 = [100, 200, 300, 400, 500, 600, 700];
+        var subscrpit = parseInt(prompt("请输入插入元素的下标")); //用户输入插入下标
+        if (subscrpit >= 0)  // 判断用户输入合法性 
+        {
+            for (var i = arr3.length-1 ; i > subscrpit; i--) {
+                arr3[i] = arr3[i-1];  //循环从数组最后一个元素开始,前进到用户输入的下标结束,其中的所有元素都往后挪一个位置。
+            }
+            arr3[subscrpit] = "x"; //通过赋值插入目标元素 
+        }
+        console.log(arr3);
+
+        // 数组的末尾删除一个元素 直接数组长度--即可
+        // arr4.length--;
+
+        // 普适性的删除元素过程
+        var arr4 = new Array(0, 1, 2, 3, 4, 5, 6);
+        var subscrpit1 = parseInt(prompt("请输入需要删除元素的下标"))
+        if (subscrpit >= 0) {
+            for (i = subscrpit1; i < arr4.length-1; i++) {
+                arr4[i] = arr4[i + 1];
+            }
+            //此处我考虑不周了,在删除元素的过程中,是利用后一个元素往前覆盖前一个元素的形式,那么会产生 数组最后两个元素是重复的值
+            arr4.length--;//删除多余元素
+        }
+        console.log(arr4);
+
+        // 需要进行边界检测 来定夺 循环结束条件
+
+
+
+
+    </script>
+</body>
+
+</html>

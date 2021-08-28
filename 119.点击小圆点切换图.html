@@ -1,0 +1,258 @@
+<!doctype html>
+<html>
+<!-- 
+    编程思维:提高复用,js中形式参数并没有限定数据类型,可以通过判断形式参数的类型来给不同的对象调用传不同类型的参,调高复用度 重构
+ -->
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        img {
+            display: bLock;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        /*禁止系统滚动条*/
+        html,
+        body {
+            height: 100%;
+            /* overflow: hidden; */
+        }
+
+        #wrap {
+            width: 100%;
+            height: 100%;
+            /* overflow: hidden; */
+            /* 为了显示图片 ren'l */
+        }
+
+        #wrap .banner {
+            width: 600px;
+            height: 300px;
+            background: pink;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #wrap .banner ul.picture {
+            position: absolute;
+            top: 0;
+            left: -600px;
+            width: 4200px;
+            /* 无缝衔接:宽度要改,首发位置要改 */
+            height: 100%;
+            background: skyblue;
+        }
+
+        #wrap .banner ul.picture li {
+            float: left;
+        }
+
+        #wrap .banner ul.picture li img {
+            width: 600px;
+            height: 300px;
+        }
+
+        #wrap .banner ul.circle {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #wrap .banner ul.circle li {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: gray;
+            float: left;
+            margin-right: 5px;
+        }
+
+        #wrap .banner ul.circle li.current {
+            background: red;
+        }
+
+        /* 不能用伪元素,伪元素无法操作和获取 */
+        #wrap .banner .left,
+        #wrap .banner .right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 100px;
+            background: rgba(100, 100, 100, .6);
+            text-align: center;
+            color: white;
+            font: normal 700 20px/100px "arial";
+            cursor: pointer;
+        }
+
+        #wrap .banner .left {
+            left: 0;
+        }
+
+        #wrap .banner .right {
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="banner">
+            <ul class="picture">
+
+                <li><a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                </li>
+
+                <li><a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/3.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/4.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/6.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                </li>
+
+                <li><a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                </li>
+
+            </ul>
+            <ul class="circle">
+                <li class="current"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <span class="left">
+                < </span>
+                    <span class="right"> > </span>
+
+        </div>
+        <img src="./img/IMG_3849.JPG" alt="" style="width:700px;transform:rotate(-90deg)">
+    </div>
+
+    <script>
+        window.onload = function () {
+            var box = document.querySelector('.banner');
+            var ul = document.querySelector(' #wrap .banner ul.picture');
+            var circleNodes = document.querySelectorAll("#wrap .banner .circle li");
+            var spanNodes = document.querySelectorAll("#wrap .banner .left,#wrap .banner .right"); //querySelectorALL只支持一个字符串参数,所有变量选择器写在里面,逗号间隔
+            var timer = null; //定时器容器
+            var timeAll = 600; //自定义移动的总时间;
+            var timeStep = 20; //自定义移动的每一步耗费时间(循环定时器间隔);
+
+
+            function move(flag) {
+                //形参有两种可能,一个是span事件传来的方向,一个是小圆点事件传来的距离,所以要进行区分
+                if (typeof flag == "boolean") {
+                    if (flag) {
+                        var eleDis = -600;
+                    } else {
+                        var eleDis = 600;
+                    }
+                }else{
+                    var eleDis = flag - ul.offsetLeft;
+                }
+                //通过以上的方式求出,图片所要移动的距离;
+
+                var lastX = ul.offsetLeft + eleDis;
+                var step = eleDis / (timeAll / timeStep);
+
+                timer = setInterval(function () {
+                    var left = ul.offsetLeft + step;
+                    if (left === lastX) {
+                        clearInterval(timer);
+                        if (left === -3600) {
+                            left = -600;
+                        } else if (left === 0) {
+                            left = -3000;
+                        }
+                    }
+                    ul.style.left = left + "px";
+                }, timeStep)
+
+
+                var circleNodes = document.querySelectorAll("#wrap .banner .circle li");
+                var circleUlNode = document.querySelector("#wrap .banner .circle");
+
+
+                for (var i = 0; i < circleNodes.length; i++) {
+                    circleNodes[i].className = "";
+
+                }
+                var index = -lastX / 600 - 1;
+                if (index == -1) {
+                    index = 4;
+                } else if (index == 5) {
+                    index = 0;
+                }
+                circleNodes[index].className = "current";
+            }
+
+            spanNodes[0].onclick = function () {
+                move(false);
+            }
+            spanNodes[1].onclick = function () {
+                move(true);
+            }
+
+            //可以用委派,但是没必要,因为没有新增的元素,有新增元素用委派;
+            //以上的都是在左右span点击后发生的事情,下面将是点击小圆点后发生的事情:
+            // 1 点击某个小圆点,图片要进行切换(先瞬变,后缓变)
+            // 难点,怎么样将小圆点与对应图片进行绑定(index变量存储法);
+            for (var i = 0; i < circleNodes.length; i++) {
+                circleNodes[i].index = i; //新增一个属性.index来记录每个小圆点的下标
+                circleNodes[i].onclick = function () {
+                    // 为什么不能直接用i,而要记录;
+                    // 程序执行,外层for循环直接执行(主进程),所以外层for循环直接执行完5次,给每一个小圆点添加点击事件,此时i=4;
+                    //而回调函数处于任务队列,里面的事件还没被触发过一次,此时i已经是4了,j还是0呢,所以回调函数内的内层for循环不能用i表示被点击的小圆点下标,i早已经变成4;
+                    for (var j = 0; j < circleNodes.length; j++) {
+                        circleNodes[j].className = "";
+                    }
+                    this.className = "current";
+                    move((this.index + 1) * -600);//小圆点传的是目标图片的坐标;
+                    /* 
+                         通过this.index可以知道被点击小圆点的下标.
+                         通过小圆点下标可以推算小圆点对应的图片的目的地坐标, (this.index+1*-600) px;
+                         知道目的地坐标就可以知道坐标差,知道坐标差就可以调用move函数,move函数实现图片的缓动;
+                         思维:大片相似的功能尽量封装成函数,在函数内多用变量存储必要的值,降低耦合,使得函数更通用;
+                    */
+                }
+            }
+
+
+            //回调函数都是异步的,因为回调函数第一次出现相当于函数声明啥都不出现,,只有事件触发时才调用回调函数;
+        }
+    </script>
+</body>
+
+</html>

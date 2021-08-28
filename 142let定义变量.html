@@ -1,0 +1,70 @@
+<!-- 至此开始 为ea6的内容 -->
+<!-- 
+    let 
+    作用: 声明变量
+    特征:   
+        在块级作用域{}内有效(es5中只有全局作用域和函数作用域)
+        不能重复声明
+        不参与预解析,不存在变量提升
+    应用:
+        循环遍历事件监听 记录下标
+        替代var (趋势)
+ -->
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style></style>
+   </head>
+
+   <body>
+       <script>
+        //    console.log(a); //undefined
+        //    var a = 10;
+
+        //    // console.log(b); //b is not defined
+        //    let b =20; //let 不参与预解析
+        //    //let b = 30;//let 不允许重复声明  Identifier 'b' has already been declared
+
+        //     //let 具有块级作用域
+        //     if(true){
+        //         var c = 10;
+        //     }
+        //     console.log(c);// c成功打印,且var出来的变量c是在全局环境中定义的,是全局变量;
+
+        //     let e = 100;
+        //     if(true){
+        //         console.log(e);//正常打印,e是let出来的全局变量
+        //         let b = 1000;
+        //     }
+        //     console.log(d);//  d is not defined,let声明变量具有块级作用域,块级(就是两个{}之间是其作用域)
+
+            for(var i = 0; i <3 ; i++) {
+                setTimeout(function(){
+                    console.log(i);
+                },1000)
+            };
+            //打印了3个3;
+            //定时器的回调函数是异步代码,而for循环是同步代码,异步代码得等所以同步代码执行完后再执行,此时for循环早执行完了,i早就是3了
+            //详细过程:
+            /*  
+             * for循环是同步代码,开始执行;
+               设置定时器是同步代码,直接执行,而定时器的回调函数是异步代码,交给其对应的事件管理模块
+             * for循环三遍了,也设置了三个定时器了,i也早就是3了,此时才开始处理异步代码
+               而在定时器回调函数达到条件(time-1000)后进入事件队列逐个执行,打印i,i早就是3了.
+             */
+
+             for(let i = 0; i <3 ; i++) {
+                setTimeout(function(){
+                    console.log(i);
+                },1000);
+            };
+            //打印了 0 1 2;
+            //原因,let是块级作用域,而for循环相当于开了三个{}三个块级作用域
+            //第一个块级作用域i=0 ,第二个i=1,第三个i=2;
+
+            //之前需要通过 Nodes[i].index = i 配合this.index; 来记录下标,使用let定义之后不需要了,每次循环都是一个块级作用域;
+       </script>
+   </body>
+</html>

@@ -1,0 +1,57 @@
+<!-- 
+    开关状态思想 (标志位思想)
+
+    事件属性理解:例如onclick事件,当有鼠标点击时,该事件(背后封装的函数)才开始执行,才开始栈中创建事件函数运行环境,执行完后生命周期结束
+ -->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        div#box {
+            width: 200px;
+            height: 200px;
+            background: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+
+    </div>
+    <script>
+        window.onload = function () {
+            // 由于ID号在HTML中唯一,因此可以直接在js中使用id号来获取元素对象  语法: id号.元素对象属性方法等.  box.style.width = "100px";
+
+            //标志位开关思想 多次来回切换颜色
+            var flag = true; //true 为原来的颜色
+
+            // 此处没有通过方法获取对象，而是直接通过id号获取对象
+            box.onclick = function () {
+                if (!flag) {
+                    box.style.backgroundColor = "skyblue";
+                    // 每次点击后,标志位反转,否则flag一直不变,无法切换
+                    // flag = !flag;
+                }
+                else {
+                    box.style.backgroundColor = "pink";
+                    // flag = !flag;
+                }
+                //优化 提取公共部分到外面 继承公共部分共同执行;
+                flag = !flag;
+            }
+
+        }
+    </script>
+</body>
+
+</html>

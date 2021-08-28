@@ -1,0 +1,115 @@
+<!-- 
+//基础页面架构: 由外到内: document 初始包含块 html body 其次是我们的元素; 
+//禁止系统滚动条(为了美观,布局统一化),然后用一个盒子模拟body,并在此模拟盒子中添加滚动条;
+//模拟盒子装载了自定义的所有元素,为什么要有模拟盒子?因为body很特殊,会产生意料不到的效果(例如背景色)
+//以后项目初始化,令div#wrap body html  初始包含块,四者合一 外层还有一个深不见底document; -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        img {
+            display: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        div#wrap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* 基础的滑槽滑块 样式模拟*/
+        #wrap .scrollBar {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            width: 30px;
+            height: 100%;
+            border-left: 2px solid yellowgreen;
+            border-right: 2px solid yellowgreen;
+        }
+
+        #wrap .scrollBar .scrollIn {
+            position: absolute;
+            top: 0;
+            left: 3px;
+
+            width: 24px;
+            height: 60px;
+            background-color: gold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+       
+        <div class="scrollBar">
+            <div class="scrollIn">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+           
+            var scrollIn = document.querySelector("#wrap .scrollBar .scrollIn");
+        
+
+            scrollIn.onmousedown = function (event) {
+                //滚动条只需要垂直方向移动
+                event = event || window.event;
+                var eleY = scrollIn.offsetTop;
+                var startY = event.pageY;
+              
+                document.onmousemove = function (event) {
+                    event = event || window.event;
+                    var endY = event.pageY;
+                    var disY = endY - startY;
+                    var lastY = eleY + disY;
+                    if(lastY < 0){
+                        lastY = 0;
+                    }else if(lastY > document.documentElement.clientHeight - scrollIn.offsetHeight){
+                        lastY = document.documentElement.clientHeight - scrollIn.offsetHeight;
+                    }
+                    scrollIn.style.top = lastY + "px";
+                }
+                document.onmouseup = function () {
+                    document.onmousemove = null;
+                }
+                return false;
+            }
+
+        }
+    </script>
+</body>
+
+</html>

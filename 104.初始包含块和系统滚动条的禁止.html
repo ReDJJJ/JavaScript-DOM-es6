@@ -1,0 +1,57 @@
+position为absolute的元素会相对于距离最近的position为relative/fixed/absolute的上级元素进行定位，如果上级元素都没有position属性，那么则相对于初始包含块定位。
+
+初始包含块不是body元素也不是html元素，而是html元素的包含块（the initial containing block），指的是以整个 canvas (渲染内容的空间) 的坐标原点(左上)为基准，以 viewport (也就是浏览器视窗内渲染 HTML 的空间)为大小的矩形。
+初始包含块:大小为视口,固定在最顶端的包含块
+
+<!doctype html>
+<html>
+    
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+           /*
+            怪相 : 给body 和 html 设置背景色 (body和html自身比较特殊)
+            哪怕body,html的长宽限定了,单独给body,html设置背景色还是会文档全上色,而不是再body,html范围内上背景色,
+            也就是说: 单独给body,html上背景色 相当于给整个文档上背景色;
+            body,html同时上背景色,则body自己上背景色,整个文档上html的背景色
+           */
+           html{
+               width:600px;
+               height:600px;
+               border: 2px solid black;
+               margin-left:150px;
+               background: lightpink;
+           }
+           body{
+                width:300px;
+               height:300px;
+               border: 2px solid gray;
+               margin-left:50px;
+               background: skyblue;
+           }
+           div{
+               width:100px;
+               height:100px;
+               background: lightgreen;
+               position:absolute;
+                top:10px;
+                left: 10px;
+           }
+           /*
+             document元素:深不见底，宽度就是视口宽度,但是高度理论无限;
+             浏览器会再document下一层添加初始包含块,目的是给所有元素一个基准的参考值;
+             初始包含块无法控制:就是第一屏(视口),滑下去初始包含块就跟着页面上去了;
+             以前说子绝父不相,则子相对body,其实不对,子随父不相相对的是初始包含块
+             最外层元素(例如body)设置height:100%;其实这个百分比参照的也是初始包含块
+           */
+           
+       </style>
+   </head>
+
+   <body>
+       <div id="box"></div>
+       <img src="./img/IMG_3816.JPG" alt="" style= "width: 600px">
+   </body>
+</html>

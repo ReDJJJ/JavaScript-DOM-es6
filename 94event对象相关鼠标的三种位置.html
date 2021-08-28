@@ -1,0 +1,68 @@
+<!--
+     client  客户端
+
+     事件对象:event 
+
+     event概念,作用:
+                    系统给我们封装的对象,任何事件都会有整个event对象,就是回调函数的第一个形参;
+                    这个对象当中封装了对应事件的一切相关信息;
+
+     event兼容性处理:
+    为何需要兼容性处理: 如果是高级浏览器去调用函数的回调函数,那么高级浏览器会自动把event事件对象传给回调函数的第一个形参
+                     如果是低版本浏览器去调用,低版本浏览器则会把事件对象封装好作为window.下属的一个属性 window.event,并不会传给回调函数当第一个形式参数
+        
+    兼容性处理 : event = event || window.event 写在回调函数第一行;
+    理解: 第一个event是变量名, 第二个event是形参,第三个window.event下的一个属性
+    相当于不用var 声明了一个event全局变量, 若第二个event存在,则代表浏览器为高级浏览器(系统传给回调函数第一个形参为事件对象event),若第二个event不存在,则代表的是低级浏览器,取用window下的一个属性window.event;
+    (为什么window.event不能省略window,因为函数形参有个event,根据作用域链先回查找当前作用域范围内的参数,结果有个undefined的形参event,不会跳转到全局环境中获取window.event,所以低级浏览器要直接说明取用window.event)
+
+    event.target兼容性处理: 冒泡源事件 在高级中存放在 event.target 属性当中, 而低级存放在 event.srcElement;
+    var target = event.target || event.srcElement;
+
+    event中有三种属性记录的鼠标的位置
+    三种鼠标位置: clent page offset
+    clientX clientY  视口坐标(以视口的左上角为坐标原点)
+    pageX pageY 页面坐标(以页面的左上角为坐标原点) 
+    offsetX offsetY 自身盒子内坐标(以盒子的左上角为坐标原点)
+
+    视口的左上角和页面的左上角不一定是同一个点,因为当用户滑动鼠标或屏幕时,页面会滑动,而视口则永远是当前展示给用户的窗口.
+
+-->
+
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           *{
+            margin:0;
+            padding:0;
+           }
+           .box{
+              width:300px;
+              height:300px;
+              background : skyblue;
+              margin:100px;
+           }
+           
+       </style>
+   </head>
+
+   <body style="height:3000px">
+        <div class="box"></div>
+       <script>
+           window.onload = function (){
+               var box  = document.querySelector(".box");
+               box.addEventListener("click", function(event1){
+                   event = event1 || window.event;
+                   var target = event.target || event.srcElement;
+                   console.log(event.pageX+"  "+event.pageY);
+                   console.log(event.clientX+"  "+event.clientY);
+                   console.log(event.offsetX+"  "+event.offsetY);
+                   //都是打印纯数字的,在设置的时候需要注意。+px达到格式
+               },false);
+           }
+       </script>
+   </body>
+</html>

@@ -1,0 +1,63 @@
+<!-- 
+    js的数据类型 : 两大类 基本数据类型 对象数据类型(后面学习)
+    
+    基本数据类型: 
+    < 数字Number : 整数 小数 0b二进制 0八进制 0x十六进制  科学计数法 
+    < 字符串String : 用引号括起来的文本都是字符串 "洪江" '123' 'personName232'
+    < 布尔类型boolean : 两个值 true真 false假
+    < Undefined : 未定义类型的数据类型 
+    < null :空 
+
+
+ -->
+
+
+
+
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+
+            alert("数字类型打印出来是蓝色,而字符串类型是黑色,可以判断一个数字是数字类型还是字符串类型");
+
+            var Number ;
+            Number = 1; 
+            Number = 1.1;
+            Number = 222e2;console.log(Number);
+            Number = 0b10; console.log(Number);
+            Number = 010; console.log(Number);
+            Number = 0x10; console.log(Number);
+            // 科学计数法 aeb , a * 10的b次方;
+            // 数字前缀: 0b代表二进制 0代表八进制 0x代表16进制; 而系统输出都是转换成十进制结果输出
+
+            var str ;
+            str = "zhaoliying"; console.log(str);
+            str = "1010" ; console.log(str);
+            str = ""; console.log(str); //空字符串 是一个特殊对象 字符串是空值
+            str = "   "; console.log(str); //三个空格组成的字符串,空白字符串,特殊对待;
+            str = " it's me " ; console.log(str); //遇到字符串内容有单双引号 单双引号混用(引号嵌套),话说js没有转义字符的么???
+
+            var bool;
+            bool = true;console.log(bool);
+            bool = false;console.log(bool);
+
+            // 如果利用var 定义了一个变量,而没有初始化(赋值),那么该变量就是Undefined类型的变量,值为Undefined
+            var vaible;console.log(vaible);
+            var vaible = undefined; console.log(vaible);
+            // vaible的值是Undefined, 而vaible是Undefined类型的变量,    凡是Undefined类型的变量,其值都是Undefined;
+
+            var empty = null;console.log(empty);
+            // 变量赋值为null,则该变量就变成了null类型的变量,值为null
+            // 与undefined不同,null类型必须是赋值过null的变量.而undefined 不用赋值就默认undefined类型
+            // null常用在给一个对象初始化,或者删除一个对象;
+        </script>
+    </body>
+</html>

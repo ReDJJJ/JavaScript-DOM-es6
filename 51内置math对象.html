@@ -1,0 +1,117 @@
+<!-- 
+    英文: round 四舍五入,圆的
+          floor  地板 基底
+          ceil 天花板 上限
+
+ -->
+
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            //js中内置Math对象,内置了大量的方法;
+            // Math . round(四舍五入) floor(向下取整) ceil(向上取整)  
+            // 对整数使用 取整 ,整数不变
+            var a = 1.64;
+            console.log(Math.round(a)); // round四舍五入2
+            console.log(Math.floor(a)); // floor 向下取整 1
+            console.log(Math.ceil(a));  // ceil向上取整 2
+
+            
+            //max(求最大值) min(求最小值) 
+            console.log(Math.max(1,5,6,9,7,100,-50)); //100
+           
+            console.log(Math.min(1,5,6,9,7,100,-50)); //-50
+
+            
+            // PI(math中的一个属性)  Math.PI = 3.1415.....
+            console.log(Math.PI);
+
+            //  pow 求幂数  语法 pow(基数,幂级)
+            console.log(Math.pow(2,10)); //求2的10次方
+
+            // abs 绝对值 
+            console.log(Math.abs(-5));
+
+            // sin tan cos  三角函数 这个方法当中参数需要用的是弧度!!!!!!!!!,而不是角度
+            //  弧度 : 弧长和半径的比值   2Math.PI * r = d;
+            // 常用弧度 : 360 - 2pi ;
+            //            180 - pi ;
+            //              90 - 0.5pi;
+            //               45 - 0.25pi;
+            //                 30 - 30/360pi;
+            // 任意角度x的弧度   Math.PI * (x/360) ;
+            console.log(Math.tan(Math.PI*(90/360)));
+            console.log(Math.sin(Math.PI*(60/360)));
+
+            //random 产生随机数 [0-1) (左开右闭,能取到0不包含1);
+
+             console.log(Math.random()); 
+            // 取 0 - 100 之间的随机数  思路:由于Math.random取不到1,*100 [0,99.9999],选择*101 然后向下取整Math.floor
+             var result = console.log( Math.floor((Math.random()*101)));    
+            // 取 1 - 100的随机数 思路:  *100 [0,100)  +1 [1,101) 向下取整 [1,100]
+             var result = console.log(Math.floor(Math.random()*100+1));
+            // 取 n1 ~ n2 的随机数 思路: Math.random()*(n2-n1+1) 再+n1 再Math.floor 
+            // 封装函数实现求任意范围随机数
+            function getRandomNumber (x,y){
+                return Math.floor(Math.random()*(y-x+1)+x);
+            }
+            //  深度理解: 随机数诞生[0,1) ,此时乘一个数 n ,范围变成[0,n), 再加一个数x , 范围变成[x,n+x), 再向下取整, [x,n+x-1]
+            //  所以,  随机数配合乘数来限定 随机数的范围, 而加减数 确定随机数的起点 , 向下取整保证 闭区间内可取任意数
+
+
+            //字符串 string 是连续的,有序的,可以使用数组的部分操作方式来操作字符串
+            var str = "ABCD";
+            console.log(str[0]); //打印字符串的第一个字符
+            console.log(str.length); //打印字符串长度
+            //字符串本身是一个基本数据类型,是一个常量,只读不写
+            str[0]='a';
+            console.log(str[0]); //str[0]无法改变,字符串本身是常量
+
+
+
+            // 利用随机数和字符串进阶知识写随机验证码
+
+            // 1确定码源
+            var word = "QWERTYUIOPASDFGHJKLZXCVBNM0123456789";  //小写没包含
+            // 2拼接验证码
+            var code = ""; //空串
+
+            function getAuthCode(x){
+                for(var i=0;i<x;i++){
+                    code += word[Math.floor(Math.random()*(62))];
+                }
+            }
+
+
+            getAuthCode(6);
+            console.log(code);
+            
+
+
+
+
+
+
+
+
+
+
+
+            // round 四舍五入 floor 向上取整 ceil向下取整 PI 属性3.14 pow(基数,幂次) abs绝对值 sin(弧度) random 随机数[0-1)
+
+
+
+
+
+        </script>
+    </body>
+</html>

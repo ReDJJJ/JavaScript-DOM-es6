@@ -1,0 +1,76 @@
+<!-- 面向对象三大特征 : 封装 继承 多态 -->
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+       </style>
+   </head>
+   <body>
+            //打印对象,打印结果是对象本身,还是显示对象是哪个构造函数的实例化
+
+            
+    <script>
+        //Teacher应该是Person的一个子类,那么Teacher的实例化对象能使用Person的方法或属性该多好,就不用重复书写代码且浪费内存空间了;这种思路叫做继承
+            function Person (name,age){
+                this.name = name;
+                this.age = age;
+            }
+            function Teacher(name,age,gender){
+                //借用构造函数继承属性  
+                // this.name = name;
+                // this.age = age;
+                Person.call(this, name, age); //在Teacher内部调用了Person构造函数,调用之前call把this指向从window(普通Person调用的this)指向了new Teacher()的将来实例化对象,完成了继承
+                this.gender = gender;
+            }
+            Person.prototype.eat = function(){
+                console.log("吃东西");
+            }
+            Teacher.prototype = new Person();  //要写在Teacher实例化过程之前,否则继承对之前的Teacher类的对象不起效果;
+            Teacher.prototype.constructor = Teacher;
+
+
+
+            //this.操作控制
+
+
+            var p1 = new Person("hj",10);
+            var t1 = new Teacher("t1",10,"man");
+            p1.eat();//打印吃东西
+            t1.eat();
+        
+            // 原型链继承: 为了子类继承父类的方法 注意是方法
+            // 做法: 1让子类的原型是父类的一个实例化对象   子类.prototype = new 父类();
+            //         2手动给子类的原型添加构造属性 consturctor 指向子类(构造函数本身)     子类.prototype.constructor = 子类;
+            
+            // 原理: 本来Teacher的原型 是 Object 的一个实例化对象,那么当Teacher的实例化对象t1找不到方法的时候,顺着原型链的 找到(Teacher的原型对象)Teacher.prototype,若还是没有,找Object的原型对象(Object.prototype),再没有返回undefined
+            //而 Teacher.prototype = new Person()后, 改变了原型链的顺序,当Teacher的实例化对象t1找不到方法时,顺着原型链找Teacher.prototype,找不到再找Person.prototype,(因为此时Teacher的原型是Perosn的一个实例化对象,而任何对象的隐式原型指向其构造函数的显示原型),此时Teacher的实例化对象就可以使用Person类的方法了.
+            //可以继承属性么? 准确来说,不大行,Person构造函数内的属性都没法继承,因为原型链找到的是Person构造函数的原型prototype,也只能使用Person.prototype内的属性
+            //弊端:这样子,实际上在改变了原型链的同时,也改变了Teacher.prototype ,Teacher.prototype的constructor属性不见了,还增加了Person实例的name和age属性,new Person()实例化过程不仅改变了__proto__,还覆盖了.prototype本身的属性constructor
+            console.log(Teacher.prototype);
+             // 打印结果Person:
+                    // age: undefined
+                    // name: undefined
+                    // __proto__: Object
+            //多态两种表现:方法重写 和 方法重载
+            //方法重写: 子类和父类共用同一个函数名,而子类重写了同名方法覆盖了父类的方法(原型链)
+            //方法重载: 根据函数传进去的参数不同(参数个数不同,类型不同等),拥有不同的目的(flag标志位判断类型,arguments判断参数个数等,以前都见过的)
+            //重写方法达到多态; 老师是人的子类,并且通过原型链继承到eat这个方法,但是老师比较特殊,要吃肉！
+            //直接给Teacher()构造函数的原型对象中添加方法来覆盖父类的方法(就是重写),达到老师吃肉的目的,并通过判断参数类型 进行方法重载;
+            Teacher.prototype.eat = function(flag){
+                console.log("重写方法:老师吃肉");
+                // if(typeof flag == "boolean"){
+                //     .... //重载
+                // }
+                // if(arguments.length == 2 ){
+                //     ....//重载
+                // }
+            }
+            var t2 = new Teacher();
+            t2.eat();
+            //吃肉
+            console.log('微信操作控制');
+    </script>
+   </body>
+</html>

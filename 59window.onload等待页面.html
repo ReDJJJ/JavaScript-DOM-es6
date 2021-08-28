@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+
+        <input type="button" value="按钮" id="btn1">
+        <script>
+            //标准文档流 : 从左往右 从上往下  依次渲染文档的过程 称为标准文档流
+
+            /*  
+                    windows.onload 等待页面加载完成事件 (文档流渲染完成,元素都在)
+                    window.onload是一个事件，当文档加载完成之后就会触发该事件 .
+                    一般情况下都是等待页面加载完成之后才去操作dom元素
+                    如果页面没有加载完成就去获取dom元素,有可能获取不到
+
+                    window.onload = funciton(){
+                        执行语句;
+                    }等待页面加载完成,系统会自动执行function(){}函数当前中的代码;
+
+                    onload是window对象下面的一个事件属性,事件属性搭配回调函数来 完成某些功能 (等待文档流渲染完成)
+
+                    function()是window.onload事件的回调函数,不用调用也会执行函数.且没有函数名
+                    js语句的第一行就是 window.onload 来等待页面加载完成
+            */
+
+
+            window.onload = function(){
+                //以后js代码都写onload事件属性的回调函数里面,确保页面都已经渲染完成,才可以获取和操作元素(标签)
+
+                var btn = document.getElementById("btn1");   //btn成为了dom对象
+                // 创建一个变量btn, 将document对象中的方法getElementById(id)获取到的元素btn#btn1  赋给btn,此时btn变量就是dom(document)的一个实例化对象了;
+
+                //btn都是dom对象了,则也封装了一大堆的属性和方法;
+                // 此处不是 在btn对象中修改或者增加onclick方法 而是回调函数 (系统在点击后自动调用),
+                //添加 点击 事件 监听  点击按钮之后会执行function(回调函数)代码;
+                btn.onclick = function (){
+                    alert("btn is click! "); 
+                } //btn.onclick 事件配合回调函数,当按钮被点击时候会执行回调函数中的内容语句
+            }
+        </script>
+    </body>
+</html>

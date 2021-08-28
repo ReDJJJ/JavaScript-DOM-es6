@@ -1,0 +1,73 @@
+<!-- 
+    什么时候用for , 什么时候用 while
+    1 一个循环有明显的循环次数,此时for
+    2 一个循环没有明显的循环次数,但是有明显的循环结束条件, 选择while
+ -->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+
+
+        <script>
+            
+            //while循环
+            /*  
+                while(表达式){
+                    代码块;
+                    控制块;
+                }
+                执行顺序: 先判断while()里的值(统统隐式转换成boolean值)
+                          若为false,跳过该循环,执行循环后面的语句
+                          若为true ,执行代码块,控制块,执行完后,在进行判断. 
+
+                所有循环的关键: 一定要弄清楚跳出循环的临界值
+            */
+            var i = 0 ;
+            while( i < 5 ){
+                console.log(i);
+                i++;//控制循环次数
+            }
+
+            /*  
+                do{
+                    代码块;
+                    控制块;
+                }while();
+
+                执行顺序: 
+                          先执行一次do{}里面的代码块和控制块
+                          再判断while()里的值(统统隐式转换成boolean值)
+                          若为false,跳过该循环,执行循环后面的语句
+                          若为true ,执行代码块,控制块,执行完后,在进行判断. 
+
+                所有循环的关键: 一定要弄清楚跳出循环的临界值
+            */
+           var j = 1;
+           do{
+              console.log(j);
+           }while(false); //do{}while(); 一定有一个分号
+
+        //    break和continue 作用
+        /*
+           break作用:1 在switch语句中跳出switch 2在循环中出现跳出 离它最近的一层循环 ;break只能跳出一层循环,并且离它最近的循环
+           continue作用: 结束本次循环, 返回到下一次的开始 
+        */
+           for(var k = 1; k < 100; k++){
+               if( k%3!=0){continue;}
+               console.log(k);
+           }
+        //    假若k%3 != 0 ,k不能被3整除,则跳出本次循坏(剩余代码不执行),直接到K++,然后开始下一次循环
+
+           
+
+
+        </script>
+    </body>
+</html>

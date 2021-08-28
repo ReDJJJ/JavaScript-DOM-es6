@@ -1,0 +1,74 @@
+<!-- 
+    兼容性封装设置读取内容函数
+    1浏览器兼容性讲解
+        主流浏览器: chorme safari opera fixfox ie
+
+        高级浏览器: ie9+ 和chorm safari opear firefox 
+        低级浏览器: ie8 及 以下
+    
+    2   问题: 封装函数处理: textContent的兼容性问题(textContent属性只有高级浏览器生效),innerText所以浏览器都生效
+    
+   
+
+    关键: 怎么样判断 一个浏览器是否是高级或低级呢？
+          !!!!通过判断 textContent 是否存在  存在即为高级浏览器  不存在即为低级浏览器
+
+           兼容性思维1: 有些老旧浏览器不支持很多属性,可以通过判断是否能读取到需要兼容的属性(如textContent),来进行判断高级和低级浏览器
+
+ -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <script>
+        window.onload = function () {
+            var spanList = document.querySelectorAll("span");
+       
+            function getOrSetContent(node, setContent) {
+                //既能获取内容 (至少一个参数:获取哪个节点的内容?) 又能设置内容(节点,设置的内容值); js中形参和实参不一定需要一一对应
+                //个人逻辑 : 既然实际参数不固定? 那是否需要通过arguments 来实现一个函数拥有多个功能呢? 答案是肯定的 需要
+
+                if (arguments.length == 1) { //参数只有一个
+                    if (node.textContent) { 
+                        return node.textContent;
+                    } else {
+                        return node.innerText;
+                    }
+                }
+                if (arguments.length == 2) { //参数有两个
+                    if (node.textContent) {
+                        node.textContent = setContent;
+                    } else {
+                        node.innerText = setContent;
+                    }
+                }
+
+            }
+            for (let i = 0; i < spanList.length; i++) {
+                console.log(getOrSetContent(spanList[i]));
+                getOrSetContent(spanList[i],"我是你爹"+i);
+                console.log(getOrSetContent(spanList[i]));
+            }
+        }
+
+            //详细解析: 为什么if(node.textContent) 能够判断一个浏览器是高级还是低级
+            // 1首先低级浏览器中不存在这个node.textContnet 这个对象中的属性,会返回一个undefined ;(注意变量未定义会报错not defined,而对象与数组越界查询返回undefined值)
+            // 2高级浏览器中存在这个textContent 这个属性, 哪怕获取对象无内容如<span></span> textContent获取结果是空白字符串' ',因此高级浏览器中textContent最差的返回值是"  "空白字符串,空白字符串转布尔值为T;
+            // 3if else if等分支语句后面的(),都要转化成布尔值,而undefined转布尔为false , 空白处转布尔为ture; 所以可以if(node.textContent)可以区分高低 浏览器. 
+    </script>
+
+</body>
+
+</html>

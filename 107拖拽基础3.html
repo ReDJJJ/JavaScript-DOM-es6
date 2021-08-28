@@ -1,0 +1,79 @@
+<!doctype html>
+ <html>
+ <head>
+     <meta charset="utf-8" />
+     <title></title>
+     <style>
+         div {
+             width: 100px;
+             height: 100px;
+             background: lightgreen;
+             position: absolute;
+             top: 100px;
+             left: 100px;
+         }
+     </style>
+ </head>
+ <!-- 
+    拖拽基础2的问题
+       若拖拽目标内有文字内容,在选中文字的情况下,拖拽div会产生浏览器默认行为:只拖拽文字;
+    解决方案: 禁用浏览器默认行为
+        dom0事件禁用 : 在总事件上 添加 return false
+        dom2事件禁用 : event.preventDefault();
+
+    调试小技巧: 常见错误:
+                1 {}位置错了
+                2 单词写错了
+    了解一下全局捕获: box.setCapture() 只有低级浏览器支持
+            box.setCapture && box.setCapture();
+            若前为真,则取后面的值作为整个表达式的值(setCapture执行了并返回值作为整个语句的值),
+            若前为假,说明box.setCapture不存在(高级浏览器),则无序执行后面的语句高级浏览器中的box.setCapture()也就不会执行;
+    全局捕获:一个对象触发鼠标事件以后,以后所有的鼠标后续事件都捕获到该元素身上。
+
+    以后给body和html添加事件,全部给document添加(想想背景色和滚动条).
+ -->
+ <body>
+     <div id="box"> RedJJJ
+     </div>
+     <script>
+         window.onload = function () {
+             var box = document.getElementById("box");
+             box.onmousedown = function (event){
+                 event = event || window.event;
+                 //获取元素初始坐标
+                 var eleX = box.offsetLeft;
+                 var eleY = box.offsetTop;
+ 
+                 //获取鼠标初始坐标
+                 var startX = event.pageX;
+                 var startY = event.pageY;
+        
+                 document.onmousemove = function(event){
+                     //获得位移后的鼠标坐标 , 每次触发该事件都会更新一次
+                     var endX = event.pageX;
+                     var endY = event.pageY;
+ 
+                     var disX =   endX-startX;
+                     var disY =   endY-startY;
+ 
+                     var lastX = eleX + disX;
+                     var lastY = eleY + disY;
+ 
+                     box.style.left = lastX + "px";
+                     box.style.top = lastY + "px"; 
+ 
+                 }
+                
+                 document.onmouseup = function (){
+                     document.onmousemove = null;
+                 }
+                 return false; //禁用浏览器默认行为;
+                 //dom2 事件 event.preventDefault();
+             } 
+         }
+ 
+    
+     </script>
+ </body>
+ 
+ </html>

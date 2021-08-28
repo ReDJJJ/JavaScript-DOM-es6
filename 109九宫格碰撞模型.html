@@ -1,0 +1,125 @@
+<!-- 
+    现在中间有一个BOX
+    让盒子A碰撞到BOX时候停下;
+
+    整个模型分成九宫格,当盒子碰到BOX停止;
+
+    碰撞检测要写在赋值之后,因为这样子逻辑才相通 ,只有先碰才进行调整
+
+    重要方法 对象名.getBoundingClientRect() 只读
+    直接获取元素相对于视口的top值和left值
+    用处:当元素位于其他父元素内部时候,offsetTop,offsetLeft显示的是相对父元素参考点,此时想求元素位于视口的topleft可以直接利用此方法
+         哪怕元素父亲是document视口,当元素自身除了定位TOP和LEFT之外,还有transform(transition(50%,50%));此时offsetTop和offsetLeft指向的还是绝对定位的TOP和LEFT,此时offsetTop和offsetLeft就不能准确代表元素在视口中的偏移量了;
+
+         //.getBoundingClientRect()返回的是一个对象如下；
+//						{
+//							top:100,
+//							left:100
+//						}
+ -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        div#box {
+            width: 100px;
+            height: 100px;
+            background: lightgreen;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+        }
+
+        div.center {
+            width: 300px;
+            height: 300px;
+            background: skyblue;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="center"></div>
+    <div id="box"> RedJJJ</div>
+    <!-- 绝对定位,后写遮盖先写 -->
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <img src="./img/IMG_3835.JPG" style="width:600px" alt="">
+
+    <script>
+        window.onload = function () {
+            var box = document.getElementById("box");
+            var center = document.querySelector(".center");
+            box.onmousedown = function (event) {
+                event = event || window.event;
+                //获取元素初始坐标
+                var eleX = box.offsetLeft;
+                var eleY = box.offsetTop;
+
+                //获取鼠标初始坐标
+                var startX = event.pageX;
+                var startY = event.pageY;
+
+                document.onmousemove = function (event) {
+                    //获得位移后的鼠标坐标 , 每次触发该事件都会更新一次
+                    var endX = event.pageX;
+                    var endY = event.pageY;
+
+                    var disX = endX - startX;
+                    var disY = endY - startY;
+
+                    var lastX = eleX + disX;
+                    var lastY = eleY + disY;
+
+                    box.style.left = lastX + "px";
+                    box.style.top = lastY + "px";
+
+                //boxX,X代表会碰上的center的X边的条件 
+                  var boxL = lastX+box.offsetWidth;
+                  //box的R侧,会碰上center盒子的L侧
+                  var boxR = lastX;
+                  var boxT = lastY+box.offsetHeight;
+                  var boxB = lastY;
+
+                  // 此处一定要使用getBoundingClientRect(),因为center元素有translate(位移),offsettop,offsetleft不能代表center元素在视口中的偏移量;
+                  var centerL = center.getBoundingClientRect().left;
+                  var centerR = centerL + center.offsetWidth;
+                
+                  var centerT = center.getBoundingClientRect().top;
+                  var centerB = centerT + center.offsetHeight; 
+
+                //   获取八个边缘之后,关键思路来了
+                //   逆向思维,判断碰撞太麻烦,判断不碰撞时更简单
+                //   以下四个条件,每个条件代表了一个永不碰撞的区域
+                //   四个区域重叠起来就是永不碰撞的区域 
+                
+                if( boxL < centerL || boxT < centerT || boxR > centerR || boxB > centerB){
+                    center.style.background="skyblue";
+                }else{
+                    center.style.background="pink";
+                }
+
+           
+
+                }
+
+                document.onmouseup = function () {
+                    document.onmousemove = null;
+                }
+                return false; //禁用浏览器默认行为;
+            }
+        }
+    </script>
+</body>
+
+</html>

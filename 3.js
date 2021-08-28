@@ -1,0 +1,1 @@
+alert("外链式 js 比较特别 是在body标签内部\n通过script标签src 来引入的");

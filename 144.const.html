@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+       <script>
+        //   const 声明变量
+        //   const 声明变量的同时必须初始化,且声明的变量的值不可更改;
+        const a = 10; //const声明同时必须初始化;
+        //a = 20; //Assignment to constant variable. const声明变量的值不可更改
+
+        //const特征:
+        /*
+            不可更改
+            声明同时必须初始化
+            具有块级作用域
+            不能重复声明
+            不参与预解析
+        */
+
+        //面试题:
+            const obj = {a:100,b:200}
+            obj.a = 1000;
+            console.log(obj);
+        //可以更改obj中的属性a,理解:const声明的是obj这个变量;意味着obj变量存储的值是不可更改的(obj存储的堆内存首地址不可更改),而不是obj指向的对象的内容不可更改;
+            obj = {} ; //报错 obj变量的值(地址 已经被更改了
+       </script>
+   </body>
+</html>

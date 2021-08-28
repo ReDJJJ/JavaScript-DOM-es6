@@ -1,0 +1,53 @@
+<!-- 
+    回调函数 目前无法举例 到DOM编程时候才能讲出来
+
+
+    回调函数:函数是我定义的,我没有调用,最终执行了 (调用  函数名() fun()就算一次调用,无论在哪)
+
+    回调函数 一般情况都是当作参数 去传递的,但并不是说回调函数就得当参数
+
+
+    事件
+    定时器
+    ajax
+    生命周期回调函数
+
+ -->
+
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            // 函数作为参数 ,实际脱裤子放屁,fn1是全局变量,直接调用就好
+            function fn(func){
+                console.log("嘿嘿");
+                func(); //fn1()直接调用即可
+            }
+
+            function fn1(){
+                console.log("芜湖");
+            }
+
+            fn(fn1);
+            // 预编译后, fn和fn1 分别在全局环境中创建了全局变量fn 和 fn1 ,分别指向堆内存的对应函数内容
+            // fn(fn1) ; fn先执行,fn入栈,在fn函数环境中创建了形式参数func局部变量, func 的值是fn1的值, 所以func和fn1 共同指向了 fn1的堆内存,只不过func作用域是局部变量
+            // func() 就是 fn1()
+
+            // 对象数据类型
+            // 读取时,读取的是对象指向地址的数据内容
+            // console.log(fn)  打印fn变量指向地址的数据内容 (堆内存内fn函数的内容)
+            // 赋值时,赋值的是地址
+            // fn1 = fn ; fn变量的指向地址 赋予给fn1  两者共同指向堆内存的函数内容
+
+            console.log(fn1); //打印fn1函数内容 (根据fn1指向地址 去堆内存找函数内容)
+            console.log(fn1());//打印 fn1调用的结果 (返回值 默认undefined)
+        </script>
+    </body>
+</html>

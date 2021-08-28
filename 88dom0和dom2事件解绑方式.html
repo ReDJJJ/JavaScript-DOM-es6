@@ -1,0 +1,87 @@
+<!-- 
+    dom分版本 dom 0 1 2 3 
+    dom0和dom2 有自己独立的事件绑定和解绑方式
+    事件绑定就是添加事件监听呗
+    解绑就是逆操作呗
+
+    回调函数可以拥有自己的函数名 
+
+
+ -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        div {
+            height: 100px;
+            background: skyblue;
+        }
+    </style>
+</head>
+<div id="box">
+
+</div>
+<button>解绑按钮</button>
+
+<body>
+    <script>
+        window.onload = function () {
+            var a = 0;
+            var box = document.querySelector("#box");
+            var button = document.querySelector("button");
+
+
+            box.onclick = function(){
+                alert(++a);
+            }
+            //为box对象中的onclick属性(onclick也是对象)添加回调函数function(){}
+
+            //dom0 事件解绑方式
+            button.onclick = function(){
+                box.onclick = null;
+                //本质上是 元素对象 的事件属性 与回调函数断开,box对象的onclick属性不再指向任意地方;
+            }
+
+
+              //  dom2 事件一个是注意高级低级的事件类型参数区别(简写和详写),还有解绑(参数一致)回调函数需要拿出来单独定义,不能直接写在参数里面
+
+
+            //dom2 addEventListener  解绑  removeEventListener  高级浏览器
+            //removeEventListener 解绑要求:参数和addEventListener一模一样;
+        
+            // box.addEventListener("click", function () {
+            //     console.log(a++);
+            // }, false);
+            // box.removeEventListener("click", function () {
+            //     console.log(a++);
+            // }, false)//解锁失败: 上面的function 和下面的function 相当于定义了两个回调函数,虽内容一致,但是彼此地址不同
+            //所以为了能够正确解绑:回调函数需要单独定义 并且赋予一个函数名指向该地址
+            function fn() {
+                console.log(123456);
+            }
+            box.addEventListener("click", fn, false);
+            button.onclick = function () {
+                box.removeEventListener("click", fn, false); //正确解绑方式
+            }
+
+            //dom2 attachEvent 解绑方式  detachEvent 
+            // detachEvent解绑要求:参数和attacthEvent一模一样 (所以回调函数需要单独定义,并赋予函数名)
+            // function fn1(){
+            //     console.log(123456);
+            // }
+            // box.attachEvent("onclick",fn1); //低级浏览器 dom2事件参数: 详写事件类型 onclick
+            // button.onclick = function () {
+            //     box.detachEvent("onclick",fn1); 
+            // }
+        
+        }
+        // DOM 0 的事件添加方式: 
+        //                  dom0不可以同时同一类事件多次,如果添加后面覆盖前面;
+        //                  dom2可以添加同一类事件多次,由上至下依次执行;
+    </script>
+</body>
+
+</html>

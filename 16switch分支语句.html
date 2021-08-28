@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            
+            // switch case 分支语句(if多分支的变种,可读性更好)
+
+            // switch (有值的东西,最后里面是一个值,并不会进行转化！！！,这是与if语句最大的区别！！！！if语句里面的条件最后都会转化为布尔值){
+            //     case 值1 : 
+            //             代码块;
+            //             break;
+            //     case 值2 : 
+            //             代码块;
+            //             break;
+            //     default : 
+            //             代码块;
+            //             break;
+            // }
+            
+        
+            //  switch 执行流程:
+            /*
+                1 switch(表达式){},先计算出()内表达式的值,该值不会进行转换成布尔值(予以保留)
+                2 计算出来的值与{} 各个case 后面的值进行比对
+                3 执行第一个值匹配的case的代码块,并且一直执行该case以下所有的case语句,直到遇见break;跳出switch语句
+                4 若无匹配的case ,则执行default的代码块.(default不一定要有,就像if中的else一样)
+                ！！！！注意  switch()的值和case 后面的值 匹配是全等  ===(类型和值都相同)  (没有隐式转换)
+            */
+            var num = parseInt(prompt("请输入今天周几"));
+            switch(num){
+                case 1:
+                    console.log("周一");
+                    // break;
+                case 2:
+                    console.log("周二");
+                    // break;    
+                case 3:
+                    console.log("周三");
+                    // break;
+                case 4:
+                    console.log("周四");
+                    // break;
+                case 5:
+                    console.log("周五");
+                    break;
+                default:
+                    console.log("请输入正常的工作日");
+                    break;
+            }
+            // 若无break;则会从第一个匹配的case 一直执行该case以后所有case的代码块(除了default);
+            
+
+            // case 后面的值是一个确定的值,而不可能是一个范围
+
+            var mark = parseInt(prompt("请输入您的成绩"));
+            // 由于case 的值 只能是一个确切的值,所以将成绩 取头两位来进行 判断成绩区间
+            if(mark<=100 && mark >=0){
+                    switch(parseInt( mark/10 )){
+                        case 10:
+                        case 9 : 
+                                console.log("A");  break;
+                        case 8 :
+                                console.log("B");break;
+                        case 7 :
+                                console.log("C");break;
+                        case 6 :
+                                console.log("D");break;
+                        default:
+                                console.log("不及格");break;
+                    }
+            }else{
+                console.log("请输入一个正确的成绩(0-100)");
+            }
+            // 取头两位数字 10 和 9 都为A  而不及格交给default:来处理
+
+            // ><>=<= == === != !== !比较表达方式和取非表达式的结果一定布尔值 而 || 和 && 表达式不一定
+            // 先switch(true) ,则当case后面的表达式成立时, case 值为true ,则和switch(true)对应上了 ,进入该case
+            // 将判断条件放入case 后面的值: 当case 后面的值 为true 进入该case 执行 其后面所有case语句,直到遇见break;
+            var score = parseInt(prompt("请输入您的具体成绩"));
+            switch(true){
+                                case  ( score <= 100 && score >= 90):
+                                console.log("A");  break;
+                                case  ( score < 90 && score >= 80):
+                                console.log("B");  break;
+                                case  ( score < 80 && score >= 70):
+                                console.log("C");  break;
+                                case  ( score < 70 && score >= 60):
+                                console.log("D");  break;
+                                case  ( score < 60 && score >= 0):
+                                console.log("E");  break;
+                                default:
+                                console.log("请输入一个正确的成绩(0-100)");
+            }
+        </script>
+    </body>
+</html>

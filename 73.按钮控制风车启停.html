@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+    <!-- 
+        关键思路: flag开关思想 父元素ul转来带动子元素li转 
+        坑: 复合属性transform border font 等两次出现在样式中 很可能发生后写的会层叠先写的 会发生层叠现象,所以后写的有可能内容会包含前写的内容;
+            在下面代码中,关键帧中 的transform会叠层掉 ul中的transform ;
+            忘记了一个关键属性 : animation-play-state : running paused 控制动画运行或者暂停 
+
+        风车的布局思路:老师和我的不一样
+        老师的是 四个li浮动 铺满整个ul(每个li长宽均为ul的一半)
+        然后每个li通过圆角设立成风车扇叶的样子 对角设置成100%; border-radius: 0 100% 0 100%/ 0 100% 0 100% 或者 right-top-border-radius:100% left-bottom-border-radius:100%
+        老师的扇叶胖一点 其实是 100% -80% 连接点没那么绝对了
+    -->
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        div.wrap {
+            width: 400px;
+            height: 400px;
+            background: skyblue;
+            margin: 200px auto 0;
+            position: relative;
+        }
+        div ul {
+            width: 10%;
+            height: 10%;
+            background: red;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* 此处transform 会被层叠 所以translate(-50%, -50%)也要添加在动画中 */
+            transform-origin: center center;
+            animation: rotateUl1 5s 0s linear infinite reverse;
+        }
+        div ul li {
+            width: 300px;
+            height: 100px;
+            background: pink;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /* 位移调整 */
+            border-radius: 50%;
+        }
+        div ul li:nth-child(1) {
+            transform-origin: left center;
+            transform: translateY(-50%) rotateZ(0deg);
+        }
+        div ul li:nth-child(2) {
+            transform-origin: left center;
+            /* //transform-origin 中间不需要,间隔 */
+            transform: translateY(-50%) rotateZ(90deg);
+        }
+        div ul li:nth-child(3) {
+            transform-origin: left center;
+         
+            transform: translateY(-50%) rotateZ(180deg);
+        }
+        div ul li:nth-child(4) {
+            transform-origin: left center;
+           
+            transform: translateY(-50%) rotateZ(270deg);
+        }
+        @keyframes rotateUl1 {
+            0% {
+                transform: translate(-50%, -50%) rotateZ(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotateZ(360deg);
+            }
+        }
+        button{
+            width:100px;
+            height:100px ;
+            display:block;
+            margin:0 auto;
+            /* button是行内元素  */
+        }
+      
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <ul>
+            <li>
+
+            </li>
+            <li>
+
+            </li>
+            <li>
+
+            </li>
+            <li>
+
+            </li>
+
+        </ul>
+    </div>
+    <button>启停按钮</button>
+    <script>
+        window.onload = function () {
+            var ul = document.querySelector("div.wrap>ul");
+            var btn = document.getElementsByTagName("button"); //只有一个数组元素的伪数组
+            var flag = false;
+            btn[0].onclick = function () {
+                if (flag) {
+                    ul.style.animationPlayState = "running";
+                }
+                else{
+                    ul.style.animationPlayState = "paused";
+                }
+                flag = !flag;
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!-- 
+    延迟定时器(单次定时器): 是window.下的一个方法
+        通常用一个变量接收设置延迟定时器这个对象,方便清除
+            var timer = setTimeout(function(){ timer只是个变量名,指向了setTimeout
+                        延迟后执行的代码块;
+                    },延迟时间(单位ms))
+        清除延迟定时器:
+            clearTimeout(timer);
+
+    循环定时器(多次定时器): 也是window下的一个方法
+        通常用一个变量接收设置循环定时器这个对象,方便清除
+        var timer = setInterval (funciton(){ 
+            每次延迟后执行的代码块
+        },延迟时间ms)
+
+    清除循环定时器:
+            clearInterval(timer);
+        
+    无论是哪种计时器(延时,循环),都是window下的一个方法,】都要使用全局变量进行存储;
+                              不要在函数内部进行定义局部变量来存储定时器对象,因为需要在程序任何位置去清除定时器;
+    定时器要用全局变量装,否则造成在局部作用域外无法清除定时器,(甚至还会报错);定时器重复冲突
+ -->
+
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+       <button>
+           清除延迟定时器clearTimeout(延迟定时器对象)
+       </button>
+       <script>
+           window.onload = function() {
+               var a = 10 , b = 10;
+               var btn = document.querySelector("button");
+
+
+               //延时定时器;
+               var timerTimer = setTimeout(function() {
+                   console.log(a+b);
+               },3000);
+               //点击按钮后清除延时定时器
+               btn.onclick = function() {
+                   clearTimeout(timerTimer);
+               }
+
+               //循环定时器
+               var  timer = setInterval(function() {
+                   console.log(a++,b++);
+               },3000);
+               //按下按钮后清除循环定时器
+               btn.onclick = function() { //此处dom0事件,后添加的事件监听会覆盖前面同类型的事件监听,所以现在按钮只能清除循环定时器了;
+                   clearInterval(timer);
+               }
+
+               //功能:打印十遍后不再打印,每次打印间隔1s  (需要一个变量记录打印次数)
+               var count = 0;
+               var timer1 = setInterval(function() {
+                   console.log(a++,b++);
+                   count ++;
+                   if(count===10){
+                       clearInterval(timer1);
+                   }
+               },1000);
+           }
+       </script>
+   </body>
+</html>

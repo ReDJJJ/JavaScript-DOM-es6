@@ -1,0 +1,174 @@
+<!--     
+    功能: 鼠标移入后,轮播图图标渐变出现 (有来有回)
+
+    纯CSS 思路 : 利用transition 过渡 配合opacity 即可实现 
+
+    轮播图 固定结构 : 一个div盒子 嵌套 一个 很长的 ul  其中ul 中的li 宽度恰好和 div 盒子一样 ,当点击轮播按钮时 ul移动 
+
+
+     // 老师使用的是 渐变  transition 配合opacity 而我使用的是 动画 动画只有一个
+     动画出现了许多问题  1 动画次数只设置一次 则  只有第一次会渐变出现,鼠标移出后不会渐变消失,已经消耗完了次数了.
+                        2 动画次数设置无数次 则 鼠标移入和移出都会发生无数次的渐变出现 和渐变消失
+
+    解决方法:未有 有可能会说 为什么不使用两个动画 ,一个给移入 一个给移出呢?
+    因为 这样子移入和移出状态不连续 ,这样子是两个动画 ,当移入动画进行到一半(设此时透明度50%) 此时移出了触发了另一段动画(开始透明度为0)  这样子透明度渐变就割裂开了. 
+
+-->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .banner {
+            width: 600px;
+            height: 300px;
+            margin: 50px auto;
+            background: skyblue;
+            position: relative;
+            overflow: hidden;
+            /* 很长的ul 装载轮播图片 父元素div.banner溢出隐藏 */
+        }
+
+        .banner .picture {
+            /* 
+                    块级元素 不设置宽高 默认和父亲一样 
+                    所以假若不设置宽高,宽度和div.banner一样,浮动的轮播图由于位置不够往下挤了
+                    所以要设置一个很长的ul 恰好能容纳 多个li 并列排序
+                */
+            width: 1800px;
+            /* 轮播图的布局关键之一 一个长度可以容纳多个浮动li 的长ul */
+        }
+
+        .banner .picture li {
+            float: left;
+            /* 轮播图的布局关键之一 */
+        }
+
+
+
+        .banner .picture li img {
+            width: 600px;
+            height: 300px;
+            /* 最终效果:(限定li 或img 或100%随父亲啊之类等手段) 最终图片的总长宽一定和div.picture的ul一致  */
+            display: block;
+        }
+
+        .clearfix::after {
+            display: block;
+            content: '';
+            clear: both;
+            height: 0;
+        }
+
+        .banner .circleList {
+            width: 120px;
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+
+            opacity: 0;
+            transition: all 1s linear;
+            /* transition设置在默认状态 则有来有回 */
+            /*  
+                冷知识: 实际运行过程中 opactiy 是瞬间变值的 只不过浏览器帮忙渲染渐变过程 所以transition是无法获取渐变过程中的中间值的
+                transition只能获取 渐变过程 开头和结尾的值 opacity 0 和opacity 1;
+                所以后期学习移动端的时候,就不能用transition来达成 滑动即点即停的效果 ,因为transition无法获取中间值
+            */
+        }
+
+        .banner .circleList li {
+            width: 20px;
+            height: 20px;
+            float: left;
+            border-radius: 50%;
+            background: skyblue;
+        }
+
+        .banner::before,
+        .banner::after {
+            content: ">><<";
+            display: block;
+            width: 30px;
+            height: 100px;
+            background: rgb(124, 124, 124);
+            opacity: .6;
+        }
+
+        .banner::before {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            margin-top: -50px;
+        }
+
+        .banner::after {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            margin-top: -50px;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="banner">
+        <ul class="picture">
+            <!-- 轮播图图片列表 -->
+            <li><img src="./img/1.png" alt=""></li>
+            <li><img src="./img/55.png" alt=""></li>
+            <li><img src="./img/44.png" alt=""></li>
+        </ul>
+        <ul class="circleList clearfix">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <script>
+        //小圆点模块
+        var circleList = document.querySelectorAll(".banner .circleList li");
+        for (let i = 0; i < circleList.length; i++) {
+            //同一元素可以同时有多个监听事件
+            circleList[i].onclick = function () {
+                for (var j = 0; j < circleList.length; j++) {
+                    circleList[j].style.backgroundColor = "skyblue"; //更改元素样式一样要记得改的是行内式 .style.样式属性名
+                }
+                this.style.backgroundColor = "pink";
+            }
+        }
+        //小圆点整体淡化淡出
+        var banner = document.querySelector(".banner");
+        var ul = document.querySelector("ul.circleList");
+
+        // 此处本人犯了巨大错误 ,没弄清楚对象 , 是移入div的时候 , 小圆点模组整体ul渐变 . 所以是给div添加监听,但是修改的是ul的属性来进行动画的开始
+      
+        banner.onmouseover = function () {
+            ul.style.opacity = 1;
+        }
+
+        banner.onmouseout = function () {
+            ul.style.opacity = 0;
+        }
+    </script>
+</body>
+
+</html>

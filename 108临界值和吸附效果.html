@@ -1,0 +1,84 @@
+<!-- 
+    拖拽的基础上 添加边界问题
+
+    思路: 利用判断 元素自身的位置offsettop和offsetleft 是否超出边界
+
+    若出界(将坐标限定在边界内固定不动)
+    若未超出(坐标正常移动)
+    判断应该在移动事件内部进行判断
+    
+    吸附效果:修改判断条件接口,若在边界50px范围以内,直接赋边界死值固定在
+
+    1分成上下左右
+    超出左: box.offsetLeft < 0; 右 box.offsetLeft >= 视口宽度-box.clientWidth(元素有边框时要用offsetWidth);
+    上: box.offsettop < 0;      下 box.offsetTop >= 视口高度-box.clientHeight;
+
+    而程序中的lastY和lastX 是将要赋值给元素绝对定位的top和left,所以通过判断lastY和lastX来判断将来元素是否会超出界限;
+ -->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background: lightgreen;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box"> RedJJJ
+    </div>
+    <script>
+        window.onload = function () {
+            var box = document.getElementById("box");
+            
+            document.onmousedown = function(event){
+                event = event || window.event;
+                var eleX = box.offsetLeft , eleY = box.offsetTop; 
+                var startX = event.pageX ,startY = event.pageY;
+                console.log("1");
+                document.onmousemove = function(event){
+                  
+                    event = event || window.event;
+                    var endX = event.pageX;
+                    var endY = event.pageY;
+
+                    var disX = endX - startX;
+                    var disY = endY - startY;
+
+                     //元素最终位置 = 元素最初位置+鼠标位置差
+                    var lastX = disX + eleX; 
+                    var lastY = disY + eleY;
+                    // 此处为元素位移前夕,在此处进行界限预处理,
+    
+                    // 若lastX lastY 出界,则直接赋边界的死值;
+                    // 可以左右出界为一组 if elseif 
+                    if(lastX < 50){lastX = 0;} //若超出左边,将lastX=0;赋值给box.style.lastX 
+                    if(lastY < 50 ){lastY = 0;} 
+                    if(lastX > document.documentElement.clientWidth - box.offsetWidth-50){lastX = document.documentElement.clientWidth - box.offsetWidth};
+                    if(lastY > document.documentElement.clientHeight - box.offsetHeight-50){lastY = document.documentElement.clientHeight - box.offsetHeight};
+                    box.style.left = lastX + "px";
+                    box.style.top = lastY + "px";
+                }
+                document.onmouseup = function(event){
+                    document.onmousemove = null;
+                }
+                return false;
+                // dom2 解绑 event.preventDefault();
+            }
+        }
+
+   
+    </script>
+</body>
+
+</html>

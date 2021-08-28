@@ -1,0 +1,53 @@
+
+
+<!-- assign 分配指派  -->
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style></style>
+   </head>
+   <body>
+       <!-- 
+            ES6中对象的拓展方法
+            1Object.is(x,y); 判断两个数据是否全等 , 和 v1 === v2 作用一致; 垃圾
+
+
+        -->
+        <script>
+        console.log(Object.is("2",'2')); // === 功能 true;
+
+            //Object.assign(target,source1,source2....); 
+            //将源对象的属性复制到目标对象当中
+
+            let obj = {a:1,b:2};
+            let obj1 = obj;
+            //以上这种做法,堆内存只有一个对象区域,而变量obj和obj1两个都指向同一个堆内存地址;  
+            let obj2 = {};
+            for (const key in obj) {
+                obj2[key] = obj[key];
+            };
+            console.log(obj2);
+            //深拷贝 
+
+            //而Object.assign()方法 要求至少两个对象之间发生,只不过目标对象的属性是来源于源对象,并且可以源于多个源对象,将源对象的所有属性复制到目标对象当中
+             obj1 = {a:1,b:2,c:"k"}; 
+             obj2 = {name:"hj",age:30};
+            let targetobj = {gender:"male"};
+            Object.assign(targetobj,obj1,obj2);
+            console.log(targetobj);
+
+            //es6 中,允许直接操作 __proto__属性;
+            console.log(obj2.__proto__);
+            obj2.__proto__ =obj1; //单独修改obj2的隐式原型;
+            console.log(obj2.__proto__);
+
+            //面试题:
+            // let obj2 = {};
+            // Object.prototype = obj1 ;
+            // console.log(obj2.__proto__); //还是Object,没有改变,因为Object的原型修改是在obj2 定义之后. 而obj2定义是原型链就确定了,除非自己改否则不会再更改了.这也是为什么之前原型链继承语句要写在实例化对象过程之前的原型,实例化过程一旦完成,原型链不会因为第三方更改而更改,除非自己修改自己的__proto__;
+            //原型链和作用域链在定义的时候已经确定了,面试题要注意
+        </script>
+   </body>
+</html>

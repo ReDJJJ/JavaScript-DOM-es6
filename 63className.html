@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           .blue{
+            background: skyblue;
+           }
+           .pink{
+            background: pink;
+           }
+       </style>
+   </head>
+   <!-- 思路: 通过更换元素对象className 来达到改变颜色的目的 -->
+   <body>
+    <p id='pp' class="pink">哈哈哈哈哈哈哈哈哈哈哈哈</p>
+       <script>
+           window.onload = function(){
+                var pp = document.getElementById('pp');
+                pp.onclick = function(){
+                    pp.class='red';//不生效  原因: class是js中的关键字 类 , 对象.属性中.语法要求符合标识符规则 ,不符合用[''],变量用[]
+                    //但是更奇怪的是['']也不行,js中封装了,想操作class属性应该使用className;
+                    console.log(pp.className);
+                    pp.className='blue'; //生效,操作Class类选择器需要使用className属性
+                }
+           }
+
+       
+
+       </script>
+   </body>
+</html>

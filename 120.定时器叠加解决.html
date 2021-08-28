@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+<!-- 
+    编程思维:提高复用,js中形式参数并没有限定类型,可以通过判断形式参数的类型来给不同的对象调用传不同类型的参,调高复用度
+    定时器叠加:解决定时器叠加问题和个人思路大体一致:就是保证同一时间只有一个同类定时器在运行,通过标志位控制,其实就是进程锁的意思;
+
+ -->
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        img {
+            display: bLock;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        /*禁止系统滚动条*/
+        html,
+        body {
+            height: 100%;
+            /* overflow: hidden; */
+        }
+
+        #wrap {
+            width: 100%;
+            height: 100%;
+            /* overflow: hidden; */
+            /* 为了显示图片 ren'l */
+        }
+
+        #wrap .banner {
+            width: 600px;
+            height: 300px;
+            background: pink;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #wrap .banner ul.picture {
+            position: absolute;
+            top: 0;
+            left: -600px;
+            width: 4200px;
+            /* 无缝衔接:宽度要改,首发位置要改 */
+            height: 100%;
+            background: skyblue;
+        }
+
+        #wrap .banner ul.picture li {
+            float: left;
+        }
+
+        #wrap .banner ul.picture li img {
+            width: 600px;
+            height: 300px;
+        }
+
+        #wrap .banner ul.circle {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #wrap .banner ul.circle li {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: gray;
+            float: left;
+            margin-right: 5px;
+        }
+
+        #wrap .banner ul.circle li.current {
+            background: red;
+        }
+
+        /* 不能用伪元素,伪元素无法操作和获取 */
+        #wrap .banner .left,
+        #wrap .banner .right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 100px;
+            background: rgba(100, 100, 100, .6);
+            text-align: center;
+            color: white;
+            font: normal 700 20px/100px "arial";
+            cursor: pointer;
+        }
+
+        #wrap .banner .left {
+            left: 0;
+        }
+
+        #wrap .banner .right {
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="banner">
+            <ul class="picture">
+
+                <li><a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                </li>
+
+                <li><a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/3.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/4.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/6.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                </li>
+
+                <li><a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                </li>
+
+            </ul>
+            <ul class="circle">
+                <li class="current"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <span class="left">
+                < </span>
+                    <span class="right"> > </span>
+
+        </div>
+        <img src="./img/IMG_3849.JPG" alt="" style="width:700px;transform:rotate(-90deg)">
+    </div>
+
+    <script>
+        window.onload = function () {
+            var box = document.querySelector('.banner');
+            var ul = document.querySelector(' #wrap .banner ul.picture');
+            var circleNodes = document.querySelectorAll("#wrap .banner .circle li");
+            var spanNodes = document.querySelectorAll("#wrap .banner .left,#wrap .banner .right"); //querySelectorALL只支持一个字符串参数,所有变量选择器写在里面,逗号间隔
+            var timer = null; //定时器容器
+            var timeAll = 600; //自定义移动的总时间;
+            var timeStep = 20; //自定义移动的每一步耗费时间(循环定时器间隔);
+            var isMoveFlag = false;//默认没有
+            var running = null; //自动轮播定时器
+
+
+            function move(flag) {
+                // clearInterval(timer); 可以  保证定时器只开启一个,不会造成定时器叠加,但是解决不了问题
+                if (isMoveFlag) {
+                    return; //假若isMoveFlag是true;则代表着当前有定时器运行,直接结束该函数;
+                }
+
+
+                if (typeof flag == "boolean") {
+                    if (flag) {
+                        var eleDis = -600;
+                    } else {
+                        var eleDis = 600;
+                    }
+                } else {
+                    var eleDis = flag - ul.offsetLeft;
+                }
+                //通过以上的方式求出,图片所要移动的距离;
+
+                var lastX = ul.offsetLeft + eleDis;
+                var step = eleDis / (timeAll / timeStep);
+
+                //每次点击span都会执行move(),都会创建定时器,而前一个定时器还没清除又添加一个,则会导致轮播图停不下来并且越转越快;
+
+                timer = setInterval(function () {
+                    isMoveFlag = true; //定时器运行 上锁 
+                    var left = ul.offsetLeft + step;
+                    if (left === lastX) {
+                        clearInterval(timer);
+                        if (left === -3600) {
+                            left = -600;
+                        } else if (left === 0) {
+                            left = -3000;
+                        }
+                        isMoveFlag = false;//最后一步,整个移动结束了,释放定时器锁;
+                    }
+                    ul.style.left = left + "px";
+                }, timeStep)
+
+
+
+                var circleNodes = document.querySelectorAll("#wrap .banner .circle li");
+                var circleUlNode = document.querySelector("#wrap .banner .circle");
+
+
+                for (var i = 0; i < circleNodes.length; i++) {
+                    circleNodes[i].className = "";
+
+                }
+
+
+                var index = -lastX / 600 - 1;
+                if (index == -1) {
+                    index = 4;
+                } else if (index == 5) {
+                    index = 0;
+                }
+                circleNodes[index].className = "current";
+            }
+
+            spanNodes[0].onclick = function () {
+                move(false);
+            }
+            spanNodes[1].onclick = function () {
+                move(true);
+            }
+
+            for (var i = 0; i < circleNodes.length; i++) {
+                circleNodes[i].index = i;
+                circleNodes[i].onclick = function () {
+                    for (var j = 0; j < circleNodes.length; j++) {
+                        circleNodes[j].className = "";
+                    }
+                    this.className = "current";
+                    move((this.index + 1) * -600);
+
+                }
+            }
+
+            //自动轮播的逻辑基本逻辑
+            //定时器嵌套 : 大定时器决定每张图停留的间隔(包含缓动的时间) ; 小定时器负责图片移动的方式 ;
+            //有两个个大问题 :
+            // 当自动轮播时候,点小圆点顺序会乱掉(假如自动轮播到第三张图,此时点击第一个张图,确实会跳转到第一张图,但是自动轮播会到第三张图而不是第四张),,并且会一直轮播,不停了
+            //,所以要添加onmouseover,onmouseout;鼠标移入清除轮播定时器,鼠标移出添加轮播定时器)(刷新定时器),就能解决以上两个问题了 
+
+            function autoRunning() { //函数封装设立定时器;
+                running = setInterval(function () {
+                    move(true); //当传入布尔值类型的形参的时候,会自动获取此时ul的坐标,并且往一个方向轮播;
+                    //此处为什么不会发生定时器层叠: 外层定时器每轮时间>内层定时器总时间(此时内层定时器都解锁)
+                }, 3000);
+            }
+            autoRunning();//调用函数进行自动轮播;
+
+            box.onmouseover = function () { //鼠标移入,停止轮播
+                clearInterval(running);
+            }
+            box.onmouseout = function () {  //鼠标移入,开始轮播
+                autoRunning();
+            }
+        }
+        //   第一步： 结构	 结构牢记 
+        //   第二步：css   外面小盒子根据图片的宽度进行设置         内部大盒子   宽度是根据图片的个数进行的设置的
+        //   第三步： js行为		
+			
+				//1、点击按钮让图片先动起来（只点击右侧）   每次点击要准备走的距离都是-600，这个距离需要用定时器慢慢走，
+				//	需要求每一步的距离     元素起始位置我们是可以获取到的， 结束位置我们也求出来；
+				
+				//2、 看什么时候元素停止，当刚好元素走的位置和开启求出来的结束位置一样的时候，清除移动定时器；
+				
+				//3、左边按钮和右边按钮    几乎一致，  只是点左边按钮的时候，元素要准备走的距离是600，其它的都不变，因此封装函数move(flag)
+					//函数传参为true就是点右  false就是点左
+					
+				//4、无缝的操作     结构需要变化   最前面加最后一张    最后面加第一张； 在清除定时器的时候
+					//，去判断是否元素走到了最后一张的位置和第一张的位置，如果走到，让元素顺便到相应的位置
+					
+				//5、小圆点变色  排他   关键点在求出哪一个小圆点变色，就是要拿到小圆点变色的下标，通过元素最终位置去求小圆点变色的下标
+				
+				//6、点击小圆点，图片移动对应位置  要传递元素准备移动的最终位置  跟点击的小圆点下标相关，move里面参数要根据类型进行判断
+				//到底是点的按钮还是点的小圆点，因为传过来的参数不同
+				
+				//7、自动轮播 ，  根据图片的下标进行move  传的也是元素准备移动的最终位置， 下标需要进行判断   为6  变回1
+				
+				//8、自动轮播鼠标行为的同步   鼠标移入清除自动轮播   鼠标移出重启自动轮播   
+				
+				
+				//9、移入之后，鼠标点击按钮或者小圆点，都要去把自动轮播的下标值 进行更新， 否则没法同步；
+    </script>
+</body>
+
+</html>

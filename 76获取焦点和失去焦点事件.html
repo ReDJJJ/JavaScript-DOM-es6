@@ -1,0 +1,49 @@
+<!--
+     获取焦点事件 : onfocus 失去焦点 onblur   //事件效果和 :foncus伪类 差不多
+
+     随机色:
+     两种思路: 利用随机数 机制  随机数范围0-255  然后js修改属性值 color= "rgb("+green+","+red+","+blue+")";
+              利用验证码 机制  随机验证码 #xxxxxx color = #xxxxxx
+-->
+
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+       <input type="text" class="input1">
+       <input type="text" class="input2">
+       <input type="text" class="input3">
+
+       <script>
+           window.onload = function() {
+               var inputList = document.querySelectorAll("input");
+               // input1 自动聚焦 input2 placeholder input3 不可用
+                inputList[0].autofocus = true;
+                inputList[1].placeholder = "芜湖";
+                inputList[2].disabled = true;
+
+                for (var i = 0; i < inputList.length; i++) {
+                    inputList[i].onfocus = function(){
+                        var red = Math.floor((Math.random()*255-0+1)+0);
+                        var blue = Math.floor(Math.random()*256);
+                        var green = Math.floor(Math.random()*256);
+                        for (var j = 0; j < inputList.length; j++) {
+                            inputList[j].style.color= "rgb("+green+","+red+","+blue+")";
+                            inputList[j].style.backgroundColor= "rgb("+blue+","+green+","+red+")";
+                        }
+                        this.style.color = "pink";
+                        this.style.backgroundColor = "skyblue"; //修改的都是行内式
+                    }
+                }
+           }
+       </script>
+   </body>
+   
+</html>

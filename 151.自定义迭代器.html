@@ -1,0 +1,116 @@
+<!-- 普通对象默认是不能使用for of方法的, 因为其构造函数Object的原性中没有Symbol.iterator这个方法,以供for of方法使用-->
+<!-- 此处自定义迭代器 让对象也能使用for of循环-->
+
+<!--
+     内置属性值Symbol.iterator是一个方法,专门用来供for of消费使用的
+     数据有这个方法就能使用for of,能使用for of就能使用...三点运算符 (普通对象默认不能使用...三点运算符)
+-->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style></style>
+</head>
+
+<body>
+    // iterator是一种接口(函数)，为各种不同的数据结构提供统一的访问机制
+
+    <script>
+        // iterator 函数工作原理:
+        // iterator创建(返回)一个对象A,该对象使用了一个位置变量,该位置变量指向数据结构的起始位置
+        // 第一次调用对象A的next方法,此时位置变量指向数据结构起始位置,取该位置成员的值,并让位置变量存储下一个成员的位置
+        // 接下来不断的调用next方法,位置变量不断往后移动,直到指向最后一个成员
+
+        //每次调用next方法,next方法都会返回一个包含value和done的对象B{value:当前成员的值,done:布尔值}
+        //value表示当前成员的值，done对应的布尔值表示当前的数据的结构是否遍历结束。
+        //当遍历结束: value:undefined done:true;
+
+        //以迭代数组为例子:
+        function myIter(arr) {
+            //对象内没有变量,所以需要在myIter函数外部设置一个位置变量
+            let index = 0; //指向数组初始位置
+            var nextObj = {
+                next: function () {
+                    if (index < arr.length) { //判断next方法是否遍历完了数组
+                        return {
+                            value: arr[index++], //每次赋完后 index指向下一个位置
+                            done: false,
+                        }
+                    } else {
+                        return {
+                            value: undefined,
+                            done: true,
+                        }
+                    }
+                    //简化return index < arr.length ? {value: arr[index++],done: false} : {value: undefined,done: true};
+                    //此处三元运算符执行过程没理解到位,:前后的表达式运算的结果作为整个三元表达式的值;并将该三元表达式的值作为next函数的返回值
+                }
+            }
+            return nextObj;
+        }
+        //以上迭代器还是个闭包,所以index可以在外部调用的时候正常变化; 
+        //所以上面结构那么复杂是为了形成闭包,让外部也可以正常调用obj中的next函数 来形成遍历
+
+        //测试自己写的接口是否实现了iterator的原理
+        let arr = [1,2,3,4];
+        var obj = myIter(arr); //将myIter创建的对象赋给obj,让obj指向这个对象,完成闭包的最后一步,至此闭包绑定完成,obj就是一个拥有next方法的对象;
+        for (let i = 0; i <= arr.length; i++) {
+            console.log(obj.next());
+        }
+      
+        //把Array构造函数原型的的Symbol.iterator 迭代器替换成自己的接口,看是否可以for of
+        // Array.prototype[Symbol.iterator] = myIter;  //将myIter的地址赋给Array.prototype[Symbol.iterator]
+        // for (const value of arr) { //const块级作用域
+        //     consolo.log(value);
+        // }
+        //Cannot read property 'length' of undefined 报错
+        //过程: for of 函数需要Symbol.iterator迭代器的支持,所以for of循环的时候数组会调用迭代器,但是我们自定义的迭代器需要一个形参(arr),数组调用迭代器的时候并没有传参数,此时形参arr为undefined,所以报错;
+        //既然Array.prototype[Symbol.iterator]是数组本身自己调用的其隐式原型(Array.prototype)的方法,则用this不就可以指向该数组了么;
+
+        function myIter2() {
+            let that = this ; //此处的this指向该函数的调用者,为数组本身
+            let index = 0; 
+            return {
+                next: function () {
+                    if (index < that.length) {  //next方法内不能用this,此处的this指向next方法的所有者对象,而不是外层myIter2的this(指向数组),所以要用到let that = this小技巧
+                        return {
+                            value: that[index++], 
+                            done: false,
+                        }
+                    } else {
+                        return {
+                            value: undefined,
+                            done: true,
+                        }
+                    }
+                }
+            }
+        }
+        Array.prototype[Symbol.iterator] = myIter2;
+        for (const value of arr) { //const块级作用域
+            console.log(value);
+        }
+
+    </script>
+</body>
+
+</html>
+
+<!-- 
+    程序编写经验:
+
+    有时候重复的嵌套,看似复杂,实际上只是为了形成闭包;
+    if(条件1){
+        return A句
+    }else{
+        return B句
+    } 
+    ----利用三元运算符简化---- return 条件1 ？ A句:B句
+    return 的东西看起来复杂,起始可以分类说明: return 基本数据类型(单纯的值) , return 对象数据类型(对象的首地址);
+
+    
+
+ -->

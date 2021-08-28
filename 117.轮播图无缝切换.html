@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        img {
+            display: bLock;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        /*禁止系统滚动条*/
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrap .banner {
+            width: 600px;
+            height: 300px;
+            background: pink;
+            margin: 50px auto;
+            position: relative;
+        }
+
+        #wrap .banner ul.picture {
+            position: absolute;
+            top: 0;
+            left: -600px;
+            width: 4200px;
+            /* 无缝衔接:宽度要改,首发位置要改 */
+            height: 100%;
+            background: skyblue;
+        }
+
+        #wrap .banner ul.picture li {
+            float: left;
+        }
+
+        #wrap .banner ul.picture li img {
+            width: 600px;
+            height: 300px;
+        }
+
+        #wrap .banner ul.circle {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #wrap .banner ul.circle li {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: gray;
+            float: left;
+            margin-right: 5px;
+        }
+
+        #wrap .banner ul.circle li.current {
+            background: red;
+        }
+
+        /* 不能用伪元素,伪元素无法操作和获取 */
+        #wrap .banner .left,
+        #wrap .banner .right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 100px;
+            background: rgba(100, 100, 100, .6);
+            text-align: center;
+            color: white;
+            font: normal 700 20px/100px "arial";
+            cursor: pointer;
+        }
+
+        #wrap .banner .left {
+            left: 0;
+        }
+
+        #wrap .banner .right {
+            right: 0;
+        }
+    </style>
+</head>
+<!-- 瞬间动 个人思路:就修改一下ul的位置不就好了-->
+<!-- 轮播图经典思路:小盒子box装长盒子ul 
+                      点击左右span或者小圆点,轮播图位置动,瞬动改属性
+                      滑动需要 CSS过渡 或者 js中的移动模组(定时器,需要配合界限限定)
+    
+                      js中移动模组:定时器微分法,先设定总的事件,在达到目的地后清除定时器即可
+     编程思维,发现好几个模块同时用一类代码,尝试封装成函数,然后在事件回调函数内调用 
+    -->
+
+<body>
+    <div id="wrap">
+        <div class="banner">
+            <ul class="picture">
+                <!-- pc端无缝衔接的结构 ,首部加尾图 ,尾部加首图 ,添加的两个图充当传送门的用途 -->
+                <li><a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                </li>
+                <!-- 尾图传送门 -->
+                <li><a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/3.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/4.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/6.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                </li>
+
+                <li><a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                </li>
+                <!-- 首图传送门 -->
+            </ul>
+            <ul class="circle">
+                <li class="current"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <span class="left">
+                < </span>
+                    <span class="right"> > </span>
+
+                    <br><br><br><br><br><br> <br><br><br><br><br><br><br><br><br>
+                    <img src="./img/IMG_3847.JPG" alt="" style="width:700px;">
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            var box = document.querySelector('.banner');
+            var ul = document.querySelector(' #wrap .banner ul.picture');
+            var spanNodes = document.querySelectorAll("#wrap .banner .left,#wrap .banner .right"); //querySelectorALL只支持一个字符串参数,所有变量选择器写在里面,逗号间隔
+            var timer = null; //定时器容器
+            var timeAll = 600; //自定义移动的总时间;
+            var timeStep = 20; //自定义移动的每一步耗费时间(循环定时器间隔);
+            // 之所以用全局变量 是为了 方便后期维护
+
+            //   无缝切换的原理 PC端
+            //   1先修改架构,在原本排序前面添加一张尾图,在结尾的后面添加首图; ul的宽度和left对应更改
+            //   2原理:当ul位移到首部的尾图 或者 尾部的首图时,ul再瞬间切换到原本排序的首图和尾图
+            //   相当于首部和尾部加了一个传送门,不停的传送回原本的首部尾部,而瞬间变化图内容一样的用户看不出来的;
+
+            function move(direction) {
+                if (direction) {
+                    var eleDis = -600;
+                } else {
+                    var eleDis = 600;
+                }
+                var lastX = ul.offsetLeft + eleDis;
+                var step = eleDis / (timeAll / timeStep);
+                timer = setInterval(function () {
+                    var left = ul.offsetLeft + step;
+                    if (left === lastX) { //最后一步判断
+                        clearInterval(timer);
+                        // 执行完本次循环定时剩余代码后,清除定时器;
+                        if (left === -3600) {
+                            left = -600;
+                        } else if (left === 0) {
+                            left = -3000;
+                        }
+                    }
+                    ul.style.left = left + "px";
+                    //先做正常的移动,最后一步移动完后判断是否是特殊传送门,是则瞬变,
+                    // 定时器的详细过程:
+                    /*
+                        每轮定时,先将下一步的坐标赋给left;
+                        进行判断(left===lastX),是否为最后一步,
+                                    若是,则走完这一步到目的地了,清除定时器
+                                                    再判断走完这一步的目的地是否是传送门
+                                                    若是,这一步进行传送(直接修改left值)
+                                                    若不是,不传送,正常走完最后一步
+                                    若不是,则走完这一步继续走下一步;
+                        赋值,真正执行走一步这个动作;
+
+                        所以可以使得前面的缓动正常执行,在最后一步进行瞬变;
+                    */ 
+                //    无缝切换根本不用做所谓的边界检测,只需要检测首图和尾图传送门即可,因为本质上使用一个无限轮回,不可能遇到尽头
+                }, timeStep)
+            }
+
+            spanNodes[0].onclick = function () {
+                move(false);
+            }
+            spanNodes[1].onclick = function () {
+                move(true);
+            }
+
+
+        }
+    </script>
+</body>
+
+</html>

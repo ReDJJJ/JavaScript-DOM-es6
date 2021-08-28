@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+        </head>
+                <!-- 数组的核心,下标的确定,可以添加变量存储 边界下标 -->
+    <body>
+        <script>
+            var arr1 = [1,2,3,4,5];
+            document.write('arr1数组长度：'+arr1.length);
+            // 数组名.length 为数组长度   数组长度=数组中数组元素的个数
+
+            var arr2 =new Array(10);//构造一个长度为10的数组,数组元素都是undefined类型的undefined;
+            // 数组下标(索引),每个数组元素拥有独一无二的数组下标,数组下标 从0开始。 
+            // 通过数组下标可以定位数组元素,方便以后的操作;
+            console.log(arr2[0]);
+            // 数组名[数组下标]: 含义是 数组中对应下标的数组元素的'值' 
+            arr2[0] = 1; //给arr2数组下标为0(第一个)的数组元素赋值 1;
+            arr2[1] = 1000;//给arr2数组下标为1(第二个)的数组元素赋值 1000;
+            console.log(arr2);
+
+            var arr3 = [1,2,3,4,'洪江'] ;
+            console.log(arr3[4]);
+            arr3[4] = "RedJJJ"; // 改操作
+            console.log(arr3[4]); 
+            
+           //读操作 : 只读取数组元素的值 , 不进行任何变动 , 例如 打印 console.log(arr[k]);
+           //写操作 : 改动数组内某些元素的值 , 如 增 删 改.
+           // arr.length -1 = arr下标的最大值
+
+
+
+        </script>
+    </body>
+</html>

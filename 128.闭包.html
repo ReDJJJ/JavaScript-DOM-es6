@@ -1,0 +1,30 @@
+js中的闭包就是能够读取其他函数内部变量的函数
+如何从外部读取局部变量？(如果少定义全局变量,提高性能)
+
+B站的视频例子: 
+总体架构
+        function counter(){
+            var s = 0;
+            function docounter(){
+                s++;
+                console.log(s);
+            }
+            return docounter; //返回docounter的地址,这样子堆内存上的docounter就有了指向,不会被当作垃圾函数清除,所以外部就可以调用counter内部定义的局部函数了
+        }
+        
+        var docounterFn = couter();
+
+        setInterval(function(){
+            docounterFn(); 
+        },1000)
+
+
+// 解析: 
+        代码干了什么: counter()嵌套了一个docounter()
+                     然后docounter的地址作为couter()的返回值, 而docounterFn接收了docounter的地址,doucounterFn指向了docounter
+                     然后定时器中每1s执行 docounterFn(),而docounterFn指向的是docunter的地址,但是却能读取外部函数counter()的变量s;这就是闭包
+
+        此处闭包的作用: 保护变量s不被外部操作污染(s是局部变量),并且少声明全局变量提高性能;
+        为什么不直接定时器内counter(),每轮都会进行var s=0;s都会初始化,无法达到功能;
+        明明没有调用counter 为什么s会存在呢? 因为嵌套函数docounter 的作用域链中指向了counter的变量对象,使其在堆内存中存在,且不会被回收;
+

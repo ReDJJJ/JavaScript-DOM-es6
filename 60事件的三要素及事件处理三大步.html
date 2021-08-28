@@ -1,0 +1,60 @@
+<!-- 
+
+什么叫做事件？
+       事件，俗话说就是对一定事物产生一定的影响。
+
+       例如：我们打开一个网页，网页被打开的那一刻，首先触发的事件就是onload事件，只有触发了这个事件，才会执行这部分代码。
+
+什么是事件
+是指用户在某事务上由于某种行为所执行的操作; （对页面元素的某种操作）
+
+事件是文档或者浏览器窗口中发生的特定的交互瞬间。(例如点击事件)
+
+事件是用户或浏览器自身执行的某种动作，如click,load和mouseover都是事件的名字。
+
+事件是javaScript和DOM之间交互的桥梁。
+
+
+ -->
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <input type="button" value="按钮" id="BTN1"> 
+        <script>
+            // 1获取DOM元素对象
+            // var 变量名 = document.getElementById(); 
+            /*
+                getElementById()这个是document文档对象下的一个方法,通过id获取元素,并将其封装成 dom对象 作为返回值  赋予 变量
+                此方法只能获取一个dom元素对象,因为id号唯一
+            */
+
+            /*
+                2事件
+                事件三要素: 事件源(承受事件的DOM节点对象(元素,属性,文本,注释)) 事件类型  事件处理回调函数
+                语义 : 什么元素发生了什么事怎么处理
+
+                事件处理三大步 : 获取事件源DOM对象 添加事件监听 书写处理回调
+
+                事件书写好后可以重复触发执行
+            */
+           window.onload = function(){
+                var a = 10;
+                var btn = document.getElementById("BTN1"); //第一步:获取事件源 通过id 来 获取元素,封装成元素对象 赋给btn
+                btn.onclick = function(){  //第二部:添加事件监听
+                    a++;                   //第三步:书写事件处理回调函数
+                    console.log(a);
+                }    
+           } //点击一次 a++一次 ,打印一次 ;
+
+
+
+        </script>
+    </body>
+</html>

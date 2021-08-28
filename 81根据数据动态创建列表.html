@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+    <!-- append 附属,添加附属 -->
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           *{
+               margin: 0;
+               padding: 0;list-style-type: none;
+           }
+         #box{
+             background: pink;
+         }
+         #box li{
+             background: skyblue;
+             width:20%;
+         }
+       </style>
+   </head>
+
+   <body>
+       <script>
+           //根据后台返回的数据 动态创建列表ul
+           window.onload = function() {
+               // 后台返回的数据,解析完成后放在arr数组里面
+               var arr = ["列表111","列表222","列表333","列表444"];
+               function createUlByArr (array){
+                document.body.innerHTML += "<ul id='box'></ul>"; //注意:是在innerHTML这个属性中加一个字符串,其中字符串的标签会生效
+                var ul = document.getElementById("box");//获取新创建的元素ul ,作为下面li 的爹.
+                
+                    // //使用u第三种方式创建ul
+                    // var ul = document.createElement("ul");
+                    // document.body.appendChild(ul); 
+                    // ul.id = "box";
+            
+
+
+                // 第二种创建方式的好处在于,可以原汁原味的添加一个标签,添加过程中直接写上id class 等属性,而第三种方法要通过修改对象元素属性的方式添加id或者class;
+                for (var i = 0; i < array.length; i++) {
+                    //第三种创建方式
+                    var li = document.createElement("li");
+                    li.innerText = array[i]; //将数组内容赋予新增的元素
+                    ul.appendChild(li);
+                }
+               }
+               createUlByArr(arr);//执行创建过程
+
+
+               //老师的思路:用一个字符串str,str通过拼接的方式把整个ulli原汁原味的打包起来,然后放入 爹.innerHTML,成功的重要前提"innerHTML中标签会生效"
+               var arr2 = ["列表111","列表222","列表333","列表444"];
+               var str = "<ul>"
+                for (let i = 0; i <arr2.length; i++) {
+                    str += "<li>"+arr2[i]+"</li>";
+                }
+                str += "</ul>"; //字符串大拼接 完成元素标签的布局(字符串内容其实和直接写在HTMLbody中的一致)
+                document.body.innerHTML += str; 
+           }
+           
+       </script>
+   </body>
+</html>

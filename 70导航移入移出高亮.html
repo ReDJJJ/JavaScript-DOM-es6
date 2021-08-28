@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            /* 此处list-style-type 冗余量大,应该独立写在ul li 选择器内 */
+        }
+
+        ul li {
+            width:200px;
+            height: 50px;
+            background: skyblue;
+            box-sizing: border-box;
+            border: 1px solid lightgreen;
+            text-align: center;
+            line-height:50px;
+        }
+        /* 导航nav一般都是固定死的,所以一般都是固定宽高,所以可以给导航一个宽高 */
+        /* 行内元素就当作文本使用 ,所以行内元素垂直居中的办法就是 行高和块级高度一样高 */
+    </style>
+</head>
+
+<body>
+    <!-- 思路: 1利用排他思想 完成移入移出高亮  2设立两个监听事件 一个移入一个移出 -->
+        <ul>
+            <li>数码</li>
+            <li>服装</li>
+            <li>家电</li>
+        </ul>
+        <script>
+            window.onload = function(){
+                var liList = document.getElementsByTagName("li");
+
+               // 利用鼠标移入和鼠标移出两个事件  一个元素身上可以添加多个事件 (只要不冲突)
+                // for(var i=0;i<liList.length;i++){
+                //     liList[i].onmouseover = function(){
+                //         this.style.backgroundColor = "pink";  //移入事件源变粉
+                //     }
+                //     liList[i].onmouseout = function(){
+                //         this.style.backgroundColor = "skyblue"; //移出事件源变回原来颜色 天蓝色
+                //     }
+                // }
+                
+
+            //     利用排它思想
+            //     for(var i=0;i<liList.length;i++){
+            //         liList[i].onmouseenter = function(){
+            //            for (let j = 0; j < liList.length; j++) {
+            //                liList[j].style.backgroundColor ="skyblue";
+            //            }
+            //            this.style.backgroundColor = "pink";
+            //         }    
+            //     }
+            // }
+              
+                for(var i=0;i<liList.length;i++){
+                   
+                    liList[i].onmouseover = function(){
+                        var color1 = Math.floor(Math.random()*255+1); 
+                        var color2 = Math.floor(Math.random()*255+1); 
+                        var color3 = Math.floor(Math.random()*255+1); 
+                        this.style.backgroundColor = "rgb("+color1+","+color2+","+color3+")";  
+                    }
+                    liList[i].onmouseout = function(){
+                        var color1 = Math.floor(Math.random()*255+1); 
+                        var color2 = Math.floor(Math.random()*255+1); 
+                        var color3 = Math.floor(Math.random()*255+1); 
+                        this.style.backgroundColor = "rgb("+color1+","+color2+","+color3+")"; 
+                    }
+                }
+            }
+        </script>
+</body>
+
+</html>

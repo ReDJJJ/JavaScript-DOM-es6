@@ -1,0 +1,82 @@
+<!-- properties: 属性 性质-->
+<!-- Object.defineProperties(obj,descriptors) 为指定对象添加若干属性 -->
+<!-- 
+    为啥要用一个方法添加属性?直接 .属性 = 值 不好么？
+    因为有时候对象内部属性之间有关联性;
+    例如 Person{
+        name : '洪江',
+        age : 18,
+        firstName : "洪",
+        lastName : "江",
+    }
+    假如洪江改名了,改成了洪~,那么就需要修改 Person.name = "洪~", 但是仅此还不够,还需要改 Person.lastName = "~", Object.definedProperties就是为了处理这种 对象内部属性关联的情况
+ -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style></style>
+</head>
+
+<body>
+    <script>
+        var person = {
+            firstName: "洪", //姓
+            lastName: "江", //名
+            // fullName =  firstName+lastName,  //Invalid shorthand property initializer 非法操作
+            // 想让姓名 = 姓+名,因为对象内没有变量,firstName+lastName这个语句相当于没''的字符串;
+        }
+        //因此,想让对象内部属性产生关联,则需要利用Object.definedProperties这个方法
+        Object.defineProperties(person, {
+            fullName: {
+                set: function (data) {
+                    //不写此方法无法设置
+                    var arr = data.split("-"); //"data以-为间隔被砍成数组"
+                    this.firstName = arr[0]; //此处this指向person对象
+                    this.lastName = arr[1];
+                },
+                get: function () {
+                    //不写此方法无法读取
+                    return this.firstName + this.lastName;//返回 fullName和firstName 和lastName的关系
+                }
+            }
+        })
+
+        //    Object.definedProperties两个参数,第一个为操作对象,第二个描述符,描述符内容为 需要扩展的属性以及其获取get方法和修改set方法;
+        //    编写后,definedProperties函数会封装,以后利用.语法查询或者修改此属性,就会自动调用get方法或者set方法,若不写这两种方法,属性则无法获取或修改
+        console.log(person.fullName);//读取属性时,会自动调用fullName属性的get方法,获取fullName属性,至于自动调用这个过程实现是Od这个函数的事情了
+        person.fullName = "洪-小江"; //在设置的时候 设定一个间隔符-留给set中的split砍成数组;而"洪-小江"会自动传给set方法第一个参数data;
+        console.log(person.fullName);//设置属性时,会自动调用fullName属性的set方法,更改firstName和lastName属性值,以此来达到修改fullName的目的
+
+
+        //以上的自动动作都由Object.defineProperties这个方法自动完成;
+       // 什么时候用defineProperties? 对象内部的属性之间有某种关联,就把关联关系 写入第二个参数描述符中对应属性的对象中的set函数和get函数当中
+       // 例如 虚岁 = 实岁+1 ; 姓名 = 姓+名 字符串拼接
+       //而字符串拼接可以设置一个间隔符号 , 供splite去砍成数组,再分别赋值;
+       //而字符串赋值的时候也记得设置一个间隔符号,
+    </script>
+
+    <!-- 
+        抽象:
+         Object.defineProperties(对象名,{
+               添加的属性名:{
+                   set: function(data){
+                    //data为设置语句的值
+                    关联关系
+                   },
+                   get: function(){
+                    关联关系
+                   }
+               }
+
+            对象名.属性 = 值 ; 此会自动调用set方法
+            对象名.属性 ;  此会自动调用get方法
+
+
+            思路:实际上fullName属性通过Object.defineProperties(对象名,{})让firstName和lastName拼凑出来的.查询fullName的值就是由firstName和lastName拼凑出来的,而修改fullName就是修改firstName和lastName,然后在get函数中体现fullName,fullName没有灵魂.
+        -->
+</body>
+
+</html>

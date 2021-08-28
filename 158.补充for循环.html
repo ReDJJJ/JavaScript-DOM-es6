@@ -1,0 +1,33 @@
+// 原生具备 iterator接口的数据(可用for of遍历)
+           // 1Array 2arguments 3set容器 4map容器 5String  (数组,伪数组,字符串,set容器,map容器) 
+           // 对象不具有原生iterator 不能使用for of
+           
+          /*
+            for of 循环 
+            for(value of target){
+                代码块; value是一个变量,将会轮询地接收对象的每一个值
+            }
+            !!!在DOM里面querySelectorAll()等 拿到的都是伪数组 可用使用for of 
+            能用for of 就能用 for in
+          
+          */
+
+          四种for循环的区别
+          哪四种: for 数组.forEach for in  for of
+
+          for 最原始的循环 循环遍历 可用break 和 continue 
+          forEach是数组的方法 遍历循环数组 效率最高 但是不支持break和continue (遍历数组又不用break和continue尽量用forEach) 但是foreach不会影响原数组要注意
+          for in 一般是用来遍历对象属性(方法)的, 效率很慢 , 因为for in 不仅要遍历对象本身的属性还有去遍历对象层层原型链上隐式原型里面的属性(方法),这个我之前就发现了
+          for of 可以遍历数组、伪数组、 set map容器 和 string 字符串 ,遍历的是值,也可以使用break和continue
+
+
+          for in 一般是用来遍历对象属性(方法)的, 效率很慢 , 因为for in 不仅要遍历对象本身的属性还有去遍历对象层层原型链上隐式原型里面的属性(方法),这个我之前就发现了
+            假若只想遍历对象自己本身的属性方法呢?
+            Object.hasOwnProperty(属性名); //若为自己的属性,则返回t 否则返回false
+            因此 可以如此 :
+            for (key in object) {
+                if(Object.hasOwnProperty(key)){ //判断key是否为自己的属性方法
+                    ....
+                }
+            }
+            以后能使用for of 就是使用for of  效率不低,支持break和continue

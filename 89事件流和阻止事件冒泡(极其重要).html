@@ -1,0 +1,136 @@
+<!-- 事件流 : 事件的执行顺序  -->
+<!doctype html>
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style> 
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .laoda{
+            width:500px;
+            height:500px;
+            background-color:aquamarine;
+            position: relative;
+            border: 1px solid pink;
+        }
+        .laoer{
+            width:300px;
+            height:300px;
+            background-color:skyblue;
+            position: absolute;
+            top:0;left:0;right:0;bottom:0;
+            margin:auto;
+            border: 1px solid pink;
+        }
+        .laosan{
+            width:100px;
+            height:100px;
+            background-color:pink;
+            position: absolute;
+            top:0;left:0;right:0;bottom:0;
+            margin:auto;
+        }
+
+
+
+        </style>
+    </head>
+        <div class="laoda">
+            <div class="laoer">
+                <div class="laosan">
+
+                </div>
+            </div>
+        </div>
+    <body>
+        <script>
+            var laoda = document.querySelector(".laoda");
+            var laoer = document.querySelector(".laoer");
+            var laosan = document.querySelector(".laosan");
+
+            //dom0 事件 只能冒泡 
+            // laoda.onclick = function(){
+            //     console.log("老大");
+            // }
+            // laoer.onclick = function(){
+            //     console.log("老二");
+            // }
+            // laosan.onclick = function(){
+            //     console.log("老三");
+            // }
+            /* dom0事件 只能冒泡
+            点击老三,依次打印
+            老三 老二 老大
+            */
+
+            //dom2 事件 标准事件流(三个阶段),并由程序员自己选择捕获还是冒泡
+            // 通过addEL()第三个参数进行选择,ture捕获,false冒泡,不写默认冒泡false;
+            // laoda.addEventListener("click",function(){
+            //     console.log("老大");
+            // });
+            // laoer.addEventListener("click",function(){
+            //     console.log("老二");
+            // });
+            // laosan.addEventListener("click",function(){
+            //     console.log("老三");
+            // });
+            /* dom2标准事件流默认冒泡
+            点击老三,依次打印
+            老三 老二 老大
+            */
+
+            // laoda.addEventListener("click",function(){
+            //     console.log("老大");
+            // },true);
+            // laoer.addEventListener("click",function(){
+            //     console.log("老二");
+            // },true);
+            // laosan.addEventListener("click",function(){
+            //     console.log("老三");
+            // },true);
+            // /* dom2标准事件流  捕获
+            // 点击老三,依次打印
+            //  老大 老二 老三 
+            // */
+            //  // 冒泡和捕获 (事件传播)会一直传到整个document文档 , 点击了老三 相当于点击了点击了老二老三 body html
+            // document.documentElement.addEventListener("click",function(){
+            //     console.log("html");
+            // },true);
+
+
+
+            // 事件流(事件传播) 点击老三的同时,老二和老大也同时认为自己被点击到了,因为老三是老二的内容,老二又是老大的内容;
+            //  事件流 ---     冒泡流  从内部向外部传播 老三盒子-->老二盒子-->老大盒子 
+            //                 捕获流  从外部向内部传播 老大-老二-老三  
+            //  标准事件流:    包含三个阶段: 先捕获(外向内),获取元素,再冒泡(内向外);
+            // 三个阶段当中的捕获和冒泡由程序员自己选择 执行哪个阶段: 通常使用默认(冒泡内向外) 仅限dom2事件;
+            // 冒泡和捕获 (事件传播)会一直传到整个document文档 , 点击了老三 相当于点击了点击了老二老大 body html
+
+            //事件流(事件传播)是客观存在的,看不出来只是因为事件传播过程中元素没有添加事件监听回应事件传播,每个事件都会进行冒泡
+            // 冒泡情况下,父子祖辈关系设置了相同类型的事件监听事件,事件处理会从内到外执行;
+            // 但是不想父元素事件进行处理;
+
+            //阻止事件冒泡; 想在哪个元素停止冒泡传播, 调用事件对象下的方法 event.stopPropagation(); 
+            laoda.addEventListener("click",function(){
+                console.log("老大");     
+            });
+            laoer.addEventListener("click",function(){
+                console.log("老二");
+            });
+            laosan.addEventListener("click",function(event){
+                console.log("老三");
+                // event.stopPropagation();//阻止事件冒泡
+                //冒泡传播从老三就停止了;
+            });
+            document.documentElement.addEventListener("click",function(){
+                console.log("html");
+            });
+
+
+            //应用场景: 当触发一个盒子的事件,其祖辈盒子都依次触发了同类型事件,此时需要停止冒泡函数,回调函数内的event.stopPorpagation
+        </script>
+    </body>
+</html>

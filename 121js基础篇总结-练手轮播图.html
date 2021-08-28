@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        ul,
+        li {
+            list-style: none;
+        }
+
+        img {
+            display: bLock;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        /*禁止系统滚动条*/
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrap {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #wrap .box {
+            width: 600px;
+            height: 300px;
+            background: pink;
+            margin: 50px auto;
+
+            position: relative;
+        }
+
+        #wrap .box ul.picture {
+            width: 4200px;
+            height: 100%;
+            background: skyblue;
+            position: absolute;
+            top: 0;
+            left: -600px;
+        }
+
+        #wrap .box ul.picture li {
+            float: left;
+        }
+
+        #wrap .box .picture li img {
+            width: 600px;
+            height: 300px;
+        }
+
+        #wrap .box .circle {
+            position: absolute;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+        }
+
+        #wrap .box .circle li {
+            width: 20px;
+            height: 20px;
+            float: left;
+            background: gray;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+
+        #wrap .box .circle .current {
+            background-color: lightcoral;
+        }
+
+        #wrap .box span {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 100px;
+            background-color: rgba(100, 100, 100, .4);
+            text-align: center;
+            line-height: 100px;
+        }
+
+        #wrap .box .left {
+            left: 0;
+        }
+
+        #wrap .box .right {
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="box">
+            <ul class="picture">
+                <li><img src="./img/9.jpg" alt=""></li>
+
+                <li><img src="./img/2.jpg" alt=""></li>
+                <li><img src="./img/3.jpg" alt=""></li>
+                <li><img src="./img/4.jpg" alt=""></li>
+                <li><img src="./img/6.jpg" alt=""></li>
+                <li><img src="./img/9.jpg" alt=""></li>
+
+                <li><img src="./img/2.jpg" alt=""></li>
+            </ul>
+            <ul class="circle">
+                <li class="current"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <span class="left">《</span>
+            <span class="right">》</span>
+
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            var box = document.querySelector('#wrap .box');
+            var spanNodes = document.querySelectorAll(" #wrap .box span");
+            var ulPicture = document.querySelector('#wrap .box ul.picture');
+            var circleNodes = document.querySelectorAll(" #wrap .box .circle li");
+            var timer = null;
+            var timeAll = 600; //移动的总时间
+            var timeStep = 20; //每一步移动的时间
+            var flag = true; //true向右
+            var isMoveFlag = false; 
+            var autoPlay = null;
+            var autoPlayEachTime = 3000;
+
+            spanNodes[1].onclick = function () {
+                move(true);
+            }
+            spanNodes[0].onclick = function () {
+                move(false);
+            }
+            function move(flag) {
+                if(isMoveFlag){
+                    return ;
+                }
+                if (typeof flag == 'boolean') {
+                    if (flag) {
+                        var eleDis = -600; //eleDis 每次的移动距离;
+                    } else {
+                        var eleDis = +600; //eleDis 每次的移动距离;
+                    }
+                } else {     //是结束减去开始 flag - ulPicture.offsetLeft;
+                    var eleDis = flag - ulPicture.offsetLeft;//eleDis 每次的移动距离;
+                }
+                var lastX = ulPicture.offsetLeft + eleDis; //lastX 移动的最终目的地坐标
+                timer = setInterval(function () {
+                    isMoveFlag = true;
+                    var step = eleDis / (timeAll / timeStep);
+                    var left = ulPicture.offsetLeft + step; //left为下一步的位置
+                    if (left == lastX) {
+                        clearInterval(timer);
+                        isMoveFlag = false;
+                    }
+                    if (left == -3600) {
+                        left = -600;
+                    } else if (left == 0) {
+                        left = -3000;
+                    }
+                    ulPicture.style.left = left + 'px';
+                }, timeStep);
+                for (var i = 0; i < circleNodes.length; i++) {
+                    circleNodes[i].className = '';
+                }
+                var index = null;
+                if (lastX == 0) {
+                    index = 4;
+                } else if (lastX == -3600) {
+                    index = 0;
+                } else {
+                    index = (lastX / -600) - 1;
+                }
+                console.log(index);
+                circleNodes[index].className = "current";
+            }
+
+            for (var i = 0; i < circleNodes.length; i++) {
+                circleNodes[i].index=i; //记录下坐标; 然后通过坐标对应关系算出小圆点对应图片的坐标，因为事件的回调函数内不能使用外层循环的变量i;
+                circleNodes[i].onclick = function () {
+                    for (var j = 0; j < circleNodes.length; j++) {
+                        circleNodes[j].className = "";
+                    }
+                    this.className = "current";
+                    move((this.index+1)*-600);
+                }
+            }
+
+            autoPlayFunction();//先执行自动轮播函数,此函数设立了一个定时器;
+
+            box.onmouseover = function(){
+                clearInterval(autoPlay);
+            }
+            box.onmouseout = function(){
+                autoPlayFunction();
+            }
+            function autoPlayFunction(){
+                autoPlay = setInterval(function () {
+                move(true); //自动一直往右走;
+            },autoPlayEachTime);
+        }
+    }
+    </script>
+</body>
+
+</html>

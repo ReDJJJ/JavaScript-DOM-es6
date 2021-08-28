@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style></style>
+   </head>
+   <body>
+        <script>
+            //JSON.parse 和JSON.stringify 是深拷贝 但是此过程不能处理内容,只是解析内和封装内容的过程
+            function checkDataType(data){
+                return Object.prototype.toString.call(data).splice(8,-1).toLowerCase();//类型小写字符串
+            }
+
+            function deepCopy(data){
+                let result
+                if(checkDataType(data) == "number" || checkDataType(data) == "string" || checkDataType(data) == "boolean" || checkDataType(data) == "null" || checkDataType(data) == "undefined"){
+                    result = data ;
+                    return result; //基本类型直接返回 结束函数执行
+                }
+                else if(checkDataType(data) == 'array'){
+                    result = [] ; //开辟一块堆内存
+                }
+                else if(checkDataType(data) == 'object'){
+                    result = {} ;
+                }
+                //程序能执行到此,一定不是基本类型;
+                //如何解决多层非基本数据类型的深拷贝呢？(避免半深拷贝的出现) 递归！(化解为更小规模的同类型问题)
+                //例如 [{},{[],{}},123] 
+
+                for(key in data){  //轮询数组或者对象,此处就是化解为更小规模的同类型问题.
+                    if(checkDataType(data[key])== 'object' || checkDataType(data[key])== 'array'){ //更小规模的问题还是数组或对象类型,则递归调用了
+                        result[key] = deepCopy(data[key]); //递归
+                    }else{
+                        result[key] = data[key];
+                        //若是数组 则key为下标
+                        //若是对象 则key的值为属性名
+                    }                                     
+                }
+                return result;
+            }
+        </script>
+   </body>
+</html>

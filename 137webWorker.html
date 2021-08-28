@@ -1,0 +1,35 @@
+<!-- 
+    利用web Worker模拟多线程
+    由于js为单线程,所谓模拟多线程就是创建多一个js文件,将耗时的同步代码扔进去单独执行;
+    分线程(额外的js文件)中的this指的是整个分线程(js文件本身)
+
+    相关API:
+        Worker : 构造函数,提供了模拟多线程的方法;
+        Worker.prototype.postMessage(); //线程给另一个线程发送数据 ()可填任何数据,会被另一线程的onMassage事件的回调函数的event.data接收
+        Worker.prototype.onMassage( function(event){ 
+            //消息接收事件监听 ,当有别的线程把数据传过来时候触发,数据信息保存在 event.data当中
+            event.data ; //另一线程发送的数据;
+        }
+        );
+ -->
+
+ <!DOCTYPE html>
+ <html>
+     <head>
+         <meta charset="UTF-8">
+         <title></title>
+     </head>
+     <body>
+         <script type="text/javascript">
+             //主线程
+             //模拟多线程 : 1 创建分线程
+             var w = new Worker('137myThread.js');//填入分线程(js文件)的路径
+             w.postMessage(5); //将5这个数据传过去;
+             //主线程添加消息接收监听,若接收到信息调用回调函数
+             w.onMessage = function(event){
+                console.log(event.data);
+             }
+             //实际开发中,一般一个耗时模块分配一个子线程;
+         </script>
+     </body>
+ </html>

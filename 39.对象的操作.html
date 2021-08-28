@@ -1,0 +1,117 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+
+        function createObject(){
+            obj = new Object();
+            return obj;
+        }
+      
+        var obj = new Object({
+            name: "iphone XSMAX",
+            brand: "Apple",
+            price: 100,
+            size: 6.7,
+            playMusic: function () {
+                console.log("放音乐");
+            }
+        });console.log(obj);
+
+        // 对象的增删改查  分为. 和[] 两种语法
+
+        /*
+           对象的增 和 改
+
+           语法 
+           对象名.属性名 = 属性值;
+           obj.price = 2000;
+           obj.year = 2019;
+           .后面的属性名 有则更改,无则添加  
+
+           对象名["属性名"] = 属性值;
+           obj["price"] = 2000;
+           obj["year"] = 2019;
+           [""]里面的属性名 有则更改,无则添加  
+
+            注意: []语法中,属性在[]中必须被""包裹,否则代表的是变量的值。
+                 ["属性名"] [变量名]
+        */
+        obj.price = 2000; //price 原本存在,则进行修改
+        obj.year = 2019; //year 原本对象中不存在该属性,进行添加
+
+        obj["price"] = 20000; //修改 price 属性 
+        obj["color"] = 'blue';  //增加属性color 
+        console.log(obj);
+ 
+        /* !!!!!!!!!!!!!!!! .和[]不同之处
+            1 操作的属性名不符合 标识符规则 例:content-type
+            obj.content-type = "text"; //报错,content-type 属性名不符合标识符规则 Invalid left-hand side in assignment
+            obj["content-type"] = "text"; // 成功添加 contet-type 属性  值为"text"
+        
+            2 操作的属性的属性名是 是一个变量的值 
+            var a = "firstPrice"; //一个全局变量a,在此想在obj (增或改) 属性名等于"firstName"的属性
+            obj.a =  12999;  //会变成 (增或改) 一个 属性名为a 的属性,而不是(增或改) 一个属性名为 a变量的值"firstPirce" 的属性
+            obj["a"] = 12999; //[]内加"" 代表着操作的是 属性名 为""内字符串的属性   obj["xxx"] = obj.xxx (除非xxx不符合标识符规则)
+            obj[a] = 12999; //在obj内操作(增或改) 一个属性名为 a变量的值的属性 ,此处为 操作 名为firstName的属性 值为12999; 
+  对象的属性名本质上全是字符串(隐式转换)
+          
+
+            简洁版:直接操作符合标识符规则的属性 . [""] 不符合标识符规则 操作属性名为变量值的属性[];
+        */
+
+        obj["content-type"] = "text"; // 成功添加 contet-type 属性  值为"text"
+        // obj.content-type = "text" //Invalid left-hand side in assignment 
+        var a = "firstPrice";
+        obj.a =  12999; // 新增了一个属性  a:12999;
+        console.log(obj);
+        obj["a"] = 1999; //改变了一个属性  a:1999;
+        obj[a] = 12999; //新增了一个属性 firstPrice:12999;  fristPrice 是a变量的值
+        console.log(obj);
+        
+        // 删除 关键字 delete
+        delete obj.year //删除属性名为year 的属性
+        console.log(obj);
+        delete obj["a"];//删除属性名为a 的属性
+        delete obj["content-type"]; //content-type 不符合标识符规则 ,只能用[]
+        delete obj[a]; //删除属性名为 a变量值的属性
+
+        // 查 (读取) 不影响属性
+        var b = "name";
+        console.log(obj.size);//读取obj中的size属性 ,并打印其值
+        console.log(obj['price']);//读取obj中的price属性,并打印其值
+        console.log(obj[b]); //读取obj中 属性名为变量b的值的属性 ,并打印其值;
+        console.log(obj.ksjfsf); //读取obj中的属性ksjsfsfd,为查找到,类似于数组 越界查询,返回值undefined
+        
+        // 遍历对象 查询所有对象中的属性 用for in 循环
+        var obj2 = createObject(); //工厂模式
+        ob2 = {
+            name:"Redjjj",
+            age:10,
+            eat:function(){
+                console.log("吃");
+            }
+        };
+        // 执行过程, 新建一个局部变量 key  , 此循环会按照顺序将属性名(注意是名)赋值给key,每赋值一个属性名则执行一次函数体,直到所有属性都执行过函数体
+        for( var key in obj2) {
+            console.log(key,obj2[key]);
+            // 轮询打印 obj2里面每一个属性和值
+            // 注意key 是接收obj2属性名的变量 , 所以值为obj2[key] ,不能用obj2["key"]或者obj2.key ,否则变成查询obj2里面的属性名为key的属性,无则undefined
+        }
+
+
+        // 以后见到 a.b  a一定是一个实例化对象
+        // 例如console.log  是对象console中一个属性(方法)log 不过log的属性值是一个函数,可以执行
+
+    </script>
+</body>
+
+</html>

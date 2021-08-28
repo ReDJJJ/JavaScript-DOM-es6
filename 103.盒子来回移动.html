@@ -1,0 +1,87 @@
+<!-- 
+    盒子来回移动:
+    错误思路:修改盒子.offsetLeft ,offsetleft是不可写的,只可读
+    正确思路: 把位移过程理解为帧,设置一个循环定时器,每次延时都是一帧,每帧移动一点点+3px,直到移动到body边缘
+             返回过程就是逆向移动一点点-3px;怎么判断什么时候返回呢?
+             当移动到body最右侧时候, offsetleft = document.body.clientWidth - box.clientwidth;
+
+    核心思想: 用极短定时器 间隔 ,模拟动画的帧 , 再通过标志量和距离比较 来进行方向控制
+ -->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 3000px;
+            position: relative;
+        }
+
+        div {
+            width: 60px;
+            height: 60px;
+            /* 固定定位要设置宽度,否则固定定位后宽度为0 */
+            background-color: pink;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="BOX">
+    </div>
+    <script>
+        window.onload = function () {
+            var div = document.querySelector("div");
+            var flag = true; //标志位, 移动方向控制者
+
+            setInterval(function () {
+                if (div.offsetLeft < 0 || div.offsetLeft >= (document.body.clientWidth - div.clientWidth)) {
+                    //当偏移量<0 (移动过左边) 或者 偏移量>视口宽度-盒子宽度(移动过右边)
+                    flag = !flag;
+                }
+
+                if (flag) {
+                    div.style.left = (div.offsetLeft + 3) + "px";
+                } else {
+                    div.style.left = (div.offsetLeft - 3) + "px";
+                    // 关键！！！！！！普通无margin情况下, offsetLeft 的值 = left 的值！！！！！！！！
+                }
+            }, 16) //每帧延时16ms
+
+            //我的思路:通过判断元素left(offsetLeft),来改变标志位flag;(开关思想),以此来改变方向;
+
+
+
+
+            //老师的思路:每步前进的步数存入变量step,预先判断下一步是否会越界,会则改变变量step的符号,以此来完成方向改变
+            // var step = 3;
+            // setInterval(function () {
+            //     var left = div.offsetLeft + step; //将下一步的位置先赋值为left,left再进行判断;
+            //     if (left < 0) {
+            //         step = 3;
+            //         left = 0; //停住16ms;
+            //     } else if (left >= (document.body.clientWidth - div.clientWidth)){
+            //         step = -3;
+            //         left = document.body.clientWidth - div.clientWidth;//停住16ms
+            //     }
+            //     div.style.left = left + "px";
+            // }, 16) //每帧延时16ms
+        
+            // 临界值判断 十分关键,一般就是 盒子的左偏移量<0 和父盒子宽-子盒子宽; (可以提前一步进行判断)
+            // 老师的思路更好: 因为老师预判了下一步,无论如何都不会超过临界值,哪怕每次位移的幅度很大,而我的思路假若位移幅度变大,要先超出临界值一次才会切换方向
+        }
+    </script>
+</body>
+
+</html>

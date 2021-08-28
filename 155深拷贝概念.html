@@ -1,0 +1,74 @@
+1、数据类型：
+* 数据分为基本的数据类型(String, Number, boolean, Null, Undefined)和对象数据类型
+- 基本数据类型：
+特点： 存储的是该对象的实际数据
+- 对象数据类型：
+特点： 栈内存储的是对象在堆当中的地址（引用），真实的数据存放在堆里
+2、复制数据
+- 基本数据类型存放的就是实际的数据，可直接复制
+let number2 = 2;
+let number1 = number2;
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style></style>
+</head>
+
+<body>
+    <script>
+        let a = 10;
+        let b = 10;//对于基本数据来说,赋值就是拷贝,基本数据类型拷贝都是深拷贝
+
+        //深浅拷贝针对的是对象数据类型
+        //深浅拷贝的本质是 堆内存是否真正开辟了两块空间用以拷贝两份一模一样的数据;
+        let arr = [1, 2, 3];
+        let arr1 = arr;  //浅拷贝
+        arr1[1] = 200;
+        console.log(arr, arr1);
+        //浅拷贝: 两个变量指向的地址相同,看似有两份,其实堆内存中只有一份数据内容.
+        let arr2 = [...arr];
+        arr2[1] = 1000;
+        console.log(arr, arr2);
+        //深拷贝: 两个变量指向的地址不同,堆内存中真正开辟了两块空间来存放两个一模一样的内容;
+
+        //但是有可能会出现很尴尬的半深拷贝
+        //数组中存在对象数据类型,存在地址拷贝(浅拷贝)
+        arr = [1, 2, { a: 1, b: 2 }];
+        let arr3 = [];
+        for (let i = 0; i < arr.length; i++) {
+            arr3.push(arr[i]); // arr3.push(arr[2]) 拷贝的是地址,是浅拷贝
+        }
+        //此处arr3和arr确实是两个数组(两个堆内存地址),但是两个数组的第三个数组元素都是指向同一地址.
+        arr3[2].b = "arr3改的";
+        console.log(arr, arr3);
+
+        //针对上面一个例子: 简单的自定义方法实现深拷贝
+    
+        // 思路:开辟一个新的对象类型数据堆内存,然后拷贝内容,然后将新的对象类型数据堆内存地址返回
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] instanceof Object) {
+                let obj = {}; //开辟堆内存;
+                for (let key in arr[i]) {
+                    obj[key] = arr[i][key];
+                }
+                arr[i] = obj;
+            } else {
+                arr3.push(arr[i]);
+            }
+        }
+            //拷贝完成以后
+            //改动一个的值，另外一个跟着改变   那么就一定是浅拷贝（因为存在地址相同）；
+			//改动一个的值，另外一个没有改变   那么就一定是深拷贝（因为里面 所有 的数据都不存在相同地址）；
+
+
+            //浅拷贝 单纯赋值地址
+            //半深半浅拷贝 arr.concat(arr2) ...扩展运算符 slice  Object.assgin(obj1,ojb2)
+            //深拷贝 基本数字类型  JSON.stringify
+    </script>
+</body>
+
+</html>

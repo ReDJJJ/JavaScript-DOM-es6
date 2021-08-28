@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <!-- typeof  用于获取数据类型  -->
+        <!-- 语法 typeof空格变量名  例如 typeof num 多重套娃 typeof typeof num -->
+        <script>
+            var $a = 1; console.log(typeof $a);
+            $a = "redjjj"; console.log(typeof $a);
+            $a = true ; console.log(typeof $a);
+            $a = undefined ; console.log(typeof $a);
+            $a = null ; console.log(typeof $a); // 获取的类型是object 特殊情况 
+
+            //  typeof 用于获取数据类型,获取的是这个值的类型名小写字符串形式
+            var $b = 123; console.log(typeof typeof $b);
+            
+        //     typeof判断
+		// 	typeof 是用来对数据类型做判断的；结果是数据类型名的小写字符串形式；
+			
+			
+		
+		// typeof的结果是什么类型
+		// 	字符串类型
+		// 	typeof 基本数据类型  整体的值都是字符串；
+		// 		'number'  
+		// 		'string'
+		// 		'boolean'
+		// 		'undefined'
+		// 		'object'(null类型)
+			
+
+			
+		// typeof的判断基本数据类型的特殊情况
+		// 	null最终会判断为object（设计缺陷）
+		// 	因为null只在对象初始化和删除用到所以类型归为object；
+        </script>
+    </body>
+</html>

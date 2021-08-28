@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+       <script>
+           //对象的简写方法有两种 : 方法简写 和 属性简写
+
+           //方法简写任何时候都适用,省略:function字样
+           //未简写:
+            let ojb1 = {
+                name : "John",
+                age : 18,
+                eat :function(){
+                    console.log("eat");
+                }
+            }
+            //简写:
+            let obj2 = {
+                name : "John",
+                age : 18,
+                eat(){
+                    console.log("eat");
+                }
+            }
+
+            //属性简写 一般用在 封装JSON字符串的原型对象当中,并且属性名和属性值的变量名要相同,其实也可以用在很多地方,注意省略的是属性名,其实就是变量代替了属性名罢了
+            //未简写
+            let a = 10, b = 20;
+            let obj3 ={
+                a:a, 
+                b:b,
+            }
+            console.log(JSON.stringify(obj3));
+
+            let c = 20 , d = 40;
+            let obj4 ={
+                c,d,
+                eat(){console.log("eat")}//转化成JSON串不打印;
+            } //当发现对象只有属性值没有属性名,就是属性简写了,只能用在JSON的原型对象当中
+            console.log(JSON.stringify(obj4));
+            console.log(obj4.c,obj4.d);
+
+
+       </script>
+   </body>
+</html>

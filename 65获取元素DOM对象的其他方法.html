@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           #p1{
+               background: blue;
+           }
+           .pp{
+               background: red;
+           }
+            body p:nth-last-of-type(1){
+                background: pink;
+           }
+       </style>
+   </head>
+   <body>
+        <p class="pp" id="p1">我是段落1</p>
+        <p class="pp">我是段落2</p>
+        <p class="pp">我是段落3</p>
+        <p class="pp">我是段落4</p>
+
+        <script>
+            window.onload = function(){
+                // 获取元素dom对象的方法
+                //  document.getElementById(id名)只能通过ID去获取元素,并且获取一个元素返回
+                //  document.getElementsByTagName(标签名) 只能通过标签名去获取,并且获取到(一个或者多个元素),返回的是一个伪数组(需要轮询),哪怕标签只有一个也是伪数组
+                //  document.getElementsByCalssName(类名) 只能通过类名去获取,并且获取到的是(一个或者多个元素),返回的一个伪数组(需要轮询),哪怕只有一个元素也是伪数组
+                var pp = document.getElementById("p1"); console.log(pp); //获取单个元素 id=p1;
+                var pp1 = document.getElementsByClassName("pp"); console.log(pp1); 
+                var pp2 = document.getElementsByTagName("p"); console.log(pp2);//通过标签名和类名选择方法都是返回伪数组
+
+                // 以上三个方法 只能依据某种属性(ID,TagName,ClassName)去获取元素   
+
+                // querySelector('选择器') , querySelectorAll('选择器'); 
+                // 以上两个获取对象的方法,是根据选择器(选择器名)来进行选择的,选择器作为字符串 作为实际参数
+                // 并且选择器名 不一定要出现在css中,css没出现过的选择器 也可以填入quetyStop()的实际参数中
+                // querySelector(),获取一个元素;
+                // querySelectorAll(),获取多个元素,返回的也是一个伪数组;
+                
+                var pp3 = document.querySelector("#p1");console.log(pp3); //获取单个元素 选择器为#p1
+                var pp3 = document.querySelector("body p:nth-last-of-type(1)");console.log(pp3); //获取单个元素 选择器为 body p:nth-last-of-type(1)
+                var pList = document.querySelectorAll(".pp"); console.log(pList.length); //返回伪数组
+               
+            
+
+            }
+        </script>
+   </body>
+</html>

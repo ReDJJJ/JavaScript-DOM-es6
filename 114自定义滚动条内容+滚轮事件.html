@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<!-- 1结构布局
+2滑块拖拽滑动
+3滑块随内容大小变化
+4滑块滑动内容也滑动
+4滑块滚轮事件 -->
+
+<!-- 滚轮事件一般都给document添加 -->
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        img {
+            display: bLock;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        /*禁止系统滚动条*/
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #wrap .scrollBar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 24px;
+            height: 100%;
+            border-left: 1px solid gray;
+            border-right: 1px solid gray;
+            background-color: pink;
+        }
+
+        #wrap .scrollBar .scrollIn {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 50px;
+            background: yellow;
+        }
+        #wrap .content{
+            position: absolute;
+            top:0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="content">
+
+        </div>
+        <div class="scrollBar">
+            <div class="scrollIn"></div>
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            var scrollIn = document.querySelector("#wrap .scrollBar .scrollIn");
+            var content = document.querySelector("#wrap .content");
+            for (let i = 0; i < 200; i++) {
+                content.innerHTML += i + "<br>";
+            }
+            var scale = document.documentElement.clientHeight / content.offsetHeight; //scale全局变量;
+            scrollIn.style.height = scale * document.documentElement.clientHeight + "px";
+
+
+            scrollIn.onmousedown = function (event) {
+                event = event || window.event;
+                var eleY = scrollIn.offsetTop;
+                var startY = event.pageY;
+
+                document.onmousemove = function (event) {
+
+                    event = event || window.event;
+                    var endY = event.pageY;
+                    var disY = endY - startY;
+                    var lastY = eleY + disY;
+                    console.log(lastY);
+                    if (lastY < 0) {
+                        lastY = 0;
+                    } else if (lastY > document.documentElement.clientHeight - scrollIn.offsetHeight) {
+                        lastY = document.documentElement.clientHeight - scrollIn.offsetHeight;
+                    }
+
+                    scrollIn.style.top = lastY + "px";
+                    var contentDis = lastY / scale;
+                    content.style.top = "-" + contentDis + "px";
+                    //内容不动,因为没有添加绝对定位
+
+                }
+                document.onmouseup = function () {
+                    document.onmousemove = null;
+                }
+                return false;
+            }
+
+            //滚轮 dom2
+            //  document不用获取,直接拿
+            document.addEventListener("mousewheel",scrollMove,false);
+            document.addEventListener("DOMMouseScroll",scrollMove,false);
+            var flag = true; //true代表上滑
+            function scrollMove (event){
+                event = event || window.event;
+                
+                if(event.wheelDelta>0){
+                    flag = true;
+                }
+                else if(event.wheelDelta<0){
+                    flag = false;
+                }
+                if(event.detail>0){
+                    flag = !true;
+                }
+                else if(event.detail<0){
+                    flag = !false;
+                }
+                var lastY = scrollIn.offsetTop; 
+                var scale = document.documentElement.clientHeight / content.offsetHeight; 
+                //由于style.top left 是字符串,所以不能直接赋予数组,需要一个变量装载数字 + "px"的方式赋值;
+                if(flag){//上滑动
+                    lastY -= 5;
+                    if(lastY<0){
+                        lastY = 0;
+                    }else if (lastY > document.documentElement.clientHeight - scrollIn.offsetHeight) {
+                        lastY = document.documentElement.clientHeight - scrollIn.offsetHeight;
+                    }
+                    scrollIn.style.top = lastY + "px";
+                    var contentDis = lastY / scale;
+                    content.style.top = "-"+contentDis + "px";
+                }else{
+                    lastY += 5;
+                    if(lastY<0){
+                        lastY = 0;
+                    }else if (lastY > document.documentElement.clientHeight - scrollIn.offsetHeight) {
+                        lastY = document.documentElement.clientHeight - scrollIn.offsetHeight;
+                    }
+                    scrollIn.style.top = lastY + "px";
+                    var contentDis = lastY / scale;
+                    content.style.top = "-"+contentDis + "px";
+                }
+                
+            }
+                
+            //大坑总结: 修改样式要通过行内式修改,查询元素长宽和位置要通过12元素(只查不改),或者.getBoundingClientRect()
+            // 修改样式的方法是赋予字符串,所以通常要注意字符串拼接的格式
+            // div.style.width  = 变量 + "px"; 切勿忘记px字符串拼接
+
+
+
+        }
+    </script>
+</body>
+
+</html>

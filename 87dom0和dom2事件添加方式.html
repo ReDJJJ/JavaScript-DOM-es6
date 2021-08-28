@@ -1,0 +1,70 @@
+<!-- 
+    dom分版本 dom 0 1 2 3 
+    dom0和dom2 有自己独立的事件绑定(添加)和解绑方式
+    dom0的方法高低级浏览器都可以使用
+ -->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        div {
+            height: 100px;
+            background: skyblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box"></div>
+    <script>
+        window.onload = function () {
+            var box = document.getElementById("box");
+            //dom0版本 事件添加方法 
+            // box.onclick = function (){
+            //     console.log("box");
+            // }
+
+            // //dom2版本 事件添加方法
+
+            // dom2.addEventListener(简写参数无on,function(){}) //高级浏览器支持 
+            // box.addEventListener("click",function(){
+            //     console.log("box");
+            // },false) 
+            //addEventListener还有第三个参数,是一个布尔值,决定事件捕获的方式(冒泡false或者捕获ture),默认冒泡false;
+
+            //dom2.attachEvent("详细参数有on,function(){}")低级浏览器支持 高级浏览器不支持
+            // box.attachEvent("onclick",function(){
+            //     console.log("box");
+            // })
+
+
+            //进行兼容性封装元素 添加dom2 监听事件  
+            function addEvent(node,eventType,callback,isBubble) { //(节点,监听事件类型,事件处理回调函数)
+                if (node.addEventListener) { //能取到,一定是函数,对象一定ture,娶不到undefined,false
+                    node.addEventListener(eventType, callback,isBubble); //简写click 高级浏览器方式addEventListener
+                } else {
+                    node.attachEvent('on'+eventType, callback); //详写onclick 低级浏览器方式attachEvent
+                    //addEeventListener 和 attachEvent的参数不一样,aE是详细参数,所以"on"+eventType
+                }
+            }
+            
+            function fn1(){
+                    console.log("box");
+            }
+            function fn2(){
+                    console.log("BOX");
+            }
+
+            addEvent(box,"click",fn1,false); 
+            //fn1函数作为参数传递,回调函数(回调函数写在外面,作为实参传入)
+
+            // dom2中 addEventListener高级简写事件类型 ,attachEvent低级详写事件类型 ！！！！！
+        } 
+    </script>
+</body>
+
+</html>

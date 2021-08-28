@@ -1,0 +1,75 @@
+<!-- 
+    作用域链: 作用域链是变量查找的规则
+    ReferenceError : 引用错误
+    Sys............: 语法错误
+    type           :类型错误
+ -->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        var a = 0;
+        function fn() {
+            var a = 1;
+            function fn2() {
+                var a = 2;
+                function fn3() {
+                    // var a = 3;
+                    function fn4() {
+                        // var a = 4; 找不到 就往↖一级找
+                        console.log(a); 
+                        // 要打印a的值,那么就要找到a变量,
+                        // 作用域链: 变量查找的过程,先从当前作用域中查找,找到就输出.
+                        //          找不到就往上一级的作用域查找,一直找到全局为止;
+                        //          中间过程中,若找到对应变量则直接输出,停止查找.直到找到全局都没有,直接报错.该变量未定义
+                    }
+                    fn4();
+                }
+                fn3();
+            }
+            fn2();
+        }
+        fn();
+
+        // 在函数声明中,发生了声明嵌套的情况,那么,被嵌套的子函数只能在父函数中被调用,子函数相当于于父函数中的一个局部变量
+        /*
+            function father(){
+                funciton son(){
+                    代码块;
+                }
+
+                son() //只能在father()内部调用.
+            }
+
+            son(); //错误 son是在father()内部声明的,所以son()属于father的局部变量,作用域在father()内部,全局环境不能调用局部变量son();
+        
+        */
+
+            // 作用域链在函数调用时候才会发生,而作用域在函数定义时候就确定了,定义时不存在函数.
+           var num = 1;
+
+            function interview(){
+                var num=10;
+                interview2();//interview 过程下包含了interview2的执行
+            }
+
+
+            function interview2(){
+                console.log(num);
+            }
+
+            interview();//打印的是1,而不是10; 因为作用域和作用域链是定义的时候就决定了. 哪怕interview2被interview()内部调用,但是interview2在定义时就在全部变量num的作用域内,不在interview()的局部变量num的作用域内.
+            // 作用域只看定义时的作用域,调用时的作用域也是依据定义时的作用域.
+            // 所以作用域链 是根据定义时候的来查找变量的作用域链。(而不是执行的时候)
+    </script>
+</body>
+
+</html>

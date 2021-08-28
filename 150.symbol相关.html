@@ -1,0 +1,91 @@
+<!-- 
+    es5中对象的属性名都是字符串:容易造成重名,污染环境;
+    symbol：标志
+    es6中添加了一种基本数据类型symbol ,至此一共六种基本数字类型 
+    特点:
+        1 Symbol属性对应的值是唯一的,解决命名冲突的问题
+        2 Symbol值不能和其他数据进行运算(会报错),包括同名字符串拼串 (symbol没有类型转化)
+        3 for in for of  遍历时不会遍历symbol属性
+ --> 
+ 
+<!doctype html>
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            //调用Symbol函数得到symbol值 Symbol()是为了创建唯一标识用的,每个symbol值都是唯一的(后台会记录这个symbol唯一值);
+                let s1 = Symbol(); //通过Symbol函数得到一个symbol类型的值,赋予给s1;
+                let s2 = Symbol(); 
+                console.log(s1); //Symbol()
+                console.log(s2); //Symbol()
+                console.log(s1 == s2); //false s1s2打印看起来一样,实际上是不一样的,这是由symbol类型特性决定的;
+               // console.log(s1>s2);  //报错,symbol不允许运算
+
+                //给symbol添加字符串标识用以区分每个Symbol
+                let s3 = Symbol("s3"); // let 变量名 = Symbol("字符串标识")
+                console.log(s3); 
+
+
+            //什么时候用: 数据需要添加一个新属性
+            //后台传回的数据可能会非常非常庞大,拥有极多的属性键值对,此时使用Symbol()避免重名覆盖已有属性,而symbol是唯一标识,不可能导致重名发生层叠;
+            let obj = {
+                name:'ALY',
+                age:'18',
+            };
+
+            //此时想添加age属性,但是obj很庞大直接添加age属性可能会发生重名,使用symbol类型值配合字符串标识解决
+            let sy = Symbol("age");
+            obj[sy] = 20;
+            console.log(obj);//{name: "ALY", age: "18", Symbol(age): 20}
+
+            //symbol属性添加之后,访问比较讲究
+            for (key in obj) {
+                console.log(key,obj[key]); //name ALY age 18 没有Symbol(age): 20
+                //for in for of 不允许访问symbol属性;
+            }
+            //直接写symbol()也不行
+                console.log(obj['Symbol(age)']);//undefined
+
+            //访问方法
+                console.log(obj[sy]); //20 用指向symbol的变量sy访问
+
+                var arr = Object.getOwnPropertySymbols(obj);
+                //该方法获取对象中所有的Symbol属性,并封装成数组返回
+                console.log(arr);
+                console.log(obj[arr[0]]);
+
+                //Symbol是一个函数,也是一个对象,Symbol对象内置了11个属性 指向语言内部使用的方法 
+                // - Symbol.iterator 指向一个迭代器方法,供for of循环遍历
+                // 对象的Symbol.iterator属性,指向该对象的默认迭代器方法 这个迭代器方法供for of 循环遍历 使用
+                
+                 //for of 普通对象不能使用,因为没有Symbol.iterator这个迭代器方法 for of用来求值  for (let x of arr)  x为数组元素的值   for (let key in arr) key为对象属性名或者下标    可惜for in 不能访问到symbol类型的对象属性
+                let arr1 = [111,222,333,444,555];
+                for (const value of arr1) {
+                    console.log(key);
+                }//for of 循环
+                for (var key of arr1) {
+                    console.log(arr1[key-1]);
+                }//for of 循环
+
+                //为什么数组就能调用for of循环呢? 因为其构造函数Array.prototype内有这个方法,而这个方法由Symbol(Symbol.iterator)这个属性指向;
+                //并且小布规定了这个Symbol.iterator是可直接读取的 Array.prototype[Symbol.iterator] [js中11个Symbol内置属性(变量)之一] Symbol.iterator是个变量名
+                //若没有了Arrary.prototype[Symbol.iterator] ,数组就不可以使用for of函数了
+                Array.prototype[Symbol.iterator] = 10 ; //修改此属性的指向;就不可用使用for of方法了
+                for (const value of arr1) { // arr1 is not iterable
+                    console.log(value); 
+                }//for of 循环
+
+                //普通对象类型没有Symbol.iterator这个方法,所以不能使用for of循环 ,但是有Symbol.hasInstance所以可以使用for in循环
+                //数组可以使用for of 和for in循环, 而普通对象只能使用for in循环不能使用for of循环(没有Symbol.iterator迭代器)
+
+
+        </script>
+    </body>
+</html>

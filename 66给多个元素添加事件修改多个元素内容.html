@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <!-- 更改一个标签内容  -->
+    
+       <!-- <p>我是文本</p>
+       <p><span>我是span</span></p>
+       <script>
+           window.onload  = function(){
+                var p1 =  document.querySelector("p:nth-of-type(1)"); //获取对象
+                var p2 =  document.querySelector("p:nth-of-type(2)"); 
+
+                p1.onclick = function (){
+                    console.log(p1.innerHTML);
+                    p1.innerHTML = "我是你爹";               
+                }
+
+                p2.onclick = function (){
+                        console.log(p2.innerText); //innerText只会打印p标签内所有文本(哪怕有嵌套关系)
+                        console.log(p2.innerHTML); //innerHTML会打印p标签内所有内容(文本和标签)
+                        
+                        p2.innerText = "<h2>我是你爹<h2>"; // 更改 innerText只会讲内容原封不动的打印到 窗口
+                        p2.innerHTML = "<h2>我是你爹<h2>"; // 更改 innerHTML 里面的标签会生效
+            }
+            }
+            // innerText和innerHTML之间的区别 :关键点在于内容中是否嵌套其他标签 
+            // 读取内容时候: 如果内容当中包含标签字符串,innerText只会输出标签里面的内容,不会输出标签本身;而innerHTML会把标签嵌套的所有标签以及内容打印出来
+            // 设置内容时候: 如果设置内容当中包含标签字符串.innerText只会打印原封不动的内容,而标签本身不生效(标签也被打印).innerHTML则会将标签生效,并打印其余内容
+
+       </script> -->
+
+
+<!--     
+    <p>我是文本</p>
+    <p>我是文本</p>
+    <p>我是文本</p>
+    <p>我是文本</p>
+
+    功能:点击任意一个p,4个p内容全部改变 (重点关注执行过程) (所有回调函数都是异步代码,都得等同步代码先执行完)
+    <script>
+        window.onload = function () {
+            var plist = document.querySelectorAll("p"); //获取所有p对象,返回伪数组
+            console.log(plist);
+
+            // js中无法对整个数组整体进行操作,需要对每一个数组元素单独进行操作.(例如数组方法里面的foreach,map和filter都是轮询针对每个数组元素进行操作)
+            // 所以想要操作一个返回值为伪数组的元素对象plist 要利用for循环针对plist伪数组 的每个数组元素都建立事件监听,并且也要利用for循环逐个改变plist中的数组元素
+            for (var i = 0; i < plist.length; i++) {
+                plist[i].onclick = function () {
+                    for (var j = 0; j < plist.length; j++) {
+                            console.log(i,j); //重点关注这个结果,可以看出这个嵌套双循环的执行过程
+                            plist[j].innerText = "<h2>I am your father</h2>";
+                    }
+                }
+            }
+
+            //这个类似嵌套双循环的过程很特别,不是传统外层一次内层一轮
+            //而是外层,先轮询一遍,先给每个p设立事件监听,当某个p被点击了,再触发onclick事件内部的循环,也就是说onclick内部一开始是不执行的(所以onclick事件内部的循环一开始也不执行).
+        } 
+    </script> -->
+
+    <!-- 本天的重点 : 注意回调处理函数的双层for循环执行过程; 回调处理函数的this;排它思想  -->
+    <p>我是文本</p>
+    <p>我是文本</p>
+    <p>我是文本</p>
+    <p>我是文本</p>
+
+    <!-- 功能:点击任意一个p,只有p不改变,其余p内容全部改变  
+            排他思想: 全体p都变成同一种状态,然后再 独立 改变被点击的p的状态  先大同,后独立-->
+    <script>
+        window.onload = function () {
+            var plist = document.getElementsByTagName("p"); 
+           
+            for (var i = 0; i < plist.length; i++) { //for 对Plist 内所有的p 添加事件监听
+                plist[i].onclick = function () {
+                    
+                    for (var j = 0; j < plist.length; j++) {// 让所有p先变成同一种状态
+                            plist[j].innerText = "<h2>I am your father</h2>";
+                    }
+                    // 然后让事件源对应的内容改为另一种状态
+                    //plist[i].innerText = "嘿嘿"; //点击时i早已经是4;
+                    // 此处要使用this,在事件处理回调函数当中,this 永远指向事件源 (事件承受的对象)
+                    this.innerHTML = "我是文本";
+                }
+            }
+        } 
+
+        //这个类似嵌套双循环的过程很特别,不是传统外层一次内层一轮
+        //而是外层,先轮询一遍,先给每个p设立事件监听,当某个p被点击了,再触发onclick事件内部的循环,也就是说onclick内部循环一开始是不执行的(异步).
+        // !!!!重点: for循环内部的事件处理回调函数当中,不能调用外部for循环的i ,当事件触发时,外层for循环早已走完一轮. 上面的i=plist.length=4
+        // 所以事件处理回调函数不能用外层i ,要使用排他思想(先大同后小异) 并且要使用this来指向事件源,为事件源来设立特例
+    </script>
+
+</body>
+
+</html>

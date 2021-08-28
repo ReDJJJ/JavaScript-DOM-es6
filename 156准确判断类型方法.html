@@ -1,0 +1,49 @@
+<!-- 
+    // typeof instanceof === 可以完整的判断所有数据类型,但是要组合使用
+    // toString方式判断所有的数据类型
+ -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style></style>
+</head>
+<body>
+    <script>
+            //** 封装方法实现toString判断所有的数据类型
+
+            //灵感:之前对象类型的toString()为什么三个都那么不一样(看[]+"",函数本体直接'',[object Object])? 因为Array.prototype Function.prototype重写了toString方法
+            // 那么如果让所有数据类型都用Object.prototype的toString方法会发生什么呢? 会不会是[object 开头大写的类型呢？] 会!!!!!!!!!! typeof结果都是小写字符串
+            var a = 1;
+            console.log(Object.prototype.toString.call(a));//[object Number]
+            var a = "";
+            console.log(Object.prototype.toString.call(a));//[object String]
+            var a = null;
+            console.log(Object.prototype.toString.call(a));//[object Null]
+            var a = [];
+            console.log(Object.prototype.toString.call(a));//[object Array]
+            var a = ()=>{}
+            console.log(Object.prototype.toString.call(a));//[object Function]
+            console.log(Object.prototype.toString.call(a).slice(8,-1).toLowerCase());//function
+            //再利用slice函数切割出来所需的字符串即可; 哪怕每个类型长度不同,通过负数参数也可以截取完整  坐标从0开始,头含尾不含
+
+            function checkDataType(data){
+                return Object.prototype.toString.call(data).slice(8,-1).toLowerCase();
+            }
+
+            //深拷贝另类方法 JSON
+            let school = {
+                name:'FJNU',
+                stu:[11,22,33,44],
+            }
+            let str = JSON.stringify(school);
+            let newSchool = JSON.parse(str);
+            newSchool.name = "福建师范大学";
+            console.log(newSchool); //福建师范大学 
+            console.log(school); //FJNU 
+            //互补影响,实现对象的深拷贝
+    </script>
+</body>
+</html>

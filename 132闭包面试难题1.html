@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+         
+           img{
+               display: block;
+               width:1000px;
+               transform: rotate(-90deg);
+               margin : 0 auto;
+           }
+       </style>
+   </head>
+
+   <body>
+        <p>1创建全局执行上下文环境,开辟0X100堆内存存放fun函数内容,并且让全局变量fun指向0X100,全局变量a默认undefined</p>
+        <img src="./img/IMG_3887.JPG" alt="">
+
+        <p>
+            a = fun(0);<br/>
+            1执行fun(0)前,创建fun(0)的执行上下文,<br/>
+            2开始执行fun(0),打印o(undefined),<br/>
+                return {<br/>
+                fun:function(m){ //2<br/>
+                return fun(m,n); //3<br/>
+                } 一整个对象,对象开辟堆内存0X80装载,<br/>
+            3而此对象内又有一个方法fun(m,n),则又需要开辟堆内存0X70来装载,0X70赋给对象中fun属性;<br/>
+        </p>
+        <img src="./img/IMG_3889.JPG" alt="">
+
+        <p>
+            地址0X80赋值给a,从此a就指向了这个对象<br/>
+            由于满足闭包关系(fun(0)嵌套方法fun,方法fun中调用了fun(0)的变量,并且外部函数被调用了),所以形成了闭包,fun(0)执行完后不会出栈;<br/>
+        </p>
+        <img src="./img/IMG_3890.JPG" alt="">
+
+        <p>
+            a.fun(1);<br/>
+            调用a对象里面的fun属性,而fun是一个方法,则开辟fun(1)方法执行上下文<br/>
+            赋值形参m = 1;<br/>
+            而fun(1)方法 返回值 return fun(m,n); <br/>
+            先要执行fun(m,n),开辟fun(m.n)的执行上下文,<br/>
+          
+        </p>
+        <img src="./img/IMG_3891.JPG" alt="">
+
+        <p>
+            并且根据,作用域链找寻到m和n的值,m为fun(1)方法的形参1,n为fun(0)函数的第一个形参0; fun(m,n) == fun(1,0)<br/>
+            打印console.log(o),o形参值为0<br/>
+            然后又返回一整个对象{<br/>
+                fun:function(m){ <br/>
+                return fun(m,n); <br/>
+                } 
+            该对象又要开辟堆内存0X60 和 0X50 ;<br/>
+            但是此次没有接收对象.<br/>
+        </p>
+        <img src="./img/IMG_3892.JPG" alt="">
+
+        <p>
+           至此,a.fun(1)执行完毕,由于没有形成闭包,所以0X60 0X50 成为垃圾对象,fun(m,n)上下文,fun(1)方法依次出栈;
+           之后的 a.fun(2) a.fun(3) 其实就是a.fun(1)最后三步的重复,只不过传的参数不同
+           <br/>
+        </p>
+        <img src="./img/IMG_3893.JPG" alt="">
+
+
+       <script>
+                    function fun(n,o){ //1
+                        console.log(o);
+                        return {
+                            fun:function(m){ //2
+                            return fun(m,n); //3
+                            }
+                        }
+                    }
+                    var a = fun(0); //打印undefined
+                    a.fun(1);//0
+                    a.fun(2);//0
+                    a.fun(3);//0
+                    var b = fun(0).fun(1).fun(2).fun(3); // undefined 0 1 2 
+
+                    var c = fun(0).fun(1);
+                    c.fun(2);
+                    c.fun(3);
+
+                    
+       </script>
+   </body>
+</html>
+
+

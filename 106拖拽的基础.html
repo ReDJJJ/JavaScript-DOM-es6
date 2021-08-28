@@ -1,0 +1,129 @@
+<!-- 
+
+    个人理解: 定时器设置极短的事件间隔,可以实现一些连续的效果,比如位移,移动等;
+
+
+
+    拖拽有三个事件过程
+    onmousedown : 鼠标按下
+    onmousemove : 鼠标移动
+    onmouseup   : 鼠标松开
+
+    并且:div元素和鼠标元素的相对位移一致,通过计时器获取前后鼠标位置坐标的改动,套用在div元素的定位top和left上
+    
+
+    个人思路: 
+            定时器负责以极短的时间间隔获取鼠标的位移(微元法);
+            鼠标按下: 创建定时器开始;
+            鼠标移动: 定时器每段间隔获取鼠标移动的坐标变化,套给div
+            鼠标松开: 清除定时器和鼠标位移事件,
+            难题: 三个鼠标事件不知道如何摆放 
+
+            解答: 鼠标移动时间 写在 鼠标按下事件的内部 因为在移动的过程中鼠标根本没有抬起过 一直属于按下事件的一部分
+            以后多种事件之间可以判断 谁是在什么事件的基础上 触发的
+
+    ！！！！！！！！！！！！！！！！！！！！！！个人思路可以完成该拖拽 
+    不过还有更简单的:不用定时器轮询获取位置,因为onmousemove本身就是一直不断触发的;
+
+    经典: 元素的最终位置 =  元素的最初位置 + 鼠标的距离差
+
+    拖拽结构:
+    BOX.onmousedown FUN(){
+        获取鼠标初始位置和BOX初始位置
+        BOX.onmousemove FUN(){
+            每次鼠标及其微小的移动都会触发该事件,一次位移会多次触发,所以自己就把位移过程微分了！！所以不用定时器微分
+            求出鼠标相对坐标差
+            素的最终位置 =  元素的最初位置 + 鼠标的距离差
+        }
+        BOX.onmouseup FUN(){
+            onmousemove不会自己清除,一直不断的触发,所以需要清除dom0事件
+            BOX.onmousemove = null;
+        }
+    }
+
+ -->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background: lightgreen;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+
+            /* 
+                目前让元素动起来 只有两种方式
+                 一种是改变.style.left top (需要绝对定位支持) ;
+                第二种: transform : translate XY 配合transition
+                第三种: animation 动画
+            */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+    </div>
+    <script>
+        // 难点:相对位移怎么样求出来,通过极短时间间隔的定时器,并用变量记录旧坐标和新坐标差值求出相对位移
+        window.onload = function () {
+            var box = document.getElementById("box");
+            var newPageX = 0, newPageY = 0, oldPageX = 0, oldPageY = 0;
+            var xindex = 0, yindex = 0;
+
+            box.onmousedown = function (event) {
+                event = event || window.event;
+                //记录鼠标按下的初始位置
+                oldPageX = event.pageX;
+                oldPageY = event.pageY;
+                //关键点二 onmousemove  写在onmousedown事件内, 因为鼠标移动的过程 鼠标没抬起来过 鼠标移动是在鼠标按下中途发生的事情
+                var timerDown = setInterval(function (event) {
+                    //通过定时器,每隔20ms来完成一次微小移动,最终拼合起来连续的移动
+
+
+                    //每次循环定时中的box.mousemove 都是细化的一次微小移动
+                    box.onmousemove = function (event) {
+                        event = event || window.event;
+                        newPageX = event.pageX;
+                        newPageY = event.pageY; //每次循环延时都记录此时的鼠标坐标
+
+                        xindex = newPageX - oldPageX;
+                        yindex = newPageY - oldPageY; //求出鼠标的相对位移
+
+                        var left = parseInt(box.offsetLeft);
+                        var top = parseInt(box.offsetTop);
+                        //伞兵,style.left这样子是查不到left和top值的,查的是行内元素 草
+                        console.log(left, top);
+                        left += xindex;
+                        top += yindex;
+                        box.style.left = left + "px";
+                        box.style.top = top + "px"; //给box定位添加相对位移
+                        oldPageX = newPageX;
+                        oldPageY = newPageY;  //本次的鼠标位置利用完了,就是下一轮的旧坐标了
+                    }
+                }, 200);
+                // 鼠标抬起是鼠标按下之后发生的,所以onmouseup事件也写在onmousedown里面
+                //pc端很特殊,鼠标的onmousemove事件不会自动解绑,需要手动解绑
+                box.onmouseup = function () {
+                    // 在鼠标抬起的瞬间,清除鼠标移动事件,否则会一直存在;
+                    box.onmousemove = null;
+                    clearInterval(timerDown);
+                    //清除鼠标移动事件
+                }
+            }
+
+
+
+
+        }
+    </script>
+</body>
+
+</html>

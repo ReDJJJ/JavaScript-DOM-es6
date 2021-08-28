@@ -1,0 +1,107 @@
+<!-- 
+    之前js操作写 的样式都是行内样式 元素.style.样式属性名  ,因此当利用此方法读的时候,一般行内样式都为空,读取的就是空字符串;
+    即无法读取写在内嵌式或者外链式的样式,修改也只能修改行内样式;
+
+    offset:抵消,弥补,偏移量
+    client:客户端
+    scroll:滚动
+
+    clientXY相对视口的鼠标位置
+    offsetXY相对盒子内部的鼠标位置
+    pageXY相对页面的鼠标位置
+
+    常用的六个:
+    clientWidth / Height: 盒子 content + padding 
+    offsetWidth / offsetHeight : 盒子 content + padding +border
+			scrollWidth   只读  
+					//当内容比盒子小的时候，拿的是盒子的clientWidth
+    				//当内容比盒子大的时候，拿的是内容的offsetWidth + 盒子的一侧内边距； 
+			scrollHeight  只读
+					//当内容比盒子小的时候，拿的是盒子的clientHeight
+//					//当内容比盒子大的时候，拿的是内容的offsetHeight + 盒子的一侧内边距；
+
+    clientTop / clientLeft : 左右边框的大小
+    offsetTop / offsetLeft : 偏移量,默认参考点为文档页面,绝对定位后为父亲参考点,若子元素不添加margin,且不添加transform:translate(),则offsetTOP/LEFT和绝对定位的TOP/LEFT值相同,可以用以查询
+    scrollTop //拿的是盒子内容向上滚动的距离
+	scrollLeft  //拿的是盒子内容向左滚动的距离
+
+
+    此系列都只有 TOP LEFT ; 并且只有scrollTop 和scrollLeft 的值是可写的,其余都是可读,不可更改,
+    所以想改可以直接通过 元素.style.属性 = 方式进行更改
+    总之: 经过这节课 : 可以读取元素的宽高 和元素的位置(偏移量),和元素边框,和元素内容的滚动距离了
+    好处:无论元素宽高本体怎么改,一查一个准(变量的好处)
+ -->
+
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           *{
+               margin :0;
+               padding : 0;
+           }
+           #box{
+               width : 300px;
+               height: 300px;
+               margin : 100px;
+               padding : 50px;
+               border :10px solid skyblue;
+               background: pink;
+               position:relative;
+
+               overflow:scroll;
+           }
+           #box1{
+               width :450px;
+               height: 150px;
+             
+               /* box有边框 不会发生外边距塌陷 */
+               position: absolute;
+               top:20px;
+               left:20px;
+               padding : 40px;
+               border :10px solid lightslategrey;
+               background: lightgreen;
+           }
+       </style>
+   </head>
+
+   <body>
+        <div id="box">box
+            <div id="box1">
+                box1
+            </div>
+        </div>
+        <button>获取滚动距离scrollLeft按钮</button>
+        <script>
+            window.onload = function(){
+                var box = document.getElementById("box");
+                var box1 = document.getElementById("box1");
+                console.log(box.style.width); 
+                // 此方式读取的是行内样式,而box行内样式为空,返回空串; 
+                console.log(box.clientWidth);  //50+300+50 
+                // 盒子的content + padding ;  clientWidth & Height(内容+内边距)    
+                console.log(box.offsetWidth);  //10+50+300+50+10
+                // 盒子的content + padding +border ;   offsetWidthHeight & width(内容+内边距+边框)  
+                console.log(box.scrollWidth);   //了解即可 // 10+40+450+40+10 + 50
+                // scrollWidth分两种情况 : 1当内容没溢出时,读数和clientWidth一致                                           
+                //当内容溢出时候, (内容的content+padding+border+溢出一侧的margin) + 溢出一侧的盒子的内边距padding; 
+                //意义: 当内容没有溢出时,就是父盒子clientWidth , 内容溢出时,父盒子clientWidth + 溢出父元素的部分Width;
+
+                console.log(box.clientLeft); 
+                //clientTop 盒子的上边框宽度 clientLeft 左边框宽度 没有right和bottom
+                console.log(box1.offsetLeft); 
+                //不设置绝对定位情况下:相对document(网页)的偏移量;
+                //在子绝父相的情况下,是相对父亲参考点的偏移量,所以可以用来查询绝对定位的top和left(前提是子元素不自己额外设置margin,否则绝对定位的margin也会生效,此时offsettop = top+margin-top),满足前提下offsetTop绝对定位的TOP LEFT设置的数值相同,;
+                
+                var btn = document.querySelector("button");
+                btn.onclick = function(){
+                console.log(box.scrollLeft);
+                //打印盒子的内容！！是内容滚动的距离(滚动条属于盒子的) 不是盒子本身滚动的距离(有滚动条情况下),无滚动条则默认0(无滚动)
+                }   
+            }   
+        </script>
+   </body>
+</html>

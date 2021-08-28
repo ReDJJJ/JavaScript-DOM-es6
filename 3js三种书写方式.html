@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            div{
+                width: 100px;
+                height:100px;
+                background: hotpink;
+                margin:200px auto;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="./3.js"></script>
+        <!--
+             语法 body标签内部 <script type="text/javascript" src="路径"></script>
+             在引入外链js文件的script标签中间,不能写代码,写的代码不会生效,外链script标签只能单纯作为外链式.
+        -->
+
+        <div onclick="alert('行内式js配合onclick属性')"></div>
+        <!--
+             onclick属性:当鼠标点击时 发生的事情  内嵌式注意内外层单双引号的 区分  
+             行内式js :相当麻烦,耦合性太强,并且只能针对事件(敲击鼠标,键盘) 来进行js设置,很少用
+        -->
+
+        <script type="text/javascript ">
+            // 内嵌式js
+            // 选择器什么时候用id选择器, 例如版心 头部 内容  尾部 
+            // id选择器是唯一的,可用于快速定位, js查找定位利用id可快速查找目标
+            alert("hello world 1!");
+        
+            console.log("hello world 2！！！");
+            // 两个弹窗,解释性语言,从上到下,先执行3.js外链,后执行内嵌式该语句
+          
+            document.write("hello world 3！！！");
+        
+        </script>
+
+
+    </body>
+    <script>
+        console.log("内嵌式js代码要写在body标签底部,哪怕写在body标签外部,浏览器也会将script补回body,渲染效率变低");
+    </script>
+</html>

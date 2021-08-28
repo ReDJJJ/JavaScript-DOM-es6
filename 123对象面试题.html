@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    a[变量]的过程
+    1取变量的值
+    2变量值转换成字符串
+    3对这个变量值转换成字符串的新属性进行操作;
+    就是以前的[]语法中的变量用法,添加一个新属性罢了
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+
+            //关键考点是 对象的属性名都是字符串类型(不是则要进行字符串转换) 对象数据类型转换成字符串类型 toString(); 
+            //对象数据类型转换成基本数据类型三步: valueOf(),求出本身(共用Object的原型对象方法)
+                                            //    toString(),砍[],function本体,[object,Object],各自使用各自构造函数(Array,Function,Object)重写的方法,
+                                            //    Number();将以上的字符串转换成数字NaN(不一定需要这步)
+			//莫急莫慌
+			var a = {};
+			var obj1 = {
+				m: 2
+			};
+			var obj2 = {
+				n: 2
+			};
+           
+			var obj3 = function() {return 1};
+            var obj4 = [1,2,"abc"];
+
+
+			a[obj1] = 4 //a["[object Object]"] = 4              a["1,2,3"] = 4
+
+			a[obj2] = 5 //a["[object Object]"] = 5; //有则更改,无则添加,覆盖了上面那行 ！！！！！！！
+			a.name = 'kobe'
+			a[obj3] = 6; //a["function() {return 1}"] = 6 ; 
+            a[obj4] = 7; //a["1,2,'abc'"] = 7;
+			console.log(a[obj1]) // 5;
+			console.log(a);
+
+            //题目解析: 预先解析后, a,obj1,obj2 三个对象 , obj3一个函数;
+            //a[obj1] = 4; 
+            //首先a[obj1] [obj1]中拿到的是obj1的整个对象;
+            //其次a是一个对象, 一个对象a[obj1]的属性名一定是一个字符串类型,所以要将obj1整个对象转化成字符串;
+            //所以a[obj1] = 4 ; -- a[toString(obj1)] = 4  -- a["[object Object]"] = 4   -- a.[object Object] = 4;
+
+            //a[obj3] = 6;
+            //首先a[obj3] [obj3]中拿到的是obj3的整个函数;
+            //其次a是一个对象, 一个对象a[obj1]的属性名一定是一个字符串类型,所以要将obj3整个转化成字符串;
+            //所以a[obj3] = 6 ; -- a[toString(obj3)] = 6  -- a["function() {}"] = 6 
+              //a[obj4] = {1,2,"abc"};
+            //首先a[obj4] [obj4]中拿到的是obj4的整个数组;
+            //其次a是一个对象, 一个对象的属性名一定是一个字符串类型,所以要将obj4整个转化成字符串;
+            //所以a[obj4] = 6 ; -- a[toString(obj4)] = 6  -- a["1,2,'abc'"] = 6 
+		</script>
+	</body>
+
+</html>

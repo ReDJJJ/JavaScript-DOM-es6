@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style></style>
+</head>
+
+<body>
+    <script>
+        //class类的概念(语法糖) class类的本质还是构造函数
+        //复习
+        function Person(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+        Person.prototype.eat = function () {
+            console.log("吃东西");
+        }
+        function Teacher(name, age, subject) {
+            Person.call(this, name, age);
+            this.subject = subject;
+        }
+        Teacher.prototype = new Person(); //改变原型链
+        Teacher.prototype.constructor = Teacher;
+
+        //语法糖class类
+        class Person1 {
+            a = 100  //定义一个和person相关(person本身的实例化对象和继承person的实例化对象)实例对象都有的一个数据(react框架会用到)
+                     //此处不能用var 和let 定义 ; 为什么? class类的语法规定,就和constructor构造器一样,小布写的
+            static b = 300 //静态数据,给person1类本身的私有数据(变量),其 实例化对象和其继承实例化对象都没有b这个静态变量
+            //实例化属性写在构造器constructor方法内,要和原型中的.constructor属性区分开
+            //假若方法写在构造器里面,则每个实例化对象拥有独立的方法,就是浪费内存空间的写法
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+                //this.eat = function(){console.log("吃")};//浪费内存空间
+            }
+            //实例方法,直接写就可以了,并且会自动添加到显式原型对象当中,以供实例化对象使用
+            eat() {
+                console.log("吃东西");
+            }
+        }
+        let p1 = new Person1("HJ",18); //实例化过程和构造函数实例化过程一样
+        console.log(p1);
+        /*
+         js中class本质就是构造函数
+         抽象
+         class 类名 {
+             constructor (属性列表){
+                 this.name = name;
+                 ....
+             }
+             实例方法名1(形参列表){
+                 代码块
+             }
+             实例方法名2(形参列表){
+                 代码块
+             }
+         }
+        */
+
+        //继承方法 extends 关键字 ,虽然extends只是用来继承方法,但是又开启了混合继承,Teacher1里面的name,age和父类Person1的冲突了
+        //继承属性 super(继承属性列表); 一个简简单单的函数调用
+        //语法 class 子类 extends 父类{}  
+        class Teacher1 extends Person1 {
+            constructor(name, age, gender) {
+                // this.name = name;
+                // this.age = age; 
+                // 使用extends后会子类父类同名属性会冲突
+
+                super(name,age); //使用super(继承属性列表)取继承属性,且extends后必须使用super取继承属性
+                this.gender = gender;
+            }
+               eat(){
+                   console.log("吃肉");//重写方法
+               }
+        }
+        let t1 = new Teacher1('redjjj',23,"man");
+        console.log(t1);
+        console.dir(Person1);
+        //实行方法的具体实行过程需要进行条件转增
+        
+        
+    </script>
+</body>
+
+</html>

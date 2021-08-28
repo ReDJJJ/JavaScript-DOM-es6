@@ -1,0 +1,45 @@
+<!-- 
+    DOM 文档对象模型
+    DOM是一个使程序和脚本有能力动态地访问和更新文档内容,结构和样式的平台和语言中立的接口
+    DOM 描述了处理网页内容的方法和接口 
+    DOM是接口,接口就是一大堆函数和方法 
+    DOM是一系列函数以及方法
+
+    Window是浏览器窗口对象,所有东西都被当作是window的子对象
+
+    文档对象 documnet 是window下的一个属性 代表整个DOM文档对象 
+    整个HTML文件 从<!doctype html> 开始 <html></html>标签内所有的内容 都是document文档对象的内容 , document包含了整个文档.
+
+
+    document 是 window 的一个属性 ;  document 又包含着 HTML ;
+
+    节点        元素   属性   文本   注释 ..
+    
+    元素节点      标签      <html> div p h1 h6  ul li ol li .. input ... table ...tr th td 
+    属性节点      属性      class id ..style...
+    文本节点      内容       P文本内容/P
+    注释节点      注释        
+
+    根元素(root)  HTML标签
+
+    文档树(DOM) : 以HTML为根节点,形成的一颗倒立的树状结构,我们称之为DOM树
+                 这个树所有的东西都称为节点,节点有很多类
+                 这些节点(DOM树的任意东西都是一个节点) 如果通过DOM方法去获取或者其他操作去使用. 这些节点称为DOM对象
+    DOM还会提供一系列的方法
+ -->
+
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            img{
+                width: 1000px;
+                transform: rotateZ(-90deg);
+            }
+        </style>
+    </head>
+    <body>
+            <img src="./img/733.JPG" alt="">
+    </body>
+</html>

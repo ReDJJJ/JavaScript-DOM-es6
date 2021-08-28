@@ -1,0 +1,80 @@
+<!--
+    函数：具有特定功能的代码块
+            函数本质上也是一种数据, 并且是对象数据类型;
+
+    函数功能：
+        1解决代码冗余问题,形成代码复用
+        2函数的出现让整个代码项目模块化
+        3封装代码,让函数成为黑盒
+
+        函数过程分为 函数定义和函数调用;
+        函数定义并不会执行其内部的功能,只是一个声明 开辟堆内存空间装载函数内容
+        函数调用才会执行函数内部的功能.
+
+        譬如alert(),console.log(),document.log 是js本身定义好的函数。直接调用即可,不需要声明。
+-->
+
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <script>
+        // 函数初体验
+        // 打印三角形
+        function printEqualTriangle() {
+            for (var i = 0; i < 5; i++) {
+                for (var j = 0; j < 5 - 1 - i; j++) {
+                    document.write("&nbsp;");
+                }
+                for (var j = 0; j < 2 * i + 1; j++) {
+                    document.write("*");
+                }
+                document.write("<br>");
+            }
+        }
+        printEqualTriangle();printEqualTriangle();
+
+        /*
+        函数定义: 字面量定义 和 函数表达式定义
+               字面量定义:
+                        function 函数名(参数列表){
+                            代码块;
+                        }
+                函数表达式定义:
+                        var 变量名(函数名) = function(参数列表){
+                            代码块;
+                        }
+
+        理解: 函数表达式即为 等号右边的 function(){} 
+              所以本质上函数也是一种数据,其类型是对象数据类型,赋予给函数名;
+        */
+        
+        // 字面量定义 与调用
+        function printRedJJJ() {
+            console.log("RedJJJ");
+        }
+
+        printRedJJJ(); printRedJJJ();
+
+        var printHelloworld = function(){
+            console.log("Helloworld");
+        }
+
+        printHelloworld(); printHelloworld();
+
+
+
+
+    </script>
+</body>
+
+</html>

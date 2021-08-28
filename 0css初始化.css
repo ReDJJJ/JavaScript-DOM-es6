@@ -1,0 +1,29 @@
+*{
+    margin :0;
+    padding:0;
+}
+
+
+ul,li{
+    list-style: none;
+}
+img{
+    display:bLock;
+}
+a{
+    text-decoration:none;
+}
+input{
+    outline:none;
+}
+.clearfix::after{
+    content:"";
+    clear:both;
+    display:block;
+}
+/*禁止系统滚动条*/
+html,body{
+    height:100%;
+    overflow:hidden;
+}
+

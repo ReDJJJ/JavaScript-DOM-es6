@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+       <h1>我是h1</h1>
+       <h2>我是h2</h2>
+         
+       <script>
+                console.log(document.documentElement); //HTML
+                console.log(document.head); //head
+                console.log(document.body); //body
+                // 特殊元素获取方式;
+
+           window.onload = function() {
+               //创建元素(标签)的三种方式 
+               //第一种 document.write 根本不用 
+               //在DOM加载完后,.wirte方法会将document内其他dom都覆盖掉;
+               document.write("<span>document.wirte</span>");
+
+               //第二种 Obj.innerHTML +=  Obj指的是 元素对象名 语法: 元素对象名.innerHTML += "添加内容 ";
+               var body = document.querySelector("body");
+               body.innerHTML += " <h3>body.innerHTML添加 我是h3</h3>";
+                
+               document.body.innerHTML += " <h4>body.innerHTML添加的我是h4</h4>"; 
+               //第二种方式添加内容innerHTML 一定是原汁原味的进行添加(跟在body内部添加元素操作一致)
+               
+
+               //第三种  
+               //第一: 利用DOM提供的函数createElement() 来创建元素对象 (创建)
+               // 语法: var 变量名 = document.createElement("元素名(标签名)"); //只能写标签名
+               var newSpan = document.createElement("span");  
+               //第二: 为创建好的DOM元素对象添加内容 (内容)
+               newSpan.innerText = "我是一个新的span";
+               //第三: 利用DOM提供的appendChild()方法 将DOM元素对象添加到文档流 (位置) 
+               //语法: 位置元素(爹).appendChild(需要添加的对象);
+               document.body.appendChild(newSpan);
+
+
+              //第三种方式不像前两种,前两种创建dom后会直接添加进文档流,第三种 需要自己手动添加并选择添加位置(找爹);
+
+
+               /*
+               几种特殊元素的获取方式  
+               1 id类,可以直接使用id号来进行获取 
+                    var box = document.querySelector("#box"); 
+                    box.onkeyup = function(){}
+                    等同于
+                    box.onkeyup = function(){}
+
+               2 HTML元素,可以直接documnet.documentElement进行获取 
+                    var html = document.querySelector("html"); 
+                    html.onkeyup = function(){}
+                    等同于
+                    document.documnetElement.onkeyup = function(){}
+
+               3 head元素和body元素,直接document.head , document.body
+
+               */
+           }
+       </script>
+   </body>
+</html>

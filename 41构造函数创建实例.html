@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+
+            //构造函数创建特定实例对象
+            // Object() 实例化的对象高度太高了,能指代所有的对象,不够细化,想要细化就要自己 编写构造函数(类) ,而Object()是系统自带的构造函数,所以不用自己构造
+
+            // 构造函数也是一个函数,通常构造函数写成大驼峰AxxBxxCxx
+            // 构造函数创建一类特定实例化对象 例如一个构造函数 负责 实例化人类,其实例化对象都是人 . 在ES5里,构造函数可以理解为类
+            // 构造函数用法和普通函数一致,直接调用,只不过比普通函数多了一种用法 new
+
+            // Array()是所有数组对象的构造函数 Function()是所有函数对象的的构造函数 Object()所有对象的顶级构造函数
+
+            function Person(name, age,gender){
+                this.name = name ;
+                this.age = age ;
+                this.gender = gender ;
+                this.eat = function(){console.log("eat")};
+            }
+
+            var p1 = new Person("洪江",23,"man");
+            console.log(p1);
+
+
+
+        </script>
+    </body>
+</html>

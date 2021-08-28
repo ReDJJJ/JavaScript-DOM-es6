@@ -1,0 +1,114 @@
+<!--
+     previous先前的
+     sibling 兄弟姐妹
+-->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <div class="box"><!-- 我是注释节点 --><p></p>
+        我是中间本文节点
+        <span></span>
+        我是末尾本文节点
+    </div>
+
+    <script>
+        window.onload = function () {
+            /*
+                其他获取子节点兄弟节点的方式(属性)
+                1 第一个子节点 firstChild     高低通用
+                2 第一个子元素节点  firstElementChild  高用 低不通用
+                3 最后一个子节点    lastChild   高低通用
+                4 最后一个子元素节点 lastElementChild 高用 低不通用
+    
+                1 上一个兄弟节点 previousSibling  高低
+                2 上一个兄弟元素节点  previousElementSibling 高用 低不通用
+                3 下一个兄弟节点 nextSibling 高低
+                4 下一个兄弟节点 nextElementSibling 高用 低不通用
+    
+                先看一下 上述方式在没有结果的情况下返回值是多少(最差情况);
+                以上属性返回值是一串字符串,若没有获取的情况下(最差情况),返回值是 null
+            */
+
+            var box = document.querySelector(".box");
+            var p = document.querySelector(".box>p");
+            console.log(null === undefined); //false 但是 null==undefined 
+            console.log(box.firstChild); //打印box的第一个子节点
+            console.log(box.firstElementChild); //打印box的第一个子元素节点
+            console.log(box.lastChild); 
+            console.log(box.lastElementChild);
+            console.log(p.previousSibling); //打印p的上一个兄弟节点
+            console.log(p.previousElementSibling);//打印p的上一个兄弟元素节点
+            console.log(p.nextSibling);
+            console.log(p.nextElementSibling);
+            // 注意: 注意 空格和换行 会被高级浏览器 获取成文本节点
+
+              // 封装函数 来完成 兼容性获取第一个子元素元素  
+              //我的思路: 低版本浏览器时,轮询节点的每一个子节点进行判断,当获取第一个元素子节点(children[i]/childNodes[i].nodeType == 1)时return 结束函数;
+              //老师思路: 低版本浏览器时,var一个变量,变量先装载第一个子节点,进行判断,若不是,变量称为子节点的下一个兄弟节点,然后进行迭代
+            
+            function getFirstElemnetChild(node) {
+                
+             if(node.firstElementChild){ //高版本浏览器 高级版本浏览器firstElementChild最差是字符串 null ,转换成布尔值为F
+                    return node.firstElementChild;
+                }
+                else { //低版本浏览器 
+                    for (let i = 0; i <= node.children.length; i++) {
+                        if (node.children.nodeType === 1) {   //此处哪怕是children 子元素节点,仍然需要判断节点类型,因为低版本浏览器会打印 元素和注释
+                            return node.children;
+                        }
+                        if(i == node.children.length){ //轮询完了 都没有return 结束函数 此时i==node.children.length ,即没有子节点是元素节点返回null
+                            return null;
+                        }
+                    }
+                }
+            }
+            //老师思路:先获取第一个判断是否为元素,是则结束循环返回,不是则获取后续兄弟节点,直到获取到第一个元素
+            function getFirstElemnetChildNode(node) {
+                if (node.firstElementChild){
+                    return node.firstElementChild;
+                }else{
+                    var NodeObject = node.firstChild;
+                    while(NodeObject.nodeType != 1){
+                        NodeObject = NodeObject.nextSibling;
+                    } 
+                    return NodeObject;
+                }
+            }
+
+            // 查找最后一个元素节点
+            function getLastElemnetChildNode(node){
+                if(node.lastElementChild && node.lastElementChild !== null){
+                    return node.lastElementChild;
+                }else if(node.lastElementChild === null){
+                    return node.lastElementChild;
+                }
+                else{
+                    var NodeObject = node.lastChild;
+                    while(NodeObject && NodeObject.nodeType != 1){ // 先判断NodeObject是否遍历完了所有子节点,再判断当前节点是否为元素节点
+                        NodeObject = node.previousSibling;
+                    }
+                    return NodeObject; //返回null 或 返回第一个元素节点
+            }
+            console.log(getLastElemnetChildNode(box));
+        }
+
+        // 关于while的一点点小细节,当找到最后一个节点也无法跳出while循环时,
+        //  NodeObject = NodeObject.nextSibling; NodeObject此时是接收到的值 是null,(为什么不是undefind?),因为undefined是查询未定义过的属性(越界查询),nextSibling很明显是内置属性(系统自己定义过的),所以当没有下一个元素可以查的时候,系统赋值给nextSibling = null;而不是像越界查询一样返回undefined
+        // 关键要搞清楚 nextSibling是这个属性没定义过,还是nextSibling这个属性的值没有办法继续取了(没有下一个兄弟元素了).
+        // 而NoodeObject.nodeType != 1 就会报错,因为null.nodeType系统不允许。
+    }
+    </script>
+</body>
+
+</html>

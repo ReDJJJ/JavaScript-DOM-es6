@@ -1,0 +1,186 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        // 根据班级人数输入每个人的成绩,求平均值
+        // var stunum = parseInt (prompt("请输入班级人数")); //输入班级人数
+        // var score = new Array(stunum);//数组来装载 各个学生的成绩;
+        // var sum = 0;//装载班级总成绩
+        // for (var i = 0; i < stunum ; i++){
+        //     score[i]=parseInt(prompt('请输入第' + (i+1) + "名学生的成绩")); //输入各个学生成绩
+        //     sum += score[i];
+        // }
+        // console.log(score); console.log(sum/stunum);
+
+
+
+        // 反转数组 借助第二个数组
+        // var arr1 = [0,1,2,3,4,5];
+        // var arr2 = [];
+        // var subscript = 0;
+        // for(var i=arr1.length-1; i>=0; i--){ //arr1 从尾部开始到头部 赋值给arr2
+        //     arr2[subscript] = arr1[i]; 
+        //     subscript++;
+            // 老师的做法 arr2[arr2.length] = arr1[i];
+            // 利用了数组在数组外尾部添加元素,长度会+1的特性,使得一直在arr2尾部逆序添加arr1的元素值
+        // }
+        // console.log(arr2);
+
+
+        // 反转数组 个人版本 (轴对称互换)
+        //  思路,双重循环,外层i从数组最后一个元素出发,递减i-- (外层先选定一个位置的元素,然后内层遍历,符合轴对称条件进行互换)
+        //               内层j从数组第一个元素出发,递增i++ 
+        //                  
+        //               内层和外层循环 分别遍历到轴中心即可. 若遍历了整个数组,相当于数组反转了两遍                                                               
+        // var arr3 = new Array(0, 1, 2, 3, 4, 5);
+        // for (var i = arr3.length - 1; i >= arr3.length / 2; i--) { 
+        //     for (var j = 0; j <= arr3.length / 2; j++) {
+        //         if (i + j == arr3.length - 1) { //前后对称条件
+        //             temp = arr3[i] ;
+        //             arr3[i] = arr3[j];
+        //             arr3[j] = temp ;
+        //         }
+        //     }
+        // }console.log(arr3);
+
+        // 反转数组 老师版本
+        // 思路: 也是利用轴对称,轴对称关系两个元素A,B两个元素下标   A下标 + B下标 = 数组长度-1       i + length-1-i = length-1;
+        // 所以,一个循环遍历一半的数组,然后对称的两两互换就可以了
+        // var arr4 = [0,1,2,3,4,5];
+        // var temp = 0 ;
+        // for (var i=0 ; i < arr4.length/2 ; i++){
+        //     temp = arr4[i];
+        //     arr4[i] = arr4[arr4.length-1-i];
+        //     arr4[arr4.length-1-i] = temp;
+        // }console.log(arr4);
+
+        // 冒泡排序  (从小到大)
+        // 冒泡排序数组: 1 3 2 6 5 8 7 9 4 
+        /*
+            第一轮冒泡排序: 从arr[0]开始,arr[0]和arr[1](前后相邻的两个元素)是否按照从小到大规律排序
+                           若是,往后查看arr[1]和arr[2](前后相邻的两个元素)
+                           若不是,调换arr[0]和arr[1]的值,再往后[1]和arr[2](前后相邻的两个元素),
+                           ....
+                           直到比较完a[7]和a[8](数组最后的两个元素),第一轮冒泡排序结束
+            第一轮排序完后,最大的元素会转移到a[8](数组的最后一个元素),因此a[8]以后不需要参与排序
+
+            第二轮冒泡排序: a[0]和a[1]比较.....巴拉巴拉 和第一轮大体一致,除了最后的结束比较的元素不同
+                           ....
+                           直到比较完a[6]和a[7](剩余数组最后的两个元素),第二轮冒泡排序结束
+            第二轮冒泡排: 第二大的元素会转移到a[7](数组的倒数第二个元素),因此a[7]以后不需要参与排序
+            ....
+            多轮排序过程,排序完成
+
+            每n论排序过后,倒数第n个元素以后就不用参与排序过程
+            
+            冒泡排序所需轮数: length-1轮 (每一轮冒泡排序,就只有一个数冒泡到数组顶端,所以要排数组长度-1轮)
+
+
+        */
+        // 冒泡排序排列 length-1轮,第n轮参与排序的元素 0-lenght-1-i     
+        // var arr5 = [1,3,2,6,5,8,7,9,4];
+        // var k = arr5.length-1; //k初始等于arr5长度
+        // for(var i=0; i< arr5.length-1 ; i++){ //总共要比较arr5.length-1轮
+        //     // 外层循环代表第几轮冒泡排序 外层循环控制的仅仅是循环的次数,与比较交换没有任何关系
+        //     for(var j=0 ; j<k; j++){
+        //          // 内层循环代表每一类冒泡排序的详细比较交换过程. 而且第i轮冒泡排序,意味着由 length-i+1个元素已经冒泡到数组最大端,不继续参与冒泡排序交换过程,利用k来限定j来达成这一目的
+        //         if (arr5[j]>arr5[j+1]) {
+        //             var temp = arr5[j];
+        //             arr5[j] = arr5[j+1];
+        //             arr5[j+1] = temp;
+        //         }
+        //     }
+        //     k--;//本轮又排好了一个元素,该元素不再参与后续的冒泡排序运算
+        // }console.log(arr5);
+        // k可以由 length-1-i来替代 length-1表示下标,length-1-i表示第i+1轮已经排好了i个元素,只需要排列剩下的length-i-1个元素
+
+        // ！！！！！！！！！！！！！！！！！！！！！
+        // ！！！！！！！！！！！！！！！！！！！！！ 一般数组存储同一类型的数据,方便后续操作
+
+        // 数组合并 就是简单的数组合并,并不要求有序
+        // 新数组法
+        // var arr6 = [1,2,3,4];
+        // var arr7 = new Array(5,6,7);
+        // var newArr = [];
+        // for(var i=0 ; i<arr6.length ; i++){
+        //     // 在数组尾部添加元素,直接 数组名.[数组名.length] = 元素值; 并且length会自动更新
+        //     newArr[newArr.length] = arr6[i];
+        // }
+        // for(var i=0 ; i<arr7.length ; i++){
+        //     // 在数组尾部添加元素,直接 数组名.[数组名.length] = 元素值;
+        //     newArr[newArr.length] = arr7[i];
+        // }
+        // console.log(newArr);
+
+        // // 合并法
+        // var arr8 = [11,22,33,44];
+        // var arr9 = [55,66,77];
+        // for(var i=0;i<arr9.length;i++){ //9合并到8 因此循环3次 
+        //     arr8[arr8.length] = arr9[i]; 
+        // }
+        // console.log(arr8);
+
+        
+        // // 数组去重 一般是创建新数组去重,原数组的数据不动 
+        // var arr9 = new Array('123', 'HJ', 'ASDF', 'HJ', 'REDJJJ', '123', '123');
+        // //原数组
+        // var newArr = [];
+        //创建一个空数组 进行查重装载内容
+        // 两层循环 外层循环 拿arr9中的数
+        // 第二层循环 判断去重的详细过程  循环拿newArr的每个数 和 arr9的第i+1个数进行比较
+        // for (var i = 0; i < arr9.length; i++) {
+        //     var flag = false;//判断是否重复的标志位 true 重复 false不重复,并且每一次外循环都需要重置一次
+        //     for (var j = 0; j < newArr.length; j++) {
+        //         if (arr9[i] == newArr[j]) {
+        //             flag = true;break; //此处两个字符串类型比较 , unicode逐位比较法
+        //         }
+        //     }
+        //     if (!flag) {
+        //         // 不重复,直接在newArr末尾添加元素
+        //         newArr[newArr.length] = arr9[i];
+        //     }
+        // } console.log(newArr);
+        // 为什么要拿标志位,以为要等内层循环一轮过后,才能判断newArr内所有元素是否查重 , 所以需要标志位
+        //  ！！！！！！标志位 : 用于记录状态,并且该状态不是即使反馈的. 要等内层循环一轮才反馈的 
+
+        // 有序插入,有一个从小到大排序好的数组,现在插入一个数,要求插入后的数组仍然有序
+        var xfactor = parseInt(prompt('请输入需要插入的数值'));
+        var arr10 = new Array(-5,0,10,20,20,50,Infinity);
+        // js由于是弱类型,所以创建变量的时候,可以赋各个类型的空值,起到语义的作用  例如 var index = '' 表示将来要往index内存入字符串类型
+        // index = null  以后index要存入一个对象 
+
+        for (var i=0; i<arr10.length; i++) {
+            //判断xfactor是否小于arr[0],或者大于arr[length-1] 两者插头插尾的特殊情况
+            if(xfactor < arr10[0]){ 
+                for(var j=arr10.length; j>0;j--){
+                    arr10[j] = arr10[j-1];
+                }
+                arr10[i] = xfactor;
+                break; 
+            }
+            else if(xfactor > arr10[arr10.length-1]){
+                arr10[arr10.length] = xfactor;
+                break;
+            }
+            else if(arr10[i] <= xfactor && xfactor < arr10[i+1]){
+                for(var k=arr10.length-1; k>i; k--){ 
+                arr10[k+1] = arr10[k];
+                } //此时结束循环的时候,k恰好就是要替换的位置的前一位,因为k--了
+                arr10[k+1] = xfactor;
+                break;
+            }
+            // 老师用额外的变量来存储 插入位置的下标哦，作为位移和插入的标志位。
+        } console.log(arr10);
+
+    </script>
+</body>
+
+</html>

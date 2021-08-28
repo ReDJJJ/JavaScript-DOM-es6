@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+    
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        img {
+            display: bLock;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        /*禁止系统滚动条*/
+        html,
+        body {
+            height: 100%;
+            /* overflow: hidden; */
+        }
+
+        #wrap {
+            width: 100%;
+            height: 100%;
+            /* overflow: hidden; */
+            /* 为了显示图片 ren'l */
+        }
+
+        #wrap .banner {
+            width: 600px;
+            height: 300px;
+            background: pink;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #wrap .banner ul.picture {
+            position: absolute;
+            top: 0;
+            left: -600px;
+            width: 4200px;
+            /* 无缝衔接:宽度要改,首发位置要改 */
+            height: 100%;
+            background: skyblue;
+        }
+
+        #wrap .banner ul.picture li {
+            float: left;
+        }
+
+        #wrap .banner ul.picture li img {
+            width: 600px;
+            height: 300px;
+        }
+
+        #wrap .banner ul.circle {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #wrap .banner ul.circle li {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: gray;
+            float: left;
+            margin-right: 5px;
+        }
+
+        #wrap .banner ul.circle li.current {
+            background: red;
+        }
+
+        /* 不能用伪元素,伪元素无法操作和获取 */
+        #wrap .banner .left,
+        #wrap .banner .right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 100px;
+            background: rgba(100, 100, 100, .6);
+            text-align: center;
+            color: white;
+            font: normal 700 20px/100px "arial";
+            cursor: pointer;
+        }
+
+        #wrap .banner .left {
+            left: 0;
+        }
+
+        #wrap .banner .right {
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="banner">
+            <ul class="picture">
+
+                <li><a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                </li>
+
+                <li><a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/3.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/4.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/6.jpg" alt=""></a>
+                </li>
+                <li><a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                </li>
+
+                <li><a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                </li>
+
+            </ul>
+            <ul class="circle">
+                <li class="current"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <span class="left">
+                < </span>
+                    <span class="right"> > </span>
+                   
+        </div>
+        <img src="./img/IMG_3849.JPG" alt="" style="width:700px;transform:rotate(-90deg)">
+    </div>
+    
+    <script>
+        window.onload = function () {
+            var box = document.querySelector('.banner');
+            var ul = document.querySelector(' #wrap .banner ul.picture');
+            var spanNodes = document.querySelectorAll("#wrap .banner .left,#wrap .banner .right"); //querySelectorALL只支持一个字符串参数,所有变量选择器写在里面,逗号间隔
+            var timer = null; //定时器容器
+            var timeAll = 600; //自定义移动的总时间;
+            var timeStep = 20; //自定义移动的每一步耗费时间(循环定时器间隔);
+
+            spanNodes[0].onclick = function () {
+                move(false);
+            }
+            spanNodes[1].onclick = function () {
+                move(true);
+            }
+
+            function move(direction) {
+                if (direction) {
+                    var eleDis = -600;
+                } else {
+                    var eleDis = 600;
+                }
+                var lastX = ul.offsetLeft + eleDis;
+                var step = eleDis / (timeAll / timeStep);
+
+                timer = setInterval(function () {
+                    var left = ul.offsetLeft + step;
+                    if (left === lastX) {
+                        clearInterval(timer);
+                        if (left === -3600) {
+                            left = -600;
+                        } else if (left === 0) {
+                            left = -3000;
+                        }
+                    }
+                    ul.style.left = left + "px";
+                }, timeStep)
+
+                //功能:小圆点随着图片切换而变色 要放到move函数里面,因为图片(主)切换后小圆点(从)也要进行切换;
+                var circleNodes = document.querySelectorAll("#wrap .banner .circle li");
+                var circleUlNode = document.querySelector("#wrap .banner .circle");
+               
+                //小圆点:排他思想
+                for (var i = 0; i < circleNodes.length; i++) {
+                    circleNodes[i].className = "";
+                    //小圆点有一个current类和li标签选择器,而current类只设置了当前颜色,所以class="",相当于小圆点全部恢复默认状态;
+                    //以前的排他思想 是利用this找到事件源,但是本次的事件源不是小圆点,小圆点的状态要看轮播图的状态
+                    //要求变色小圆点下标,必须先求显示的图片的下标,而显示的图片的下标可以通过位置来判断
+                }
+                //本人此处绕远路了,还想着中间图片缓动过程位置的变化判断,太麻烦了,只需要知道未切换时当前图片的坐标,和切换时知道下一张图片的目的地坐标不就好了！！而这不都存在lastX里面么！！！！！！！！！0.
+                //lastX 就是每次位移的目的地的原点x坐标! 而每张图片占地600px, lastX / 600   就是当前显示的轮播图坐标;
+                //而轮播图坐标关系和小圆点坐标关系很明确 : 原本序列的图-1 = 小圆点坐标 , 而两个特殊的传送门,直接设置if判断强行拉回来就好了
+                
+                var index = Math.abs(lastX/600) - 1;
+                if (index == -1){
+                    index = 4;
+                }else if (index == 5){
+                    index = 0;
+                }
+                circleNodes[index].className="current";
+            }
+//last系列就是正常的下一大步的坐标,而且传送门判断都是通过left这个在最后一步即将进行的时候进行操作的 (left = lastX)
+
+
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!-- 上一part 数组的迭代器已经完成,本part想给对象也添加 -->
+<!-- 个人思路: 想迭代对象的值,需要迭代对象的属性名,利用一下啊for in 获取对象的属性名呗？ 该思路不行,有一个关键方法 Object.key(对象名) -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style></style>
+</head>
+
+<body>
+    <script type="text/javascript">
+        // function myIter() {
+        //     let that = this;
+        //     let index = null;
+        //     for (const key in this) {
+        //         index = key;
+        //         return {
+        //             next: function () {
+        //                 if (key != undefined) {
+        //                     return {
+        //                         value: that[key],
+        //                         done: false,
+        //                     }
+        //                 }
+        //                 // }else{
+        //                 //     return {
+        //                 //         value: undefined,
+        //                 //         done: false,
+        //                 //     } 不需要,for in 已经自动帮我们完成了轮询对象属性的功能了
+        //             }
+        //         }
+        //     }
+        // }
+        // 一次个人的尝试 不过已经可以看出失败了,因为对象每一次调用next方法,都直接打印了对象全部键值对,不符合接口规范,next一次只返回一个键值对
+        
+        //关键方法: Object.keys(obj), 收集所有属性名,并打包成一个数组返回;
+        let obj = {
+            name : "HJ",
+            age : 23,
+            gender : "man",
+        }
+        console.log(Object.keys(obj)); // ["name", "age", "gender"]
+            
+        function myIter(){
+            let that = this;
+            let index = 0;
+            if(this instanceof Array){
+                return {
+                    next : function(){
+                       return  index < that.length ? {value:that[index++],done:false} : {value:undefined,done:true}
+                    }
+                }
+            }else if (this instanceof Object){
+                let keysArr = Object.keys(that);  //获取对象属性名数组
+                return{
+                    next : function(){
+                       return  index < keysArr.length ?  {value:that[keysArr[index++]],done:false} : {value:undefined,done:true}
+                    }
+                }
+            }
+        }
+        // .语法 和[] 语法要加强
+        Object.prototype[Symbol.iterator] = myIter;
+        for (const value of obj) {
+            console.log(value);
+        }
+        
+    </script>
+     
+//迭代器 编程 是接触js底层的第一步,很明显,遍历对象有更简单的方法,不一定非得用for of 循环
+</body>
+
+</html>

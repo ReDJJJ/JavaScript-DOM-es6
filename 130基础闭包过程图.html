@@ -1,0 +1,52 @@
+<!-- 闭包的实现机理实际上是内存地址的指向保证的 -->
+<!-- 闭包就是额外增加一个指向,保证外部函数和内部函数在一次执行完后 不死(不消除函数执行环境) -->
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           *{
+               text-align: center;
+           }
+           img{
+               display: block;
+               width:1000px;
+               transform: rotate(-90deg);
+               margin : 0 auto;
+           }
+       </style>
+
+   </head>
+
+   <body>
+        1创建全局上下文(变量对象 this 作用域链)  开辟堆内存放fn1函数内容并指向
+      <img src="./img/IMG_3871.JPG" alt="">
+        2 var f = fn1(); 首先先执行fn1(),创建fn1的上下文环境(对象变量,this,作用域链), 开辟堆内存防止fn2函数内容并指向  (所以做题遇到定义函数的时候,函数内部可以看成黑盒子,执行的时候再仔细看)
+      <img src="./img/IMG_3872.JPG" alt="">
+        3 fn1()执行完成,a变量赋值,并且返回fn2的地址给全局变量f (var f = fn1()) !!!关键, 按普通调用来说,fn1上下文执行完后就要出栈,堆内存fn2的函数内容成了垃圾对象等待清除<br>
+            但是此处全局变量f指向了堆内存fn2,fn2内有引用了fn1的局部变量a,此时就形成了独立的闭包了.三者互相绑定共存.fn1不再执行return就清除上下文,而是一直保留着上下文;
+      <img src="./img/IMG_3873.JPG" alt="">
+        4   完成闭包绑定之后,fn1上下文只保留了被引用的变量a,其余的变量紫砂了,所以fn1中的fn2指向断了,变成undefined ,这也是为什么fn2的作用域链只有fn1中的a
+      <img src="./img/IMG_3877.JPG" alt="">
+        5  每个闭包彼此之间都是独立的,哪怕过程一模一样，但是都是独立的闭包,互不打扰;
+        每调用一次外部函数,都是一次独立的闭包机制
+      <img src="./img/IMG_3878.JPG" alt="">
+
+       <script>
+          function fn1(){
+              var a = 0;
+              function fn2(){
+                a++;
+                console.log(a);
+              }
+              return fn2; 
+          }
+          
+          var f = fn1();
+          var f1 = fn2();
+          //f和f1是各自独立的闭包块;
+
+       </script>
+   </body>
+</html>

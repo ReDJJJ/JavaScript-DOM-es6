@@ -1,0 +1,98 @@
+ <!-- 
+        什么是Json,Json作用,
+
+        json是一个数据格式,前后端数据交互通过json格式的数据进行交互.
+        json串本质上是一个字符串,只不过限定了格式
+
+        前端往后端传数据: 要传json格式数据 json串
+
+        前端json串的格式原形就是对象或者对象的数组.前端负责把数据存储为对象或者对象的数组,然后转化为json串进行传递
+
+        json数据格式 : 
+
+
+        串接stringify 解析parse
+  -->
+ 
+ 
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            // 内置对象JSON; 内置对象JSON 内置了大量的属性和方法
+
+            var a = 100;
+            var b = null;
+            var c = "string";
+            var d = function(){
+                console.log("TEST");
+            };
+
+            //ajax 传数据的时候,需要把数据格式化,数据格式化就是把数据转换成json串 进行传递
+
+            // 数据转化成json串
+            // 第一步 数据格式化:  json串的原形在前端要求 必须是一个对象或者对象的数组 才能进行转换,即json串的数据原形要求是一个对象或者对象数组;
+            var data = {
+                a:a,  //前一个a转换成json串后是属性名,后一个a是变量a的值(stringify会完成这一个过程)
+                'b':b,
+                "c":c,
+            }
+
+            //第二步 调用转化方法JSON.stringify 将第一步封装好的 对象或者对象数组 通过 内置JSON对象的方法JSON.stringify换成 json串
+            console.log(data);
+            
+            console.log(JSON.stringify(data));
+            // 转化结果:属性名统统用""包裹,属性值原封不动,名和值之间用:相隔 ,并且转化结果整体是一整个字符串(整体用''包裹),其中方法忽略不转化且不打印
+             
+            // 有对象转化成json字符串的方法JSON.stringify,就有逆运算 将json字符串转换成对象, JSON.parse
+            // 一般是后端传回来的数据,此数据也是一种字符串,此时使用JSON.parse进行解析
+
+            result = JSON.stringify(data); //将data转化成json字符串,并将json字符串存入result
+            result = JSON.parse(result); //将JSON字符串解析成js中的对象
+            console.log(result);
+
+
+            // 工作数据结构示例 
+            var obj = {
+                name : "zly",
+                age : 32,
+                movie:[ //对象数组 , 每个数组元素都是对象,每个对象代表一部电视剧
+                    {   
+                        name : "花千骨",
+                        timeLong:"2013",
+                        cast : ["zly","hj","hjh","redjjj"]
+                    },
+                    {
+                        name : "楚乔传",
+                        timeLong:"2015",
+                        cast : ["zly","hj","hjh","redjjj"]
+                    }
+                ],
+                family:[
+                    {
+                        guanxi:'father',
+                        name:"爹",
+                        age:60,
+                    },
+                    {
+                        guanxi:'mother',
+                        name:"妈",
+                        age:55,
+                    }
+                ]
+            }
+
+            // 工作数据很容易嵌套在一起,一层层拨开来进行数据查找
+            // 查找赵丽颖演过的电视剧花千骨的主演
+            console.log(obj.movie[0].cast);
+
+        </script>
+    </body>
+</html>

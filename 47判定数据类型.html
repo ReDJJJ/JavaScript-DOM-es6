@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            // typeof 可以判断的类型  结果是小写字符串形式
+            var a;
+            a = 10; console.log(typeof a);  //"number"
+            a = false; console.log(typeof a); //"boolean"
+            a = undefined; console.log(typeof a); //"undefined"
+            a = null; console.log(typeof a); //"object"
+            a = [1,2,3]; console.log(typeof a); //"object"
+            a = function(){} ;console.log(typeof a);//"function"
+            a = {}; console.log(typeof a); //"object"
+
+            // 由结果可以看出 typeof 可以精确的查询五个类型 
+            // number string boolean undefined function  ; 而数组,对象和null 类型都归为了object,typeof判断不精确
+
+            // instanceof  用来判断 一个对象是哪个构造函数的实例  语法 a instanceof B  (a是对象,b是构造函数);
+            // instanceof 是相当于判断表达式,当a对象是由b构造函数实例化产品,则返会true 否则返回false;
+            function Person(){
+                this.name = "people";
+            }
+            var people = new Person();
+            console.log(people instanceof Person); //ture;
+            
+            //instanceof 两个主要功能: xx instanceof Object 判断是否为对象类型 xx instanceof Array 判断是否为数组类型
+
+            //一切对象(数组,函数,实例化对象)都是object的实例,Object()构造函数特别高级; 
+            // 例如 Array数组构造函数,是函数也是对象,数组也是Object实例出来的
+            console.log(people instanceof Object);//ture 判断people是否是Object的实例化对象 ,就是在判断people是否是对象数据类型
+            console.log(Person instanceof Object); //ture 函数也是对象 也是object实例化出来的
+
+            // instanceof可以用来区分 数组和对象   
+            // 判断 一个对象是否为数组
+            console.log(a instanceof Array); // false    //Array不能加(),否则代表调用;
+            var b = [1,2,3,4];
+            console.log(b instanceof Array); //ture
+
+            // typeof null 也是Object  怎么样判定null呢 利用 === 全等判断; 
+            a = null; b = [1,2,3,4];
+            console.log(typeof a); //object;
+            console.log(typeof a); //object;
+            console.log(a === null);//ture
+            console.log(b instanceof Array);//ture
+            
+            // js中一切皆对象 含义:基本数据类型可以"包装"成对象 使基本数据类型也可以使用对象的一切特性,后面会讲.
+
+        </script>
+    </body>
+</html>

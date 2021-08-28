@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+        <ul>
+            <li>AVA</li>
+            <li>apex</li>
+            <li>PUBG</li>
+            <li>R6</li>
+            <li>LOL</li>
+        </ul>
+        <script>
+            // 编写程序的时候,一个思维很重要:  谁(主动对象)调用了方法,把谁(被动对象),给怎么了？？？ 面向对象编程思维 
+
+
+            // 元素的增删改
+            //  注意:以下方法都是父元素调用,用来操作子元素
+            //  所以要调用这些方法,先要获取对应父元素和要操作的子元素
+            // 1插入子元素: .insertBefore(插入节点,参考节点);
+            // 2替换子元素: .replaceChild(替换节点,被替换节点);
+            // 3删除子元素: .removeChild(被删除节点);
+            // 4追加子元素: .appendChild(追加的节点);
+            // 了解: 节点子调用自删方法  节点.remove (IE不支持); 
+
+            // insertBefore() 和 appendChild() 两个函数可以达到 父元素的任意位置插入子元素 ,并没有insertafter()这个方法啊!
+
+            var ulNode = document.querySelector("ul");
+            var liNode = document.querySelector("li:nth-last-of-type(1)");
+            var newLiNode = document.createElement("li");
+            // 以上为获取父子元素的过程
+            newLiNode.innerText = "芜湖";//给新元素赋值;
+
+            // 插入新元素 insertBefore(插入元素,参考元素) 父元素调用
+            // ulNode.insertBefore(newLiNode,liNode);
+
+            // 替换元素  replaceChild(替换元素,被替换元素) 父元素调用
+            // ulNode.replaceChild(newLiNode,liNode);
+
+            // 删除元素  removeChild(被删除元素) 父元素调用
+            // ulNode.removeChild(liNode);
+
+            // 追加元素 appendChild(追加元素) 父元素调用
+                ulNode.appendChild(newLiNode);
+
+                // 自删 子元素子调用.remove()
+                newLiNode.remove();
+
+            
+
+        </script>
+   </body>
+</html>

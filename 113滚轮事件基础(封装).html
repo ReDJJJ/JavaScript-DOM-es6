@@ -1,0 +1,84 @@
+<!--
+     滚轮事件
+     滚轮事件和键盘事件类似,难点在于区分滚轮是上滚还是下滚
+
+     滚轮事件(都是DOM2事件,绑定和解绑都要用dom2方式)
+     
+     ie/chorme : mousewheel 
+                event.wheelDelta值:
+                    上:120;
+                    下:-120;
+     firefox: DOMMouseScroll   
+                event.detail值:
+                    上: -3
+                    下: +3
+
+    此次滚轮事件的兼容和以往的不一样;
+    以往都是通过判断一个值存不存在,来判断此浏览器是高级低级
+    但此次是dom2事件,dom2事件的绑定方式是addEventListener("简写事件名",回调,ture/false);
+    所以无法进行判断addEventListener的值来进行判断是什么浏览器
+
+    所以滚轮事件兼容为最笨的兼容方法:给对象绑定 两个事件,一个ie/chorme版本,一个firefox版本的;事件绑定失败并不会程序报错,程序可以正常执行
+    关键兼容的逻辑: 我们将多个浏览器版本的回调函数写在一起,通过标志位存储各个浏览器的鼠标滚动轨迹,然后再将滚动后触发的逻辑放入if(flag)else(!flag)当中
+-->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .box {
+            width: 500px;
+            height: 500px;
+            background: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box"></div>
+    <script>
+        window.onload = function () {
+            var box = document.querySelector(".box");
+            //笨方法:不同版本的鼠标滚轮事件都添加(都是dom2)  当鼠标在盒子上方并且滑动滚轮时
+            box.addEventListener("mousewheel", ScorllMove, false);
+            box.addEventListener("DOMMouseScroll", ScorllMove, false);
+            //利用flag 标志位来存储是上滑还是下滑
+            var flag = true;
+            function ScorllMove(event) {
+                event = event || window.event;
+                if (event.wheelDelta ==120) { // mousewheel中,往上滑动滚轮,event.wheelDelta=120
+
+                    flag = true;
+                } else if (event.wheelDelta == -120) {//mousewheel中,往下滑动滚轮,event.wheelDelta=-120
+
+                    flag = false;
+                }
+                if (event.detail == 3) { // DOMMouseScroll中,往下滑动滚轮,event.wheelDelta=3;
+
+                    flag = false;
+                } else if (event.detail == -3) {// DOMMouseScroll中,往上滑动滚轮,event.wheelDelta=-3;
+
+                    flag = true;
+                }
+                //以上都是兼容代码,目的就是为了flag获取滚轮上行还是下行
+                if(flag){
+                    //滚轮上滑的逻辑代码块
+                    box.style.height = box.offsetHeight - 50  + "px";
+                    // 前两者是数字,先运算,后字符串拼接px
+                }else{
+                    //滚轮下滑的逻辑代码块
+                    box.style.height = box.offsetHeight + 50  + "px";
+                }
+            }
+
+
+            //再说一遍,写改是通过行内式的改,读是通过十二元素读,并且!!!!行内式有格式要求,单位等一字不差,读的化都是数字;
+
+        }
+    </script>
+</body>
+
+</html>

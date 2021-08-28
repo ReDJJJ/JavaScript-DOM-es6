@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           *{
+               margin:0;
+               padding:0;
+           }
+           .box{
+               width:300px;
+               height:300px;
+               margin:50px auto;
+               background: lightgreen;
+
+               /* 父元素开启3D空间 */
+               transform-style:preserve-3d;
+               transform-origin:center;
+               transition: transform 1s linear;
+               position:relative;
+           }
+           .box:hover{
+               transform : rotateY(180deg);
+           }
+
+           .box .frount{
+               width:300px;
+               height:300px;
+               background: skyblue;
+               backface-visibility: hidden;
+               /* 正面设置背面不可见 */
+               position: absolute;
+               top: 0;
+               left: 0;
+           }
+           .box .back{
+            width:300px;
+               height:300px;
+               background: pink;
+               transform : rotateY(180deg);
+               backface-visibility: hidden;
+                /* 设置背面不可见 */
+                /* 后写的.frount会覆盖先写的.back 所以要给.back设置背面不可见 */
+                position: absolute;
+                top: 0;
+                left: 0;
+           }
+
+       </style>
+   </head>
+
+   <body>
+            <div class="box">
+                <div class="frount">正面</div>
+                <div class="back">背面</div>
+            </div>
+   </body>
+</html>

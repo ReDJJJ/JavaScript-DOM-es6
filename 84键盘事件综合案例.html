@@ -1,0 +1,159 @@
+<!-- 
+    代码逻辑 : 
+    先实现 基本核心逻辑 再实现 细节边界  
+    基本核心逻辑  也可以拆分为多个模块 
+
+
+    思路:
+                布局 一级菜单直接列表 二级菜单由三个,绝对定位到同一地方
+                难点: 怎么样绑定一级菜单和二级菜单的关系? 一级菜单的每一个li都对应着一个二级菜单
+
+                方法一:给每个一级li都添加id号,来给每个li添加监听事件,然后不同id号判断 哪个二级菜单 出现
+                方法二:在 写元素结构的时候, 让二级菜单 写进 对应的一级菜单li标签内, 形成父子元素的关系
+
+                关键思路: 二级菜单用js方法实行的时候,可以将二级菜单放入一级菜单标签内部 形成父子元素关系
+                老师的关键思路: 二级菜单嵌套在一级菜单内; 
+    小细节: a标签 中填入 ##会刷新本页面  填入javascript:;  点击a不起任何作用
+
+     // 老师的新思路: 在事件处理回调函数当中,外层循环的i是不能使用的(i早已达到轮询最大值),但是有时候又需要记录事件源的顺序;
+        // 思路: 在循环内部与事件处理回调函数外部之间 ,将i赋给对象的一个属性index,让index记录事件属性的下标;
+            //for (){
+                对象[i].index = i;
+                //每个事件源对象都拥有自己的index 属性 记录自己在伪数组中的顺序
+                
+                对象[i].onclick() = function(){
+                    //this.index就可以记录事件源的顺序下标了;
+                    因为this 对应是事件源,而不同事件源的index不同,都是自己的专属index索引
+                }
+            }
+-->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul.first {
+            margin: 50px auto;
+            position: relative;
+            background: lightblue;
+            /* 注意ul是块级元素 其宽度不设置和父亲一致 高度由内容撑开*/
+        }
+
+        ul.first>li {
+            /* 直系li,用以区分.first嵌套的两层li */
+            width: 200px;
+            height: 50px;
+            background: skyblue;
+            text-align: center;
+
+        }
+
+        ul.first>li:nth-child(2) {
+            border-top: 1px solid lightcoral;
+            border-bottom: 1px solid lightcoral;
+        }
+
+        ul.first>li a {
+            text-decoration: none;
+            line-height: 50px;
+        }
+
+        /* 二级菜单 */
+        ul.first li .secondfirst {
+            background-color: gray;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateX(100%);
+            /* //移动自身X轴100%; */
+            display: none;
+            /* 一开始先隐藏起来 */
+        }
+
+        ul.first li .secondfirst li {
+            width: 200px;
+            height: 50px;
+            background: palevioletred;
+            text-align: center;
+            line-height: 50px;
+        }
+
+        ul.first li ul.secondfirst li:nth-child(2) {
+            border-top: 1px solid lightcoral;
+            border-bottom: 1px solid lightcoral;
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="first">
+        <li><a href="##">哈哈</a>
+            <ul class="secondfirst">
+                <li>二级菜单1</li>
+                <li>二级菜单1</li>
+                <li>二级菜单1</li>
+            </ul>
+        </li>
+        <li><a href="##">嘿嘿</a>
+            <ul class="secondfirst">
+                <li>二级菜单2</li>
+                <li>二级菜单2</li>
+                <li>二级菜单2</li>
+            </ul>
+        </li>
+        <li><a href="##">芜湖</a>
+            <ul class="secondfirst">
+                <li>二级菜单3</li>
+                <li>二级菜单3</li>
+                <li>二级菜单3</li>
+            </ul>
+        </li>
+    </ul>
+    <script>
+        // window.onload = function() {
+        //     //获取一级菜单li的父元素ul,通过ul.chirldren 来获取一级菜单li的伪数组
+        //     var ulNode = document.querySelector("ul.first");
+        //     // 给ul的每一个孩子li添加监听事件
+        //     for (let i = 0; i < ulNode.children.length; i++) {
+        //        ulNode.children[i].onmouseenter = function(){
+        //         //此时this 指向事件源 ulNode.children[i];
+        //           this.children[1].style.display = "block";
+        //         //    this事件源 就是每个一级菜单li自己,一级菜单li的第二哥孩子就是二级菜单ul,修改display属性
+        //        }
+        //        ulNode.children[i].onmouseleave = function(){
+        //         //此时this 指向事件源 ulNode.children[i];
+        //           this.children[1].style.display = "none";
+        //         //    this事件源 就是每个一级菜单li自己,一级菜单li的第二哥孩子就是二级菜单ul,修改display属性
+        //        }
+        //     }
+        //     console.log(ulNode.children);
+        // }
+
+        // 以上的思路 是个人思路 : 通过多层父子嵌套关系 来绑定 一级菜单和二级菜单 可以完美实现;
+
+        // 老师的新思路: 在事件处理回调函数当中,外层循环的i是不能使用的(i早已达到轮询最大值),但是有时候又需要记录事件源的顺序;
+        // 思路: 在循环内部与事件处理回调函数外部之间 ,将i赋给对象的一个属性index,让index记录事件属性的下标;
+        var liNodes = document.querySelectorAll("ul.first>li");
+        var ulNodes = document.querySelectorAll("ul.first li .secondfirst");
+        for (var i = 0; i < liNodes.length; i++) {
+            liNodes[i].index = i;
+
+            liNodes[i].onmouseenter = function () {
+                ulNodes[this.index].style.display = "block";
+            }
+            liNodes[i].onmouseover = function () {
+                ulNodes[this.index].style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>

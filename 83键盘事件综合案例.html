@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<!-- 
+        input 表单内容都放在value  input是单标签无法通过innerText等属性去拿值
+        input.value 里的内容都是字符串形式,哪怕内容是数字也是字符串形式
+
+        字符串.trim() : 砍去字符串两边多余的空格,此方法自调用即可完成,会影响字符串本身;
+        一般从网页获取的字符串内容 都需要 自调用 trim() 来砍掉多余两边空格 
+        
+        思路 : 
+        首先布局input一个输入框 和添加 一个空的ul
+        获取input 和 ul
+        给input添加一个键盘监听事件 当是回车的时候(event.keyCode == 13) 
+        给ul添加li li的内容就是 input.value
+        然后再给新的li添加鼠标事件 ,移入变色,移出返回原型
+    -->
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <input type="text" id="firstText" placeholder="请输入一个歌曲" autofocus="">
+    <script>
+        var inputNode = document.querySelector("input#firstText");
+        var ulNode = document.createElement("ul");
+        document.body.appendChild(ulNode);
+        //先预先新建一个ul,然后父元素body调用appendChild方法 追加ul
+
+
+        inputNode.onkeyup = function (event) {  //事件处理回调函数第一个参数是事件对象,事件对象保存了事件所有有关信息,其中包含了键码
+            if (event.keyCode == 13) {
+                // console.dir(inputNode); //dir详细打印 inputNode之后发现: 用户输入的值存在value这个属性当中. 
+                // console.dir(inputNode.value);
+                if (inputNode.value.trim()) {//砍掉两边空格后判断是否为空串 ,空串则提醒
+                    var newMusicNode = document.createElement("li");
+                    newMusicNode.innerText = inputNode.value;
+                    ulNode.appendChild(newMusicNode);
+                }
+                else {
+                    alert("请输入正确格式的歌曲");
+                }
+                inputNode.value = ""; //每次输入后清除输入框 
+
+                //我的思路:在创建完li的时候,给全部li轮询添加监听事件 ,老师的思路:每创建完一个li,就单独给新li添加监听事件
+                // 获取元素的方法,新建一个变量,获取所有的li,或者通过父子元素的方式 获取ul的子元素li
+                for (var i = 0; i < ulNode.children.length; i++) {
+                    if (children.nodeType == 1) {
+                        ulNode.children[i].onmouseenter = function () {
+                            this.style.backgroundColor = "skyblue";
+                            // 事件处理回调函数不能使用i,i一定是已经循环过后遍历的值,因为回调函数 是原函数执行完后 才开始执行
+                        }
+                        ulNode.children[i].onmouseleave = function () {
+                            this.style.backgroundColor = "transparent";
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+        //变色事件监听添加循环一定需要放在onkeyup函数内部,放在外部的化,此循环就一开始执行一次,而一开始还没有任何新的li,那么以后新添加的li根本就没有添加事件监听
+
+
+
+    </script>
+</body>
+
+</html>

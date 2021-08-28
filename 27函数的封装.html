@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            // 编写求1-n的和函数
+            // var inputNumber = parseInt(prompt("请输入一个数字"))
+            // function add (num){
+            //     var sum=0;
+            //     for(var i=1;i<=num;i++){
+            //         sum += i;
+            //     }
+            //     return sum;
+            // }
+            // document.write(add(inputNumber));
+
+            //封装函数加工数组,每个数组元素+10输出
+            // var arr = [1,2,3,4,5,6,7,8,9]; //数组也是一个变量,类型,函数也是一个表达式,对象类型数据
+            // var increaseArr = function(Array){
+            //     for(var i=0;i<Array.length;i++){
+            //         Array[i] += 10 ;
+            //     }
+            //     console.log(arr);
+            //     // 打印必须在此打印,因为Array形式参数只是复制了一份实际参数的值,并不是实际参数本身参与了函数运算.所以arr数组本身的数组没有改变(X)
+            //     // 上面那行不全面,实际上arr数组本身也是改变了的,因为它是对象类型的数据,类似指针。假若实际参数只是一个基本类型的变量,那就真不改变了.
+            // }
+            // increaseArr(arr);
+          
+            
+            // 封装函数,实现对数组进行冒泡排序
+            // var  arr = new Array(1,4,3,5,6,8,2,9,7);
+            // var bubbleSort = function(Array) {
+            //     for( var i=0;i<Array.length-1;i++){
+            //         for(var j=0;j<Array.length-1-i;j++){
+            //             if(Array[j] > Array[j+1]){
+            //                 var temp = Array[j];
+            //                 Array[j]=Array[j+1];
+            //                 Array[j+1]=temp;
+            //             }
+            //         }
+            //     }
+            //     console.log(Array);
+            // }
+            // bubbleSort(arr);
+
+            // 封装函数,实现数组反转
+                var arr = [1,2,3,4,5,6];
+                function reversalArr(Array){
+                    for(var i=0;i<Array.length/2;i++){
+                        var temp = Array[i] ;
+                        Array[i] = Array[Array.length-1-i];
+                        Array[Array.length-1-i] = temp;
+                    }
+                   
+                 return Array; //返回排序好的数组;
+                }
+                arr = reversalArr(arr); document.write(arr);
+
+                // 若想返回多个数据,可以返回一个数组 return [数据1或变量1,数据2或变量2]
+        </script>
+    </body>
+</html>

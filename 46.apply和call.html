@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            // 以后实例化对象 属性赋予写在构造函数内部  方法写在构造函数的原型对象内
+
+            function Person(name, age){
+                this.name=name;
+                this.age=age;
+            }
+            function Dog(name, age,color){
+                this.name=name;
+                this.age=age;
+            }
+            Person.prototype.eat = function(x,y){
+                console.log("吃"+x+"喝"+y+this.name);//this来显示执行者
+            }
+            var p1 = new Person ("人",20);
+            var d1 = new Dog ("狗",20,"red");
+            //以上定义了 人类 和 狗类 
+            // 并且 人的原型内有eat()方法;
+
+            //call可以改变 方法的执行者 并执行方法(实际上改变的是eat函数运行环境(栈)中this指向,本来指向人,call后面指向狗,但是eat()方法还只存在于person原型的堆内存中)
+            // 方法也是一个对象,而方法拥有一个属性call,call也是一个方法,功能是可以改变方法的执行者,让一个对象可以执行另一个对象的方法
+            // 语法   方法的拥有者.方法名.call(改变后的执行者,实参1,实参2);
+
+            // 人有的方法eat ,而狗没有  利用任何函数对象中的call(属性)方法 来是狗可以调用eat
+            p1.eat("面包","水");
+            p1.eat.call(d1,"面包","水");
+            // apply 功能也一样 ,语法不一样, apply传参数 是靠数组传的, 也就是参数列表以数组形式传过去,A[0] 给第一个参数 ; A[1]给第二个参数以此类推
+            p1.eat.apply(d1,["面包","饮料"]);
+
+
+
+
+
+        </script>
+    </body>
+</html>

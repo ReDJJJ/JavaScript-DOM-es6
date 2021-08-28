@@ -1,0 +1,87 @@
+<!--
+    指将事件统一绑定给元素的！！！共同！！！的祖先元素，这样当后代元素上的事件触发时，
+    会一直冒泡到祖先元素从而通过祖先元素的响应函数来处理事件。
+    这样可以在祖先元素只绑定一次事件，即可应用到多个元素上
+    而祖先通过event.target 获取冒泡事件源头节点
+
+    event.target是元素节点对象,包含了许多属性(target.nodeName等)
+    要分清楚事件源this 和发生冒泡事件源头对象event.target
+
+
+    事件委派的应用场景 : 1有大量子元素拥有相同的事件监听事件,使用事件委派
+                        2 有创建新的子元素的行为,并且要求新创建的子元素和旧的拥有同样的行为,利用事件委派,不然就会旧的有行为,新的还需要独立添加行为;(浪费空间时间)
+             好处: 降低内存的占用
+
+             时间委派通过时间冒泡实现,在祖先元素身上添加事件监听,并且通过event.target找到冒泡源.
+             事件委派最起码得给所有需要操作的元素的最小公共祖先添加
+             例:  
+-->
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <ul class="box">
+        <li>我是li1</li>
+        <li>我是li2</li>
+        <li>我是li3</li>
+        <li>我是li4</li>
+        <li>我是li5</li>
+        <li>我是li6</li>
+        <li>我是li7</li>
+        <li><span>我是li8</span></li>
+        <span>我是span</span>
+        <li>我是li9</li>
+        <li>我是li10</li>
+    </ul>
+    <script>
+        window.onload = function (){
+            //需求: 点击的li 变色
+            //未学习事件委派之前, 需要给每个li添加相同的事件监听（轮询）,并书写相同的事件处理函数,如下:
+            var ulNode =document.querySelector("ul");
+            // var liNodes = document.getElementsByTagName("li");
+            // for (let i = 0; i < liNodes.length; i++) {
+            //     liNodes[i].onclick = function (){
+            //         this.style.backgroundColor = "yellow";
+            //     }
+            // }
+            //但是相当于给每个li都添加了功能一模一样的事件监听,但是却大大浪费了内存空间
+
+
+            // 事件委派: 利用事件冒泡性质 : 子元素触发事件会传播给祖先元素相同事件,所以事件监听给祖先元素,祖先元素再通过event.target 来寻找冒泡事件产生者;  
+            // 并且,event.target 会指向产生这个事件的源头(冒泡的源头),所以可以通过 event.tartget来操作 父元素中产生冒泡事件的子元素
+            // 并且event是事件对象,target是event的属性,其本身也是对象,event.target里包含了nodeName属性,可以通过判断 nodeName 来筛选出父元素中的各类子元素
+            // nodeName : 元素 大写元素名  文本 #text  注释 #comment
+
+            //ulnode在事件回调函数中的是this(this的四种指向,默认window,被调用函数中真正执行者,构造函数中新建立的对象,回调函数中事件源) , 而event是事件发生g过程中的所有信息集合体
+            //因为整个onclick事件是属于ulnode的监听事件,所以回调处理函数中的this指向ulnode
+            ulNode.onclick = function(event){
+                console.log(event.target); //指向发生冒泡事件的最小源头
+                console.log(this); //this指向整个监听事件的拥有者
+                console.log("是ul的子元素li们的点击事件传播给了 父元素ul,触发了父元素的点击事件监听.事件源为父元素ul");
+                if(event.target.nodeName === "LI"){ //判断 是不是li子元素产生的冒泡事件 ,注意若li子元素嵌套了其他元素,则此冒泡事件不是li产生的,而是li嵌套的其他元素产生的.
+                    //.event.target永远指向产生冒泡事件的最小源头(最小范围),所以 <li><span>我是li8</span></li> 不会变色.;
+                    event.target.style.backgroundColor = "yellow";
+                }
+
+                //让嵌套在li里的span和li(span他爹)变色,并且不让单独的span变色 (通过判断源头的爹和源头各自的类型)
+                if(event.target.parentNode.nodeName == "LI" && event.target.nodeName == "SPAN")
+                {
+                    event.target.style.backgroundColor = "skyblue";
+                    event.target.parentNode.style.backgroundColor = "pink";
+                }
+            }
+        }
+
+    </script>
+</body>
+
+</html>

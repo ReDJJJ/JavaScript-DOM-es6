@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        ul,
+        li {
+            list-style: none;
+        }
+
+        img {
+            display: bLock;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input {
+            outline: none;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        /*禁止系统滚动条*/
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        #wrap{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #wrap .banner{
+            width: 600px;
+            height: 300px;
+            background: pink;
+            margin: 50px auto;
+            position: relative;
+        } 
+        #wrap .banner ul.picture{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width:3000px;
+            height:100%;
+            background: skyblue;
+        }
+        #wrap .banner ul.picture li{
+            float: left;
+        }
+        #wrap .banner ul.picture li img{
+            width:600px;
+            height:300px;
+        }
+        #wrap .banner ul.circle{
+            position: absolute;
+            bottom:20px;
+            left:50%;
+            transform: translateX(-50%);
+        }
+        #wrap .banner ul.circle li{
+            width:20px;
+            height:20px;
+            border-radius: 50%;
+            background: gray;
+            float: left;
+            margin-right: 5px;
+        }
+        #wrap .banner ul.circle li.current{
+            background: red;
+        }
+        /* 不能用伪元素,伪元素无法操作和获取 */
+        #wrap .banner .left,  #wrap .banner .right{
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width:40px;
+            height:100px;
+            background: rgba(100,100,100,.6);
+            text-align: center;
+            color: white;
+            font: normal 700 20px/100px  "arial";
+            cursor: pointer;
+        }
+        #wrap .banner .left{
+           left: 0;
+        }
+
+        #wrap .banner .right{
+            right:0;
+        }
+
+    </style>
+</head>
+<!-- 瞬间动 个人思路:就修改一下ul的位置不就好了-->
+<!-- 轮播图经典思路:小盒子box装长盒子ul 
+                  点击左右span或者小圆点,轮播图位置动,瞬动改属性
+                  滑动需要 CSS过渡 或者 js中的移动模组(定时器,需要配合界限限定)
+-->
+<body>
+        <div id="wrap">
+            <div class="banner">
+                <ul class="picture">
+                    <li>
+                        <a href="javascript:;"><img src="./img/2.jpg" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><img src="./img/3.jpg" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><img src="./img/4.jpg" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><img src="./img/6.jpg" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><img src="./img/9.jpg" alt=""></a>
+                    </li>
+                </ul>
+                <ul class="circle">
+                    <li class="current"></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+                <span class="left"> < </span>
+                <span class="right"> > </span>
+            </div>
+        </div>
+        <script>
+            window.onload = function() {
+                // var leftbtn = document.querySelector('#wrap .banner .left');
+                // var rightbtn = document.querySelector('#wrap .banner .right');
+                // 老师用的是对象数组;
+                var box = document.querySelector('.banner');
+                var ul = document.querySelector(' #wrap .banner ul.picture');
+                var spanNodes = document.querySelectorAll("#wrap .banner .left,#wrap .banner .right"); //querySelectorALL只支持一个字符串参数,所有变量选择器写在里面,逗号间隔
+                //不动 ul没定位 ,不动没定位不动没定位 .
+                spanNodes[1].onclick = function(){ 
+                    var eleDis = -600;
+                    var lastX =  ul.offsetLeft + eleDis; // ul走过-600后的位置
+                    if(lastX < -2400){
+                        lastX = -2400;
+                    }
+                    ul.style.left = lastX+"px";
+                }
+                spanNodes[0].onclick = function(){
+                    var eleDis = 600;
+                    var lastX =  ul.offsetLeft + eleDis;  //ul走过600后的位置
+                    if(lastX > 0){
+                        lastX = 0;
+                    }
+                    ul.style.left = lastX+"px";
+                }
+            }
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!-- 
+    新理解: 
+        overflow:scroll 表示强制打开滚动条
+        overflow:hidden 溢出隐藏,也可以看作关闭系统滚动条
+        以上两个可以看作滚动条的开关;
+
+        两者都可以避免内容溢出,但是方式不一样,一个抹掉了,一个保留了滚动条;
+
+        系统滚动条有两个
+        系统滚动条分别位于 document和body身上 ;
+        设置情况:
+        单独给body或html设置系统滚动条开关(overflow:hidden/scroll),控制的都是document文档的系统滚动条
+        若同时给body,html设置overflow:hidden/scroll,则body的设置控制body的系统滚动条,html的设置控制document的滚动条;
+
+
+        禁止系统滚动条(初始化内容):
+        html,body{
+            overflow : hidden;
+            height : 100%;
+        }
+        解释:为什么要有height:100%;
+        1 (增强说服力) ：不设置height:100% ,相当于html,body没固定高度,那么其内容永远无法溢出(内容会撑大html,body),那么双重设置overflow:关闭两个系统滚动条就很奇怪了,你都不会溢出了,肯定不会有滚动条啊,关了干啥
+        2 (让html和body等于初始包含块(第一屏)大小,令三者宽高在一开始完全一样,令三者完全重合);
+
+        问题:一开始设置html和body 为视口宽高,那么内容溢出怎么办?
+            答：自己做滚动条; 为啥自己做:一、各个浏览器滚动条不一致,会导致布局出现偏差,需要自己统一滚动条,二、好看;
+            所以,以后html和body就是随着视口大小变化而变化,而内容溢出则靠自制滚动条拖动html和body里面的内容;
+ -->
+
+
+ <!doctype html>
+ <html>
+     
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+ 
+            html{
+                width:600px;
+                height:600px;
+                border: 2px solid black;
+                margin-left:150px;
+                background: lightpink;
+                overflow:scroll;
+                /* 单独设置会隐藏document系统滚动条,并且body的溢出html的内容看不见了 (滑不下去了)*/
+            }
+            body{
+                 width:300px;
+                height:3000px;
+                border: 2px solid gray;
+                margin-left:50px;
+                background: skyblue;
+                overflow:scroll;
+                /* 单独设置会隐藏document系统滚动条,并且body的溢出html的内容看不见了 (滑不下去了)*/
+                /* 两者都设置,则body控制body系统滚动条, html的控制document滚动条 */
+                 
+            }
+            div{
+                width:100px;
+                height:100px;
+                background: lightgreen;
+                position:absolute;
+                 top:10px;
+                 left: 10px;
+            }    
+        </style>
+    </head>
+ 
+    <body>
+        <div id="box"></div>
+        
+    </body>
+ </html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<!-- attribute : 属性 -->
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <p id='pp' class="pink" aa='cc'>哈哈</p>
+    <!-- 自定义属性 aa = 'cc'  理解:p标签是document对象下的一个对象,则p是一个对象,对象添加一个属性aa='cc'不违反语法 -->
+    <script>
+        window.onload = function () {
+            var pp = document.getElementById('pp');
+            pp.onclick = function () {
+                pp.aa = "cc";//无效,aa是自定义属性 操作自定义属性需要调用函数setAttribute(属性名,属性值) getAttribute(属性名);
+                console.log(pp.getAttribute("aa")); //cc
+                pp.setAttribute("aa","bb"); //有则更改 , 无责添加
+                console.log(pp.getAttribute("aa")); //bb
+            }
+        }
+        //    修改属性总结:
+        //    普通属性 : DOM对象名.属性名  = 属性值
+        //    特殊属性(名和值相同) : DOM对象名.属性名 = true/false;
+        //    Class属性: DOM对象名.classNmae = 值;
+        //    自定义属性: 修改自定属性值需要调用元素对象方法 setAttribute() 和 getAttribute () 
+        //    元素名.setAttribute().getAttribute() 方法不仅能修改获取自定义属性,其他任意属性都可以进行修改与获取
+        //    常用: 标签自带属性(就是不包括样式) 用.  class 用 className  自定义属性用 setAttribute 和 getAttribute 名值相同用ture和false
+    </script>
+</body>
+
+</html>

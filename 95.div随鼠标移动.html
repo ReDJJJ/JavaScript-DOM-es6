@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+   <head>
+       <!-- 思路: 通过修改绝对定位的位移值 和 鼠标的值绑定 -->
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           *{
+               margin :0;
+               padding:0;
+           }
+           body{
+               position: relative;
+           }
+           .box{
+              width:300px;
+              height:300px;
+              background : skyblue;
+              position:absolute;
+              top:0;
+              padding:0;
+           }
+
+       </style>
+   </head>
+
+   <body>
+       <div class="box">
+
+       </div>
+       <script> 
+                window.onload = function(){
+                        var box = document.querySelector('.box');
+                        document.documentElement.onmousemove = function(event){
+                            event = event || window.event;
+                            box.style.top = event.pageY + 'px';
+                            box.style.left = event.pageX + 'px'; 
+                            //要记得字符串拼接 + "px"; 加单位;
+                        }
+
+
+                }
+       </script>
+   </body>
+</html>

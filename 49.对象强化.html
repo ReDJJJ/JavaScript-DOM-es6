@@ -1,0 +1,40 @@
+
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            function Phone (name,price,color){
+                this.name = name;
+                this.price = price;
+                this.color = color;
+            };
+
+            // 构造函数的原型对象的属性(不管是属性还是方法) 都可以给后辈们调用,只不过不属于他们而已,可以查询普通属性或调用方法
+            Phone.prototype.inputGender = function(){ //往构造函数phone原型中添加方法 inputGender 该函数功能是 手机实例增加一个元素 华为
+                this.gender = "HUAWEI";
+            }
+
+            // 上面的写法其实造成了空间的浪费 , 应该直接在原型函数内增添 属性 ,以供多个实例使用
+            Phone.prototype.Gender = "11111";
+
+            var phone1 = new Phone('p30',6000,"yellow"); 
+            phone1.inputGender();
+            var phone2 = new Phone('p300',6000,"yellow00");
+            phone2.inputGender();
+            console.log(phone1);
+            console.log(phone2);
+            console.log(phone2.Gender);//在打印对象的时候,并不会把phone.prototype内的属性打印出来 ,而是需要调用Gender属性,发现对象本身没有这个属性的时候,才往上一级找
+
+
+
+            
+        </script>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            *{
+                margin: 0;
+                padding:0;
+            }
+            
+        </style>
+    </head>
+
+    <body>
+      
+            <button id="btn">按钮</button>
+            <input type="checkbox" id="check">
+      
+
+          
+        <script>
+            
+            window.onload = function() {
+                var check = document.getElementById("check");
+                var btn = document.getElementById("btn");
+             
+                //特殊属性:属性名和属性值相同 例如checked = "checked"  JS中用值true和false来代表该属性是否生效
+                btn.onclick = function(){
+                    check.checked = true ; //true 表示属性生效 false表示属性不生效
+                }
+            }
+            
+        </script>
+    </body>
+</html>

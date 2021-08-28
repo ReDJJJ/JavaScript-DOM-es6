@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            //valueOf方法 用于返回指定对象的原始值
+
+            //valueOf方法属于Object()的原型对象,而Object()又是mini原型链的顶端,所以 所有对象都可以使用该方法valueOf();
+            //官方:但是JavaScript的许多内置对象都重写了该函数，以实现更适合自身的功能需要。因此，不同类型对象的valueOf()方法的返回值和返回值类型均可能不同。
+            //人话:基本数字类型的构造函数的显式原型对象(基本数字类型的妈)都重写valueOf()方法,根据原型链就近原则层叠了Object()的valueOf(),,因此基本数字类型调用valueOf()返回的都是基本数据类型本身的值(null和undefined不可以valueOf()会报错)
+            //而 对象数据类型 的构造函数的显式原型对象没有重写valueOf(),因此共用了Object()的valueOf()方法;
+
+            var a = 10 , b = 'ABC' ,c = true , d = null , e = undefined; //null和undefined不可以使用valueOf();
+           //console.log("基本数字类型的构造函数的显式原型都重写了valueOf(),返回的值就是其本身内容(值),所以valueOf()对于基本数据就是取值用",)
+            console.log(a.valueOf(),b.valueOf(),c.valueOf());//10 "ABC" true
+
+            //而对象数据类型(对象,数组,函数)的valueOf()都是返回对象数据类型本身,对象.valueof指向了自己
+            var a = [1,2] ,  b = function(){} , c = {name : "hj"};
+            console.log(a.valueOf(),b.valueOf(),c.valueOf());//打印自身  [1, 2]   ƒ (){}  {name: "hj"}
+
+            
+            console.log(( a.valueOf() == a )); //对象进行判等,则比较两者地址,两者地址相等所以比较结果是相等。
+            console.log(( a.valueOf() === a )); //全等 所以对象数据类型.valueOf() 就是对象数据类型本身
+
+
+        </script>
+    </body>
+</html>

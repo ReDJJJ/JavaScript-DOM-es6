@@ -1,0 +1,92 @@
+<!-- js五种基本数据类型 ： number string boolean undefined null -->
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+        </style>
+    </head>
+
+    <body>
+    <script>
+        
+            // 数据类型强制转换(显式):
+            /*
+                Number() 强制将一个其他类型的数据转换成数字类型,转不了就是NaN  (not a number 
+
+                Number(字符串类型) :  若字符串整体是数字,则转换成数字
+                                     若字符串整体不是一个数字,则转换成NaN
+                                     若字符串是空字符串'' 或者空白字符串'  ' 则转换成数字0
+
+                        (布尔类型)  : true 1 false 0;
+
+                        (undefined) : NaN;
+0
+
+                                     输出内容可以是一个表达式(表达式)
+            */  
+
+                console.log("Number()强制转化类型");
+                var str1 = "123"; console.log(Number(str1));
+                                            
+                var str2 = "123A"; console.log(Number(str2));
+
+                var str3 = ''; console.log(Number(str3));
+
+                var str4 = '   '; console.log(Number(str4));
+
+                var num;        console.log(typeof(num));console.log(Number(num)); 
+
+                var num1 = true ; console.log(typeof(num1));console.log(Number(num1));
+
+                var num2 = null ; console.log(typeof(num2));console.log(Number(num2));
+
+            /* 
+                String() 将变量或常量值(直接加两个引号) 原封不动转换成字符串 罢了 
+            */  
+            console.log("String()强制转化类型");
+                console.log(123456)
+                console.log(String(123456));
+                var variate1 ;
+                console.log(variate1)
+                console.log(String(variate1));
+                // 上下两者的颜色不同,第一行代表variate1的值为undefined ,第二行代表 'undefined'字符串
+                var variate2 = null; 
+                console.log(variate2);
+                console.log(String(variate2)) ;
+                var variate3 = true;
+                console.log(variate3);
+                console.log(String(variate3));
+
+            /*
+                Boolean()强制转换布尔类型
+
+                转化数字: 0和NaN 为false 其余都是true;
+                转换字符串: 除了空字符''是false ,其余都是 true;
+                转换undefined 和null 都是 false;
+                 //  !后面的内容会强制转化为布尔值
+                所有对象(数组,函数,对象)转布尔值都是true;
+            */
+
+           
+            console.log("Boolean()强制转化类型");
+           
+            console.log(Boolean(123));
+            console.log(Boolean(0));
+            console.log(Boolean(Number('ABC')));//转换数字NaN的情况
+
+            console.log(Boolean('ABC'));
+            console.log(Boolean(''));
+
+            console.log(Boolean(undefined));
+            console.log(Boolean(null));
+
+    </script>   
+    </body>
+</html>
+
+<!-- 
+    数据类型 隐式转换
+    各种类型在适当的场合会发生 隐式转换 主要是运算和条件判断过程中
+-->

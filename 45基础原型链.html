@@ -1,0 +1,111 @@
+<!-- 
+    作用域链 : 查找 变量 的规则 (变量对象的链条)
+    原型链:    查找 对象 和 属性 的规则
+-->
+
+<!-- 
+1、所有的引用类型（数组、函数、对象）可以自由扩展属性。
+
+2、所有的引用类型都有一个’_ _ proto_ _'属性(也叫隐式原型，它是一个普通的对象)。
+
+3、所有的!函数!都有一个’prototype’属性(这也叫显式原型，它也是一个普通的对象)。
+
+4、所有引用类型，它的’_ _ proto_ _'属性指向它的构造函数(妈)的’prototype’属性,指向其构造函数的原型对象
+
+5、当试图得到一个对象的属性时，如果这个对象本身不存在这个属性，那么就会去它的’_ _ proto_ _'属性(也就是它的构造函数的’prototype’属性)中去寻找。
+
+原型链的最顶端就是Object.prototype;
+
+
+constructor 构造函数 prototype 原型
+
+以后指向谁 就是 存储了谁的地址
+
+构造函数的显式原型对象prototype 和 构造函数的实例化对象 隐式原型对象__proto__  指向一致. 都是指向构造函数的 原型对象
+
+
+ -->
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+
+
+    </style>
+</head>
+
+<body>
+    /*
+    本篇为基础篇; 一个mini的原型链
+    */
+    <script>
+            //途中的内存都是堆内存空间
+
+    </script>
+    <p>
+        // 构造函数(妈,肉体)本身有两个属性:prototype(原型对象) 和__proto__ ; prototype指向构造函数的原型对象(灵魂);
+        // 而构造函数的原型对象:prototype 属性也是一个对象,原型也有两个属性值:constructor(构造函数)和__proto__; constructor指向构造函数本身(肉体) ;
+    </p>
+    <img src="./img/yuanxing1.png" alt="">
+    <p>
+        // 构造函数的所有实例化对象 也都有__proto__属性 ,__proto指向构造函数的原型(儿子的proto指向妈的灵魂),也就是说
+        //实例对象的__proto__和构造函数的prototype都指向构造函数的原型对象,本质上是对象的__proto__和构造函数的prototype存储的地址一致.
+    </p>
+    <img src="./img/yuanxing2.png" alt="">
+    <p>
+        // 构造函数的原型对象也是对象啊,也有自己的创造者和__proto__(隐式原型对象),其创造者是Object(),所以构造函数原型对象__proto__指向Object的原型对象prototype;
+    </p>
+    <img src="./img/yuanxing3.png" alt="">
+    <p>
+        // 而Object.prototype.__proto就暂时封顶了  值为null;
+    </p>
+     <img src="./img/yuanxing4.png" alt="">
+
+
+
+
+    <!-- //画图思路 : 1 先把 构造函数 和  原型对象 分别用 方框和圆形画出来 ,  然后互相绑定 构造函数.prototype ---》 原型对象   原型对象.constructr ---》 构造函数
+                      2 然后画出构造函数的实例,实例的__proto__指向和构造函数的prototype指向一致,都指向构造函数的原型对象
+                      3 构造函数的原型对象也是对象,对象就有创造者,创造者就是Object(),所以构造函数的原型对象的隐式原型对象(__proto__) 指向 Object()的显式原型对象(Object.prototype);
+                      4 Object的原型对象(Object.prototype)也是对象,但是Object.prototype的__proto__封顶了,为null,停止查找 返回undefined;
+         -->
+
+
+    <script>
+        function Car(name, color) {
+            this.name = name;
+            this.color = color;
+        }
+
+        // 给Car原型增加方法 
+        Car.prototype.run = function () {
+            console.log("run");
+        }
+        // 给Object原型增加方法
+        Object.prototype.play = function(){
+            console.log("play");
+        }
+        var car1 = new Car("帕萨特", "black");
+        var car2 = new Car("朗逸", "black"); //创建两个实例化对象
+
+        // 可以这么说, 构造函数内的方法是给构造函数用的,而构造函数的原型对象中的方法和属性等是给 实例化对象用的
+        car1.run();
+        car1.play();
+        // Car.run()是Car()自用的方法; Car.prototype.run() 给后辈们用的方法
+        // Car.prototype.constructor = Car 本身  绕了一圈 ;
+
+
+        // 原型链: 当寻找一个对象的属性时,当前对象内没有,就会沿着__proto__(隐式原型独享去找)一层层往上找,直至找到Object的原型对象,若Object.prototype内也没有,则返回undefined,若属性需要执行(),则需要看属性值是否是函数,若不是就报错.
+        console.log(Car.sdjfls);//查找一个不存在的属性sdjfls 打印undefined;
+        Car.sljf(); //调用一个不存在的属性 , 报错, 不存在的属性返回undefined  undefined怎么能调用()呢?
+
+
+
+    </script>
+</body>
+
+</html>

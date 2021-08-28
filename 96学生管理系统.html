@@ -1,0 +1,107 @@
+<!-- 
+    思路: 先添加基本基本的框架 (文本框和按钮)
+          先完成点击按钮添加学生的功能 文本框的值放在了value里面
+          再完成点击按钮添加删除学生的功能
+          再完成删除功能
+
+          
+          每个td 都有这个功能, 并且还有不断新添加的 学生,每个新的学生都需要这个删除功能;
+          因此使用事件委派 和 event.target 来找到 需要删除的<td><a><td>以及它的爹tr(整行列表),进行删除
+ -->
+
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td>洪江</td>
+            <td>1122111</td>
+            <td><a href="##">删除</a></td>
+        </tr>
+        <tr>
+            <td>洪江</td>
+            <td>113311</td>
+            <td><a href="##">删除</a></td>
+        </tr>
+        <tr>
+            <td>洪江</td>
+            <td>1333311</td>
+            <td><a href="##">删除</a></td>
+        </tr>
+        <!-- 为什么不能在HTML中添加a标签进入表格中呢 因为a没有被包含在td中 ,所以浏览器解析时判断a不是在单元格中 会将a渲染到table表格外部 -->
+    </table>
+
+    <input type="text" id="name" placeholder="请输入姓名"><br>
+    <input type="text" id="gender" placeholder="请输入性别"><br>
+    <button>确认提交</button>
+
+
+    <script>
+        window.onload = function () {
+            var name = document.getElementById("name");
+            var gender = document.getElementById("gender");
+            var button = document.querySelector("button");
+            var table = document.querySelector("table");
+            button.onclick = function () {
+                if (name.trim() && gender.trim()) { //通过.trim() 砍掉两边空格 并判断是否为空串
+                    var tr = document.createElement("tr");//创建一个tr标签
+                    //给tr添加内容
+                    var nametd = document.createElement("td");
+                    var gendertd = document.createElement("td");//创建两个td,一个装名字一个装性别
+                    nametd.innerText = name.value;
+                    gendertd.innerText = gender.value;
+
+                    var deletetd = document.createElement("td");
+                    var deletea = document.createElement("a");
+                    deletea.href = '##'; deletea.innerText = "删除"; //给a标签添加href和文本 a标签不添加href和span作用一样
+                    deletetd.appendChild(deletea);//a标签包含在单元格td中
+
+                    tr.appendChild(nametd); tr.appendChild(gendertd); tr.appendChild(deletetd);//把新创立的nametd gendertd 塞入新创建的tr中
+                    table.children[0].appendChild(tr); //table下面还有一层tbody
+
+                   
+                }else
+                {
+                    alert("请输入正确的姓名性别");
+                }
+                     name.value = "";
+                    gender.value = ''; //每次输入,清空输入栏  是个人忽略的地方 
+            }
+
+            // 有新增元素 并且拥有公共的事件  所以首先考虑 事件委派
+            //祖先元素找谁？ 1整个table  2 tr 必须找table 因为table才是所有a标签的公共祖先 tr不是
+            // 找table , 找tr 还得给每个tr单元行 都轮询进行添加事件监听 浪费了空间 
+            // 可以通过table.子元素[tbody]的子元素[tr]来找到对应需要删除的tr表单行
+            //注意了 table下面一层有个tbody
+            table.onclick = function (event) {
+                event = event || window.event;
+                var target = event.target || event.srcElement;//兼容性
+                // 需要判断冒泡源事件 是否为a标签 ，否则点啥都删了 
+                if (target.nodeName == "A") //通过判断是否点击的是a标签来决定是否删除行tr  否则点击啥都删除了 还可以通过判断target的内容来决定功能
+                {
+                    table.removeChild(target.parentNode.parentNode); //报错 说删除的不是table的孩子节点,因为table下面还有一个tbody啊！！！！！！！！！！！！！！！！！！！！！！！！！！！tr是table的孙子！！！！！！！！！！！
+                    
+                    target.parentNode.parentElement.remove(); //自删成功,不过仅限高级浏览器;
+                }
+
+            }
+        }
+    </script>
+</body>
+
+</html>

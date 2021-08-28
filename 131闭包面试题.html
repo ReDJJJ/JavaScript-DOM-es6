@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<!-- 
+        做题注意事项: 预解析(先function重名层叠,后var重名抛弃);
+                     每个变量的数据类型和作用域
+                     有函数嵌套就看是否满足闭包的三个条件,满足则产生闭包(无法释放占据内存),
+                     分清楚this的指向
+                     每个函数的作用域链
+        
+        1函数的每次调用都需要开辟一次运行环境(上下文)
+-->
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        var name = "window";
+        var object = {
+            name: "object",
+            getNameFunc: function () { //方法
+                return function () { //函数
+                    return this.name;
+                }
+            }
+        }
+        console.log(object.getNameFunc()());  //window
+        //console.log(object.getName()()) 解析 :
+        //object.getName()运行返回一个匿名函数function(){return this.name;} 然后第二个()调用了该匿名函数
+        //上述没有涉及闭包:因为不符合闭包的第二个条件,内部函数引用外部函数的变量
+        //第一个函数是obj的方法getNameFunc,第二个函数是getNameFunc的内嵌函数,所以就是不同函数,不是谁的方法,所以this指向window
+
+        var name2 = "window";
+        var object2 = {
+            name: "object2",
+            getNameFunc: function () {
+                var that = this; //很常用,嵌套的子函数想使用父亲方法的this,必须通过一个变量来记录;因为嵌套的子函数this普遍指向window;
+                return function () {
+                    return that.name;
+                }
+            }
+        }
+        console.log(object2.getNameFunc()());
+        //object2.getNameFunc()() = function(){ return that.name}() 
+        //两个嵌套的函数满足闭包的三个条件:(嵌套,内部引用外部数据,外部函数调用),所以形成闭包,一直占用内存空间
+        //function(){return that.name}的作用域链为(local,getNameFunc,glabol),当前作用域没有that,去getNameFunc找,that=this,而  getNameFunc是方法,所以this指向ob2
+
+        var f= fn1();
+          f(); //1
+          f(); //2
+          f(); //3
+          //fn2调用了三次,每次都开辟了一次执行环境(栈),每次a++后就紫砂了,但是a是在fn1的执行环境中存放的,而fn1的执行环境因为闭包的原因一直存在,所以a的变化就保留下来了;
+          
+        
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background: lightgreen;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+    </div>
+    <script>
+        window.onload = function () {
+            var box = document.getElementById("box");
+            box.onmousedown = function (event){
+                event = event || window.event;
+                //获取元素初始坐标
+                var eleX = box.offsetLeft;
+                var eleY = box.offsetTop;
+
+                //获取鼠标初始坐标
+                var startX = event.pageX;
+                var startY = event.pageY;
+
+                box.onmousemove = function(event){
+                    //获得位移后的鼠标坐标 , 每次触发该事件都会更新一次
+                    var endX = event.pageX;
+                    var endY = event.pageY;
+
+                    var disX =   endX-startX;
+                    var disY =   endY-startY;
+
+                    //元素的最终位置
+                    var lastX = eleX + disX;
+                    var lastY = eleY + disY;
+
+                    box.style.left = lastX + "px";
+                    box.style.top = lastY + "px"; 
+
+                }
+                box.onmouseup = function (){
+                    box.onmousemove = null;
+                }
+            } 
+        }
+
+        // 概述以下老师思路和我的思路区别: 
+        // 老师思路是把一整段位移当作一次位移,只考虑开始和结尾,利用结尾和开始的鼠标距离差 套给 元素;能成功归功于onmousemove不懈努力疯狂触发(自我连续);
+        // 我的思路是把位移微分(定时器),在前一段位移的坐标基础上,计算鼠标没一小段的位移差赋值给元素;显然我的效率会低
+    </script>
+</body>
+
+</html>

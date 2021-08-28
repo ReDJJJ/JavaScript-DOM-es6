@@ -1,0 +1,55 @@
+<!-- 
+    日期对象Date
+ -->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            // 日期对象和Math,JSON内置对象不太一样,需要自己手动实例化一个对象
+            var date = new Date(); //实例化一个对象date(),调用其方法获取时间
+
+            console.log(date);//直接打印 date 对象  打印Date()的实例化对象比较特殊,会显示当前地区的时间,而不是打印对象的内容(属性方法等)
+            console.log(date.getFullYear()); //.getFullYear获取当前年份
+            console.log(date.getYear());//已经废弃,因为不准确,会多一个数字1
+            console.log(date.getMonth()+1); //获取月份,不过月份数值为 0-11 日常使用需要+1;
+            console.log(date.getDate());//日号
+            console.log(date.getHours());//小时
+            console.log(date.getMinutes());//分
+            console.log(date.getSeconds());//秒
+
+
+            console.log(date.toLocaleTimeString());//获取当地时间 下午9:05:15
+            console.log(date.toLocaleDateString());//获取当地日期 2021/7/24
+             //所以 toLocateDateString + toLocateTimeString 可获得当前的具体时间; 
+            console.log(date.toLocaleDateString()+date.toLocaleTimeString());
+
+            console.log(date.getTime()); //1970.1.1到目前位置的毫秒数 计算日历元年到目前为止的毫秒数
+            
+            // getTime()有什么用处 ? 记录程序运行时间
+            /*
+            程序 
+                var date = new Date();
+                var timeStart =  date.getTime();//timeStart记录程序开始时间
+            
+                代码
+            
+                var timeEnd = date.getTime(); //timeEnd记录程序结束时间
+                console.log(timeEnd - timeStart) ; // 单位 ms
+            */
+
+            function getTime (){
+                var date = new Date();
+                return date.getFullYear()+"年"+(date.getMonth()+1)+"月"+date.getDate()+"日"+date.toLocaleTimeString();
+            }
+            console.log(getTime());
+
+        </script>
+    </body>
+</html>

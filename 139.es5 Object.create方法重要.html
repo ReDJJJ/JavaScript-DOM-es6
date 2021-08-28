@@ -1,0 +1,63 @@
+<!-- 以后文档中,参数列表中含有[参数],代表这个参数可写可不写 -->
+<!-- 
+    Object.create方法
+    Object.create(参照对象名,[描述符(对象)])
+    作用: 创建一个新对象，使用现有的对象来提供新创建的对象的__proto__(隐式原型)。
+
+    第二个参数为描述符,若不写,则新对象没有任何的属性,只是新对象隐式原型proto指定为了参照对象;
+    writable:可写
+    configurable:可删
+    enumberable:可枚举(遍历)
+ -->
+
+ <!doctype html>
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style></style>
+    </head>
+    <body>
+        <script>
+            var person1 = {
+                name:"hj",
+                age:10,
+                eat:function(){console.log('吃')}
+            }
+            var person2 = Object.create(person1);
+            console.log(person2); 
+            //Object
+            //__proto__: Object
+            //函数执行结果:不经过构造函数 快速新建一个对象person2,该对象的__proto__指向为参照对象person1,由于没有第二个参数,所以没有属性,但是由于隐式原型的关系,可以继承person1的方法
+
+            person2.eat(); //继承person1的方法
+
+            //Object.create()的第二个参数描述符是一个对象,该对象内每个 每个属性又独占一个对象,每个对象可以设置属性值,属性是否可写可删可轮询等.所以Object.create(对象,[详细描述对象])就是一个以某个对象为隐式原型并且详细设置每个属性的各种参数的方法
+            var person3 = Object.create(person1,{
+                name:{
+                    value: "John",
+                    writable:true, //是否可写,默认false
+                    configurable:true, //是否可删,默认false
+                    enumberable:true, //是否能用for in 枚举 默认为false
+                },
+                age:{
+                    value: 15,
+                }
+            });
+            console.log(person3);
+            person3.name = "kobe";//更改person.name属性成功,因为[描述符]内name属性的writable 允许可写
+            person3.age = 1000; //更改不成功,因为[描述符]内name属性说明了不可写
+            delete person3.name;//删除成功,[描述符]中name属性configurable 为true
+            delete person3.age;//删除不成功,[描述符]中name属性configurable 默认为false.
+            console.log(person3);
+            for(key in person3){
+                console.log(person3[key]);//原型链中__proto__指向的对象中(隐式原型)的属性和方法都打印出来了.
+            }
+            //注意 for in循环轮询遍历对象的时候,会将对象的整个原型链中的的方法和属性都打印出来.
+            //for in循环效率是最慢的，for in不但要去查找自身的可遍历属性,还要遍历一层层隐式原型(原型链)中的可遍历属性;
+
+             // 一般常用第一种Object.create(obj),快速创建一个新对象(指定一个已存在对象为__proto__指向),再手动添加属性和方法,第二种方式还有设定每个属性可写可删可枚举,太麻烦了.
+            //第二种方式创建比较安全的对象,想保护对象中的某些属性;
+        </script>
+    </body>
+</html>

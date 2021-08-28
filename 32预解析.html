@@ -1,0 +1,230 @@
+<!-- 
+    预解析:程序在开始执行之前,会进行预解析,会将var 和 function 变量进行提升
+    
+    函数构造方法: var fn = function(){函数体};
+
+    解析function函数优先级比解析var变量要高,先解析function函数再解析var变量(包括var 构造函数),
+    解析过程中: 
+                如果function函数重名,会层叠(后面的覆盖前面的)
+                如果var变量重名,会忽略后来重名的,特别时var和funciton重名,var也会被忽略;
+                
+                解析函数的时候,函数定义方式不同,解析过程不一样
+                如果是字面量定义,整个函数都被提升
+                如果是表达式定义,只会提升变量名 (当作var变量)
+
+                变量如果不带var , 变量是不会进行预解析的.只有带var的变量才进行预解析
+ -->
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            //  源代码
+             console.log(a);
+             var a = 10;
+             console.log(a);
+            // 预解析代码  将var 变量提升,只定义并不赋值,相当于提升定义了一个变量名为a,类型为undefined的变量;
+            var A ;  
+            console.log(A);
+            A = 10 ;
+            console.log(A);
+
+
+
+            // 源代码  
+            fn();
+            function fn(){
+                console.log('hello');
+            }
+            // 源代码看似会报错,由于函数声明在函数调用后面
+            // 但由于预编译关系,函数中的function(字母量定义)会整体提升
+            // 预编译
+            function Fn(){
+                console.log('HELLO');
+            }
+            Fn();
+
+
+
+            // 预编译过程,函数中的表达式定义 会被当作普通的var ,只提升变量名
+            var fn1 = function (){
+                console.log("fn1");
+            }
+            fn1();
+            // 预编译,表达式构造函数 当作普通的 var 变量 ,仅仅提升变量名
+            var FN1;
+            FN1 = function (){
+                console.log("FN1");
+            }
+            FN1();
+
+            // 预编译,表达式构造函数 当作普通的 var 变量 ,仅仅提升变量名,所以下列情况会报错,因为FN1仅仅是个undefined类型的变量名,还未进行函数定义
+            // FN2();//FN2 is not a function; 
+            // var FN2 = function (){
+            //     console.log("FN2");
+            // }
+            // // 
+            // var FN2;
+            // FN2();
+            // FN2 = function (){
+            //     console.log("FN2");
+            // }
+
+            // function 同名的会发生层叠 后面的覆盖前面的
+            function fn3(){
+                console.log('前面');
+            }
+            fn3();
+            function fn3(){
+                console.log('后面');
+            }
+            // 预解析:
+            // function FN3(){
+            //     console.log('-前面-被后面的同名function覆盖');
+            // }
+            function FN3(){
+                console.log('-后面-');
+            }
+            FN3();
+
+            // 变量发生同名
+
+            // 源代码
+            var a =10 ;
+            var a =20 ;
+            var a =30 ;
+            // 预解析:
+            var a;
+            a = 10;
+            a = 20;
+            a = 30;
+
+
+            // 源代码;
+            var fn4 = 10 ;
+            console.log(fn4);
+            var fn4 = function(){
+                console.log("fn4");
+            }
+            fn4();
+            // 预解析
+            var fn4 ;
+            // var fn4  重名 忽略
+            fn4 = 10;
+            console.log(fn4);
+            fn4 = function(){
+                console.log("fn4");
+            }
+            fn4();
+
+            // 深度解析忽略的含义,变量 重名时预解析 忽略的意思是,不会重复的声明一个 相同名字的 undefined 类型的变量名
+            // 但是源代码中,一个相同的变量名装载的内容甚至类型 都可以改变, 例如上例子 , fn4 前一秒还是个数字类型的变量,后一秒就是对象类型的变量(函数)
+
+            // 探讨两种定义方式的函数在预编译的不同之处
+            // 字面量定义的整体上升, 表达式定义的 只上升变量, 并且function的优先级更高
+
+            fn5();
+            var fn5 = function(){
+                console.log("fn5");
+            }
+            function fn5(){
+                console.log("function");
+            }
+            fn5();
+
+            //预编译
+            function Fn5(){
+                console.log("Function");
+            }
+            var fn5 ; //与function 忽略了此次声明
+
+            Fn5();
+            Fn5 = function(){
+                console.log("Fn5");
+            }
+            Fn5();
+
+            // !!!!!!!要注意普通 var 和 function(){}同名的情况,var会被直接忽略,因为function也是一种变量.
+            // 源代码
+
+            console.log(FNNN);
+            FNNN();
+            var FNNN = 10;
+            console.log(FNNN);
+            function FNNN(){
+                console.log("我是函数");
+            } 
+            // 先扫描 function, 整体提升
+            // 再扫描var 发现一个 var FNNN, 但是与function 同名了, 所以上升变量名 但是忽略
+
+            function FNNN(){
+                console.log("我是函数");
+            }
+            // var FNNN; 同名 忽略
+            console.log(FNNN);//打印函数整体
+            FNNN(); 
+            FNNN = 10;//FNNN不再是对象类型的变量,而是一个数字类型的变量
+            console.log(FNNN);//打印FNNN的值
+            FNNN();  //FNNN不再是对象类型的变量,而是一个数字类型的变量,FNNN不再是一个函数了
+
+
+            // // 源代码
+            alert(ak);
+            ak++;
+            alert(ak);
+            var ak  = "我是字符串";
+            function ak(){
+                alert("我是函数一代目");
+            }
+            alert(ak);
+            var ak = function (){
+                alert("我是函数一代目");
+            }
+            alert(ak);
+            // 预解析
+            // 先扫function 以及重名覆盖
+            // 后扫var 重名忽略
+            // 然后执行代码
+
+            function ak(){
+                alert("我是函数一代目");
+            }
+            //var ak; //重名忽略
+            //var ak; //重名忽略
+            alert(ak); //打印函数ak
+            ak++; //函数+1  NAN
+            alert(ak); //NAN
+            ak  = "我是字符串"; //ak不再是函数,而是字符串变量
+            alert(ak); //打印字符串变量ak
+            ak = function (){
+                alert("我是函数二代目");
+            } //ak又变成了函数,二代目
+            alert(ak);//打印函数
+
+            //  
+
+
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!! 个人做题总结 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // 预编译:会将function 和 var 预先声明.
+            // 1先扫描所有的function , function 会整体上升,并且后面同名的层叠.
+            // 2在扫描所有的 var 变量(包括表达式定义函数), 只会上升 var 变量名 本身, 其装载的内容不会预编译,同名(包括与funciton同名)的会忽略,因为根本没有内容, 其内容会在代码执行过程中,由上至下地执行
+
+            //如果在函数中发现输出在var 申明之前 结果一定是undefined;
+            //函数的调用的位置与函数字面量声明的位置无关;    
+            //变量名和函数名不要取同名的,可能会发生意想不到的情况,因为js的变量可以装载 基本和对象两种类型的内容
+            
+            //  函数声明:相当于开辟栈内存和堆内存给函数 进行指向绑定 ,栈存函数名和地址 ,堆存函数内容, 但是函数声明函数内部的语句不执行.
+            //  函数执行:函数执行需要开辟函数执行环境，该执行环境也需要进行预编译.
+                
+            
+            
+             
+        </script>
+    </body>
+</html>

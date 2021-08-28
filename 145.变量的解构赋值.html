@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+        <script>
+            //变量的解构赋值 针对的是 数组或者对象 同时给多个变量 赋值的情况
+            let obj = {
+                a : "hj",
+                b : 23,
+                c:13,
+                name : "ABC",
+            }
+            // let a = obj.name ;
+            // let b = obj.age ; 麻烦
+
+            
+            //对象解构赋值的时候, 定义的变量的名字必须和对象的属性名一致;
+            // 语法 let/var {变量名1,变量2,变量3..} = 对象名; 
+            //通过解构赋值来简写
+            let {a,b,name} = obj;
+            //相当于声明了变量a,b,name, 把obj的！同名!属性其值赋值给a,b ,name
+            console.log(a,b,name);
+
+            //数组结构的时候,定义的变量的名字符合标识符规则即可,按照顺序依次赋值
+            //语法 let/var  [变量名1,变量2,变量3..] = 数组名 ;
+            let arr = [1,2,3];
+            let [x,y] = arr; 
+            console.log(x,y);
+            //let小心重复定义;
+        </script>
+   </body>
+</html>

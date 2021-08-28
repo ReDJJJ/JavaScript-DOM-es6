@@ -1,0 +1,69 @@
+<!doctype html>
+ <html>
+ <head>
+     <meta charset="utf-8" />
+     <title></title>
+     <style>
+         div {
+             width: 100px;
+             height: 100px;
+             background: lightgreen;
+             position: absolute;
+             top: 100px;
+             left: 100px;
+         }
+     </style>
+ </head>
+ <!-- 
+    拖拽基础1的问题
+    1 鼠标移动快了,小滑块跟不上
+        计算速度跟不上 无解
+    2 当鼠标在盒子外部移动,盒子不跟随,在盒子外抬起鼠标也无法解绑移动事件;
+        首先onmousemove和onmouseup的事件源给了box,在box外移动和松开鼠标是在body身上触发的onmousemove和onmouseup事件,而body触发事件冒泡过程不会冒泡到box身上,所以box的两个事件都不会触发;
+    解决方案: 
+        把移动和抬起鼠标事件赋予给 document.body,当鼠标在box内触发事件时候,会冒泡给body,触发body的同类型事件,鼠标在body内触发事件时候,直接触发body事件,使得鼠标无论在box内部外部都能完成跟随和释放事件;
+ -->
+ <body>
+     <div id="box">
+     </div>
+     <script>
+         window.onload = function () {
+             var box = document.getElementById("box");
+             box.onmousedown = function (event){
+                 event = event || window.event;
+                 //获取元素初始坐标
+                 var eleX = box.offsetLeft;
+                 var eleY = box.offsetTop;
+ 
+                 //获取鼠标初始坐标
+                 var startX = event.pageX;
+                 var startY = event.pageY;
+                //  box.onmousemove = function(event){//优化
+                 document.body.onmousemove = function(event){
+                     //获得位移后的鼠标坐标 , 每次触发该事件都会更新一次
+                     var endX = event.pageX;
+                     var endY = event.pageY;
+ 
+                     var disX =   endX-startX;
+                     var disY =   endY-startY;
+ 
+                     var lastX = eleX + disX;
+                     var lastY = eleY + disY;
+ 
+                     box.style.left = lastX + "px";
+                     box.style.top = lastY + "px"; 
+ 
+                 }
+                //  box.onmouseup = function (){ //优化
+                 document.body.onmouseup = function (){
+                     document.body.onmousemove = null;
+                     //dom0事件解绑 dom2解绑方式 removeEventListener 和 detachEevent
+                 }
+             } 
+         }
+ 
+    
+     </script>
+ </body>
+ 
+ </html>

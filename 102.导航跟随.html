@@ -1,0 +1,61 @@
+<!-- 
+    视口宽度: document.documentElementclientWidth
+    视口高度: document.documentElementclientHeight
+    HTML标签的默认长宽和视口  也就是初始包含块一致
+    以前的盲区： 以为BODY元素是HTML子元素,所以HTML一定小于BODY元素
+ -->
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           *{
+               margin: 0;
+               padding: 0;
+           }
+           body{
+               height:3000px;
+           }
+           div{
+               width: 100%; 
+            /* 固定定位要设置宽度,否则固定定位后宽度为0 */
+               height:60px;
+               background-color: pink;
+           }
+       </style>
+   </head>
+   <body>
+        <div></div>
+        <script>
+           
+        //    个人思路:用一个while循环,当未超过阈值的时候,一直循环检测 .scrollTop,当超过阈值了,将其设置未0 不让其滑动,并退出循环break; 或则开关量思想 设立一个flag?
+        ////////////////////////////////正确思路: 实际上使用BOM window.onscroll事件,一旦系统滚动条滚动便触发该事件，执行后续代码块;,导航置顶使用固定定位完成;
+            window.onload = function(){
+                var div = document.querySelector("div");
+                // //在滑动系统滚动条时,ie认为是body标签在上移,谷歌认为是html标签上移;
+                // //所以要兼容性处理 
+                // var scrolldis = document.documentElement.scrollTop || document.body.scrollTop ; //兼容性处理
+         
+                
+                //功能: 当滑动系统导航栏超过一屏(视口高度),导航置顶(固定定位)；
+                //视口大小和HTML元素大小一致
+                
+                window.onscroll = function(){
+                    // 不修改HTML标签的情况下,html标签的宽高就是浏览器窗口(视口的宽高),依照的对象是初始包含块
+                    var scrolldis = document.documentElement.scrollTop || document.body.scrollTop; 
+                    console.log(scrolldis,document.documentElement.clientHeight);
+                    if (scrolldis >= document.documentElement.clientHeight){
+                        div.style.position = "fixed";
+                        div.style.top=0;
+                        div.style.left=0;
+                    }else{
+                        div.style.position = "relative";
+                        div.style.top=0;
+                        div.style.left=0;
+                    }
+                }
+            }
+        </script>
+   </body>
+</html>

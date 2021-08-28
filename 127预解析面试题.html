@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+       <script>
+        //    作用域链和创建上下文环境概念懂了,但是做题还是以前那套,预解析然后执行
+           var x = 10;
+           function fn(){
+               console.log(x); 
+           }
+           function show(f){
+               var x = 100;
+               f(); //x = 10
+           }
+           show(fn);
+        /*
+           创建全局上下文(包含了预解析)
+           全局x = 10;
+           执行show(fn); 
+                创建函数上下文,fn函数作为实参传递给了show的f(形参),实际上传的是fn函数的堆地址,var局部变量x
+                show局部变量x = 10;
+                执行f();
+                    创建函数上下文(包含预解析)
+                    打印变量x,而f()内没有x,顺着作用域链往上找,全局变量x,打印此全局变量x,
+            
+            做题技巧:
+                执行函数的时候去定义函数的地方执行,那位置的作用域链就是正确的
+
+        犯错了!!!! 上一级作用域链是在函数定义的时候就确定了函数.[scope]数组,不过是在创建上下文时候生成罢了!!!
+                   一开始本人把f()调用的位置当作作用域链的位置!!! 作用域链应该由定义函数时候的位置决定而不是调用时候的位置决定!!!!
+                   所以在写代码的时候要注意,定义函数的时候看一下函数的作用域链
+        */
+
+        var a ;
+        function a() {
+        }
+        console.log(typeof a); //function
+        // 先预解析 function a整体提, var a 和function同名,废弃 这条声明
+        // 所以a是一个函数 
+
+        if(!(b in window)){ //判断b是不是window.中的一个属性
+            var b = 1;
+        }
+        console.log(b);
+        //这个if也是在全局环境中的if,所以预解析 var b 上提;
+        /*
+        var b ;
+        if(!(b in window)){ //判断b是不是window.中的一个属性,预解析后,b确实是window里面的一个属性;
+            b = 1;
+        }
+        console.log(b);
+        */
+
+
+        var c = 1;
+        function c(c){
+            console.log(c); 
+            var c = 3;
+        }
+        c(2);
+        /*
+        预解析
+            function c(){}
+            var c //与函数重名 作废
+            c = 1;
+            c(2);
+        执行代码
+            c = 1;
+            执行c(2) //类型错误 / 报错C此时已经不是函数了
+                
+        */
+
+        var fn = function(){ 
+            console.log(fn);
+        }
+        fn();
+        /*
+            预解析:
+            var fn ;
+            fn = function(){console.log(fn);};
+            fn();
+            执行:
+            var fn;
+            执行fn();
+                fn()预解析,没变
+                console.log(fn); 自己作用域内没有,去上一级查找,fn是一个函数,打印出来即可
+            打印 fn = function(){}  functino fn(){}   的区别 ,前一个没有函数名fn,后一个有函数名fn
+        
+        */
+
+       
+        var obj ;
+        obj = {
+            fn2 : function(){
+                console.log(fn2); //fn2是一个变量名,obj.fn2 是方法名
+            }
+        }
+        obj.fn2();
+        /* 
+        作用域概念只针对全局和函数,也只有他俩有创建执行上下文环境和变量对象这一说
+        其他被包装的变量直接去除包装即可,例如if(){var b=1},预解析时候就是 var b ; if(){b = 1};
+        作用域链是由变量对象组成的,所以当前作用域找不到变量的情况下,去上级作用域链找,
+        此处console.log(fn2);
+            函数内部没有fn2,所以去上一级作用域,上一级作用域就是全局作用域了,没有 则报错fn2未定义 fn2 not function;
+            为什么上一级作用域链不是obj内部? obj是一个对象,对象都没有自己的运行环境(上下文),没有自己的上下文怎么会有自己的变量对象呢,没有变量对象怎么会有自己的作用域呢?,或者说该对象运行在
+        
+        */
+       </script>
+   </body>
+</html>

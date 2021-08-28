@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+    <body>
+        <script>
+            //包装对象  让基本数据类型也能调用方法
+
+            //强制转换 Number() Boolean() 和 String() 其实都是构造函数(字母开头大写);
+            var a=10;
+            var b = new Number(10); 
+            console.log(b);
+            console.log(a);
+            // 此时b是构造函数Number的一个实例化对象,对象值为10[[PrimitiveValue]]: 10 且还有许多方法属性,a还是基本数字类型10
+
+            var a = 10;
+            console.log(a.toString()); //"10" a此时已经被包装成对象了
+            console.log(a);// 10 
+
+            // a仍然是基本数字类型,却可以调用方法.toString();
+
+            // a.toString 经历了以下过程:
+            // 1  首先执行 a = new Number(a); a此时已经是Number()的实例对象
+            // 2  再执行 a.toString() a调用Number()原型内的方法
+            // 3  执行完 a.toString() 再次执行 a = 10; 让a再次成为基本数字类型;
+
+
+
+        </script>
+    </body>
+</html>

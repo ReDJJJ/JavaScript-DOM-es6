@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <img src="./img/es5字符串方法.png" alt="" id="img1" />
+
+    <form action="" method="">
+        <!-- form表单中 action 为提交的地址  method : GET方式和POST方式 -->
+        <input type="button" value="按钮1"  id="btn1">
+    </form>
+
+    <script>
+        window.onload = function () {
+            var btn1 = document.getElementById("btn1");
+            var img = document.getElementById("img1");
+
+            // 修改普通属性
+            btn1.onclick = function () {
+                img.src = "./img/es5数组方法.png"; //当按钮发生点击事件,更换img的路径 
+                //img["src"] = "./img/es5字符串方法.png" .语法和[]语法
+                //理解:src是<img>标签的一个属性
+                //而img 变量通过文档对象document的方法getElementById获取到了img这个元素(标签节点),并且封装成了元素对象(由getElementById)完成封装过程,则变量img对象包含了标签img的属性还有自带的一些事件监听方法
+            }
+        }
+    </script>
+</body>
+
+</html>

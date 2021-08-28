@@ -1,0 +1,70 @@
+//了解内容
+<!-- 
+    es5严格模式
+        严格模式使得js在更严格的语法条件下运行;
+    目的/作用:
+        消除js语法的一些不合理,不严谨之处,减少一些怪异行为;
+        消除代码运行的一些不安全之处,为代码的安全运行保驾护航;
+    切换方法:
+        在需要切换严格模式的全局或者函数的第一行 写入 : "use strict"
+    
+    语法和行为改变:
+        必须用var声明变量
+        禁止自定义函数中的this指向window (保护window对象不被意外篡改)
+        创建eval作用域(了解)
+        对象不能有重名的属性
+        函数不能有重复的形参
+ -->
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+       </style>
+   </head>
+   <body>
+       <script>
+           //严格模式具体体现:
+
+           "use strict" //开启严格模式 
+
+           var a = 10;          //严格模式下 定义变量必须带var
+           console.log(a); //a is not defined
+
+           //严格模式下,普通函数的this不再指向window,而是undefined
+           function fn(){
+            console.log(this); //undefined 
+           }
+           fn();
+
+           
+           //魔鬼函数eval,让符合js语法的字符串 按照js语法去解析执行了,太灵活了别用
+           var a = 20;
+           var b = 10;
+           console.log(eval("a+b")); 
+           //创建eval作用域
+           eval("c = 10");
+           console.log(c); //c is not defined
+           //在严格模式下,创建eval自身你的局部作用域.eval内部创建的变量c在外部不再适用,而普通模式下可以eval创建的所有变量;
+
+
+           //对象不能拥有重名属性
+           var obj = {
+               name : "hj",
+               age:10,
+               age:20,
+               age:1,
+           }
+           console.log(obj.age); //非严格 1,严格模式 1;
+            //非严格模式 和 严格模式下,重名属性后面覆盖前面
+
+            //函数不能拥有重复参数
+            function add(a,b,a){ //严格模式下报错,函数中不允许重复参数 Duplicate parameter name not allowed in this context
+                console.log(a+b); 
+            }
+            add(10,8);  //非严格模式下,打印NAN,原因:第三个参数a层叠掉第一个同名参数a,而第三个a没有被传递值,默认undefined,所以undefined+8 = NAN;
+
+       </script>
+   </body>
+</html>

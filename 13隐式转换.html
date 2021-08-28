@@ -1,0 +1,65 @@
+<!-- 
+    在js中，当运算符在运算时，如果两边数据类型不统一
+    CPU就无法计算，这时我们编译器会自动将运算符两边的数据做一个数据类型转换，转成一样的数据类型再计算
+
+    例如1 > "0"这行代码在js中并不会报错，编译器在运算符时会先把右边的"0"转成数字0`然后在比较大小
+
+    1. 转成string类型：
+
+    +（字符串连接符）
+
+    2..转成number类型：
+
+    ++ / --(自增自减运算符)
+
+    +  -  *  /  %(算术运算符)
+
+    >  <  >=  <=  = =  !=  = = =  != = = (关系运算符)
+
+    3. 转成boolean类型：!（逻辑非运算符）
+ -->
+
+ 
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+        </style>
+    </head>
+
+    <body>
+        <script>
+            //转成 String  +(字符串连接符)
+            // 引号括起来的才是字符串,第一行的+是字符串连接符 ,第二行的+是算数运算符中的+
+            // +(字符串连接符) 两边至少有一边是'字符串'  , +(算数运算符) 两个边都是数字 符串连接符
+            // +字符串连接符 其他数据类型会调用String()方法转换成字符串 然后进行连接
+            console.log(1+"true");// '1true'
+            console.log(1+ true); // '2'
+            console.log(1+undefined) ;// 1+NaN =NAN;
+            console.log(1+"null"); //1null;
+            console.log(1+null); // 1
+            // 看到 + 第一步看左右两侧是否有字符串,若有字符串连接,若无,全部Number()再进行加法
+
+            //关系运算符 > < >= <= == === != !== 会将两者的信息转换成number类型
+            // 看关系运算符号两边: 若无或只有一方为字符串,将字符串Number化,进行比较。 若两边都是字符串,则按照逐位unicode编码方式 比较大小
+            //  当关系运算符两边有一边是字符串的时候,会将其他数据类型使用Number()转换
+            console.log('2'>10) //false;
+            console.log('3'>2) //true
+            // 当关系运算符两边都是字符串时候,此时同时转换成number类型比较 
+            // 注意,转换成number不是按照 Number()来转换 而是按照字符串对应的unicode编码 
+            // unicode编码查看方法 .charCodeAt() "abc123".charCodeAt();
+            console.log('A'<'B')//true;
+            console.log('aba'>'aad') //true; 
+            // 当两个字符串进行比较时,先比较第一位的字符编码大小,若相等再比较第二位的字符编码大小,直到某一位字符编码大小不一致。
+            console.log('10' < '2');//true  两个字符串'10' '2' 比较第一位 2的字符串编码大于>1 所以返回true
+
+            // 特殊情况
+            console.log(undefined == undefined) //true
+            console.log(undefined == null) //true
+            console.log(null == null) //true
+            // NaN 与任何数据类型比较都是false
+            console.log(NaN == NaN ) //false
+        </script>
+    </body>
+</html>

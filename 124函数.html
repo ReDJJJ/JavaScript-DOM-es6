@@ -1,0 +1,163 @@
+<!-- 
+    新增知识: 所有函数的构造函数都是Function();所有函数都是new Function()出来的(包括Array和Object这两个构造函数);
+    定义函数: 
+    字面量定义 function fn(){}
+    函数表达式 var fn = function(){};
+    构造函数   var fn = new Function('a','b','return a+b') //了解
+
+    函数使用方式:
+        普通函数调用:()
+        构造函数调用:new ()
+        对象方法调用 obj.test()
+        把对象方法当作构造函数用 : new obj.test()
+    只有函数对象会有prototype显式原型;
+
+    函数的定义时不会进行执行内部代码:此时可以当函数内部为一个整体(一个黑箱)看待：
+    function fn1(){
+        function fn2(){
+            function fn3(){
+
+            }
+        }
+    }
+    在定义时,外部可以看作function fn1(){
+        黑盒子
+    }
+    深层理解:函数在定义时候:只是在堆内存中开辟空间存储函数内容(原封不动的死值)
+
+
+    查漏补缺:
+    var obj = { 
+        name : "zhaoliying";
+        age : 32;
+        set : function(name,age){
+            this.name = name;
+            this.age = age;
+        }
+    }
+    obj.eat(); //普通函数调用,this指向执行者,指向obj;
+    new obj.eat(); //构造函数调用,this指向将来的新生成的对象
+    for循环添加事件中,this指向事件源
+
+
+    回调函数:
+        特征: 我定义的,我没调用,但是最终他执行了(特定条件或者时刻)
+        常见回调函数: DOM事件处理回调函数 ; 定时器回调函数 ; ajax回调函数 ; 生命周期回调函数
+    
+    匿名函数自调用: 
+        隐藏内部实现
+        不污染外部命名空间
+        写法 (function(){})(实参列表)
+    (function(){
+        var a = 3 ;
+        var b = 2;
+        return a+b;
+    }) ()
+
+    this是什么?
+    #一个关键字,一个内置的引用变量
+    #在函数中都可以直接使用this
+    #this代表调用函数的当前对象(函数的真正执行者)
+    #定义函数的时候,函数内部语句不执行,this也没确定,只有在执行开始时才确定this指向
+
+    常见this场景 
+    # fn();  window
+    # obj1.fn() obj1;  (注意:是对象的直属方法,方法内嵌的函数是普通函数,不是方法)
+    # obj1.fn.call(obj2) obj2；
+    # new Person() 将要实例化的对象
+    # nodes[i].onclick() 事件源对象
+    # => 箭头函数的this ,箭头函数没有自己的this,只看定义时(与其他函数的this在调用时才决定不同)的位置决定this,若定义时被外部函数嵌套,则=>的this指向和外部函数的this相同,若无嵌套,指向window
+
+    函数的调用方式决定了this是谁
+    this出现场合: call/apply 函数中 方法中  事件中 构造函数中 
+                  call(xxx) window obj   事件源对象 将要实例化的对象
+    
+    new 构造函数调用的过程:
+    开辟函数执行环境,开辟堆内存,将函数执行环境的this指向堆内存,执行函数代码,返回堆内存地址(this)给变量
+ -->
+
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        var obj = {
+            name: "zhaoliying",
+            age: 32,
+            set: function (name, age) {
+                this.name = name;
+                this.age = age;
+            }
+        }
+        var p1 = new obj.set("REDJ",23); //p1是 obj.set()的一个实例化对象 
+        console.log(obj);
+
+        //难题 需要弄懂 
+        //以后函数声明就当作黑盒子,不管内部多么复杂,除非他执行了,可以说函数声明时注意一样作用域链即可
+        //考点:构造函数调用过程,this的指向, 函数在定义的时候不执行(所以遇到函数定义的内部还有函数,就把最外层函数当成整体即可,因为函数定义时里面不执行相当于黑盒)
+        var Car = function(){
+            this.p = function(){
+                this.p = function(){alert(1);}
+                alert(2);
+            }   
+            this.d = function(){
+                alert(3);
+            }
+        }
+        var c = new Car();
+        c.p();
+        var c2 =c.p();
+
+        //解析: 考点 this的指向,以及函数定义顺序,函数定义时是不执行的,因为没必要关注内部(当作黑盒);
+        /*
+            var c = new Car();
+            Car函数为构造函数调用,此时函数内的this指向实例化对象
+            所以:
+            c = {
+                p = function(){
+                    黑盒1
+                }
+                d = function(){
+                    黑盒2
+                }
+            }
+            c.p();
+            c中的p方法普通函数调用,此时执行黑盒1的内容,this指向函数的调用者c;
+            this.p = function(){
+                    alert(1);
+                }
+                alert(2);
+            此时等于 
+            c.p = function(){
+                黑盒3
+            }
+            alert(2);
+            修改了c对象中p方法;并打印2;
+            此时c变成了
+            c = {
+                p = function(){
+                    黑盒3
+                }
+                d = function(){
+                    黑盒2
+                }
+            }
+            c2 =c.p();
+            构造函数c.p()的调用,此时执行黑盒3,this指向实例化对象;
+            黑盒3只有打印2;
+            所以整个程序先打印1后打印2
+        
+        */
+    </script>
+</body>
+
+</html>

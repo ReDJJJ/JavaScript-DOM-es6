@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+           img{
+               display: block;
+           }
+       </style>
+   </head>
+
+   <body>
+       <p> //以上是上次的mini原型链:主要有以下问题:函数对象自己的隐式原型对象__proto__没有搞明白;</p>
+       <img src="./img/k1.png" alt="">
+
+       <p> 添加Function function构造函数与其原型对象,其也是互相通过prototype和constructor互相指向</p>
+       <img src="./img/K2.png" alt="">
+
+       <p>所有函数都是Function的实例化对象,Object和Computer两个构造函数都是由Function new出来的<br>
+          又因为实例化对象的隐式原型__proto__指向其构造函数的显示原型prototype,所以Object和Computer的两个构造函数(对象)的隐式原型__proto__指向Function构造函数的原型对象prototype</p>
+       <img src="./img/K3.png" alt="">
+
+       <p>而所有的普通对象都是Object构造函数的实例化对象,所以Function的prototype原型对象也是Object new出来的实例化对象<br>
+        又因为实例化对象的隐式原型__proto__指向其构造函数的显示原型prototype,所以Function的prototype原型对象的隐式原型__proto__指向object的prototype</p>
+        <img src="./img/K4.png" alt="">  
+
+        <p>而Function这个构造函数比较特殊,理解为Function构造函数是由Function构造函数自己new出来的实例化对象
+            <br>所以Function构造函数的隐式原型指向其构造函数(也是Function自己)的显示原型prototype
+        </p>
+            <img src="./img/K5.png" alt="">    
+
+        <P>
+            1 只有函数 有 显式原型对象prototype
+            2 所有对象的隐式原型__proto__指向 其 构造函数的显式原型对象prototype,除了object.prototype.__proto__(顶级对象Object的原型的隐式原型) = null; 到顶了
+            3 所有函数的原型对象 有 指向函数的属性constructor,指向其函数对象本身
+            4 Function函数的构造函数也是Function,自己是自己,也是自己妈,所以自己的隐式原型和显示原型指向相同; 
+            4 无论怎么找,最后找到的都是顶级对象Object 的 原型对象
+        </P>
+
+
+
+
+       <script>
+           function Computer(name,color,brand,price,size){
+               this.name = name;
+               this.color = color;
+               this.brand = brand;
+               this.price = price;
+               this.size = size;
+           }
+           //    只有函数对象才有原型对象prototype
+           Computer.prototype.playGame = function(){
+               console.log("玩游戏");
+           }
+           Computer.prototype.writeCode = function(){
+               console.log("写代码");
+           }
+           Object.prototype.seeMovie = function(){
+               console.log("写代码");
+           }
+           Function.prototype.play = function(){
+            console.log("Function构造函数的原型对象的方法,以此验证,Object和Computer两个构造函数都是Function的实例化对象");
+           }
+
+           var c1  = new Computer("拯救者","black","联想",'7000','15.6');
+           c1.playGame();
+           c1.seeMovie();
+           Object.play();
+           Computer.play();
+
+        
+
+        //最终最终,顺着线找到的都是object function的prototype原型对象;顶级对象的显式原型对象
+        //终极原型链: 添加上了 Function这个构造函数;
+       </script>
+   </body>
+</html>

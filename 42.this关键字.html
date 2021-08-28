@@ -1,0 +1,150 @@
+<!-- 
+    概念:
+        window : 浏览器对象,顶级对象,当程序执行的时候,所有的一切(变量:变量值,自定义函数:函数内容)都是window对象的属性和属性值 其内容在堆内存中存放 与全局环境不同
+        
+        在默认情况下,window包含了js语言封装的大量内置函数和变量等等 例如console.log() 应该是 windows.console.log()  alert()应该是window.alert();
+
+        在本html:对象分为两种 : window顶级对象  普通对象
+
+        常见this场景 
+    # fn();  window
+    # obj1.fn() obj1;  (注意:是对象的直属方法,方法内嵌的函数是普通函数,不是方法)
+    # obj1.fn.call(obj2) obj2；
+    # new Person() 将要实例化的对象
+    # nodes[i].onclick() 事件源对象
+    # => 箭头函数的this ,箭头函数没有自己的this,只看定义时(与其他函数的this在调用时才决定不同)的位置决定this,若定义时被外部函数嵌套,则=>的this指向和外部函数的this相同,若无嵌套,指向window
+
+    函数的调用方式决定了this是谁
+    this出现场合: call/apply 函数中 方法中  事件中 构造函数中 
+                  call(xxx) window obj   事件源对象 将要实例化的对象
+ -->
+
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            // this本质上是一个变量(系统内置),这个变量里面存储了一个对象的堆内存首地址. 指向一个对象
+            // 并且在不同的场合,this存储的对象首地址 有所区别
+
+            // this 是一个内置变量, 当this出现在全局区域里面(this此时为全局变量),this指向的是window的首地址
+            var a = 0;
+            function add() {
+                return 1;
+            };
+            console.log(this);
+            // 打印结果 所有自定义内容都归为了 全局变量this(指向window) window对象中属性
+            // Window {window: Window, self: Window, document: document, name: "", location: Location, …}
+            //     a: 0
+            //     add: ƒ add()
+            //     alert: ƒ alert()
+
+            // 为什么构造函数的时候,名字不要单纯的用name ,因为name本身就是内置变量中的一员 , 可能会导致意想不到的后果,可以使用 类+name 例如personName
+
+            // 函数和方法的区别
+            // 函数 window对象的直属方法
+            /*
+                function fn(){
+                    console.log("a");
+                    function fn1(){
+                        console.log('b');
+                    }
+                } //这两个函数不是 普通对象的属性及属性值 ,所以是函数.
+            */
+
+
+            // 方法 一定是某个普通对象的属性,不过其属性值是函数 ,这些函数叫做方法 ,其他函数叫做函数
+            /*
+                var a = {
+                    personName : "HJ",
+                    age : "18",
+                    eat : function(){console.log("eat");}
+                }
+
+                eat 是 a对象里面的一个属性,并且属性值是函数,所以eat 是一个方法.
+            */
+
+            // 任意函数通过调用方式分为又分为普通函数和构造函数
+            // 普通函数  add() 直接()调用方法  ; 构造函数 new add()  new 调用方法为构造函数调用
+
+
+
+            //当this 在普通函数(不是方法且没用new调用)中
+            function fn(){
+                console.log(this);
+                function fn1(){
+                    console.log(this);
+                }
+                fn1();
+            }
+            fn();
+            //fn1();fn1 is not defined
+
+            // 打印结果  Window Window
+            // 解析: 此处声明了两个函数 fn fn1 , 两个都不是某个对象的属性及属性值,所以不是方法,而且普通调用,所以是普通函数,两个this都是指向windows
+            // 但是fn1声明是嵌套在fn函数里面的,所以fn1实际上是fn的局部变量,作用域在fn1函数内部.所以在全局环境内不能调用fn1;
+
+
+            // 当this出现在方法中
+            var obj = new Object({
+                personName : "HJ",
+                age : 10,
+                eat:function(){
+                    console.log("eat");
+                    console.log(this);
+                }
+            }) 
+            obj.eat(); //执行obj对象内部的方法eat
+            // eat函数是obj对象的属性及属性值,则eat是方法
+            // 当this出现在方法中,this指代调用此方法的执行者(执行对象,方法的真正执行者)
+
+            // 当this出现在构造函数当中
+            // this 表示将要实例化出来的实例化对象
+            function Person (name, age, gender){
+                console.log(this); 
+                this.name = name;  //将形参 赋予this.name ,假若是普通函数调用,则是window.name = 形参name的值 ,若是new构造函数调用,则是实例化对象.name = 形参name的值;并且遵循有则更改,无则添加原则
+                this.age = age;
+                this.gender = gender ;
+                this.eat = function(){
+                    console.log("eat");
+                    // 构造函数里面啥都没有,则实例化了一个没有属性的对象,Object({});
+                    // 构造函数,功能就是通过实际参数值传给形式参数,形式参数再把值 传给对象属性,完成实例化对象的过程.
+                };   
+            }
+            var p1 = Person("HJ",10000,"MAN"); //普通调用，this指的是window 顶级对象,结果在window对象添加了一大堆属性和函数(此函数在window对象下,称之为函数,而不是方法)
+            var p1 = new Person("HJ",10000,"MAN"); // 构造函数调用,this指向是 实例化对象,实质上this(栈内存) 存储的是实例化对象的地址(堆内存)
+                                                    // 对象赋值,则赋值给了p1,让p1指向新的 实例化对象
+
+            // 简洁版: 普通函数中的this --> window
+            //         普通对象中方法中的this --> 方法的真正调用者或者说方法的执行者
+            //          构造函数中的this --> 将来的实例化对象
+            //          全局环境中-->window
+            //           处理(回调)函数当中,this代表永远是发生事件的事件源,也就是发生事件的元素;
+
+
+
+            function Person (name, age, gender){
+                console.log(this); 
+                this.name = name;  
+                this.age = age;
+                this.gender = gender ;
+                this.eat = function(){
+                    console.log("eat");
+                };   
+                return 100; //不影响
+                return [1,2,3]; //return 对象数据类型 则覆盖 刚刚实例化的对象 返回
+            }
+            // 构造函数:如果当作构造函数使用(new),构造函数使用的时候,this指向准备实例化出来的对象,
+            // 并且构造函数如果没有return,它默认返回实例化出来的对象也就是返回this,假若有return ,return 基本数据类型 不生效仍然返回刚实例化的对象,若return 对象数据类型,则返回该对象数据类型,则刚刚实例化的对象不久白费了,被覆盖了.
+            // 回调函数:指向事件源
+            // 普通函数:如果当作普通函数使用(无new),此时构造函数相当于没有实例化过程,this指向window,可能会给window对象添加一些属性以及属性值,没有return默认返回undefined
+        </script>
+    </body>
+</html>

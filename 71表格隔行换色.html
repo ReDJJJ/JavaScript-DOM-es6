@@ -1,0 +1,57 @@
+<!-- 
+    补充知识点 table 标签内会额外内嵌一个标签 tbody 该标签也是可以获取的  (浏览器会自动补充渲染)
+    <table> <tbody> tr th td 。。。 </tbody> </table>
+ -->
+
+ <!doctype html>
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            table{
+                border:1px solid lightseagreen; 
+                /* 只对table本身添加边框  */
+            }
+        </style>
+    </head>
+
+    <body>
+        <table border="1" cellspacing="0" border-collapse="collapse"> 
+            <!-- 此处border="1",table th td 都添加了边框 border标签属性不仅设置围绕表格边框的宽度，还为每个单元格添加宽度为1px的边框-->
+            <!-- 
+                 cellspacing 标签属性：设定单元格之间的间距（单位：px）。 
+                 cellpadding标签属性：设定边沿与内容之间的间距（单位：px）
+                 border-collapse样式属性：在cellspacing (单元格边距=0)设置为0的情况下 设置表格的边框是否被合并为一个单一的边框 
+            -->
+            <!-- 此处style="border:1px solid lightseagreen",只对table添加了边框 -->
+            <tr>
+                <th>th</th>
+                <th>th</th>
+            </tr>
+            <tr>
+                <td>td</td>
+                <td>td</td>
+            </tr>
+            <tr>
+                <td>td</td>
+                <td>td</td>
+            </tr>
+            <tr>
+                <td>td</td>
+                <td>td</td>
+            </tr>
+        </table>
+
+        <script>
+            window.onload = function(){
+                var trList = document.getElementsByTagName("tr");
+                for (var i = 0; i < trList.length ; i++) { 
+                    // trList为伪数组 需要轮询进行逐个操作
+                    if(i%2==0) trList[i].style.backgroundColor = "skyblue";
+                    if(i%2!=0) trList[i].style.backgroundColor = "pink";
+                }
+            }
+        </script>
+    </body>
+</html>

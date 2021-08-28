@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style>
+
+       </style>
+   </head>
+
+   <body>
+       <!-- 
+           实现功能: 年历 
+           思路: 先创建时间对象
+           把时间各个部分(年月日)存储在多个变量中,每个变量通过方法获取时间的各个部分;
+           用result 来装拼接完好的时间字符串;
+            然后定时器 每1S 打印一次拼接好的字符串;
+            整个过程需要在 定时器的回调函数中进行,时间才会不断更新
+            关键思路:数据的更新不是自己写的什么 60进制进1啊什么的,而是通过方法时刻每一秒获取一次时间来达到时间更新的目的
+        -->
+
+        <button>阅读协议 (5s)</button>
+       <script>
+        //    var result = "";
+        //    var date = new Date();
+        //    setInterval(function(){
+        //    var year = date.getFullYear();
+        //    var month = date.getMonth()+1;
+        //    var day = date.getDate();
+        //    var hour = date.getHours();
+        //    var minute = date.getMinutes();
+        //    var second = date.getSeconds();
+        // //    var tolocate = date.toLocaleDateString(); 其实这两者拼合就可以完成年历 
+        // //    var tolocate = date.toLocaleTimeString();
+        //    result = year + "年" + month + "月" + day + "日" + hour + ":" + minute + ":" + second;
+        //    console.log(result);
+        //    },1000);
+
+        // 功能:延时阅读协议
+        // 思路: 循环计时器计数五次,其中循环计时器结束前 ,按钮状态不可用;
+        // 计时器定义一定要定义在全局环境中;
+           var btn  = document.querySelector("button"); btn.disabled = true;
+           var count = 0;
+           var timer = setInterval(function(){
+            count++;
+            btn.innerText = "(阅读协议 " + (5-count) + "s)";   //每次循环记时 改变一次剩余时间
+            if(count === 5){ //当计数累计5s , 设置btn可用 并且清除该计时器;
+                btn.disabled = false;
+                btn.innerText = "确认";
+                clearInterval(timer);
+            }
+           },1000);
+       </script>
+   </body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <title></title>
+       <style></style>
+   </head>
+   <body>
+       <script>
+            // 箭头函数 作用: 简写 匿名函数表达式 
+            // 注意 只能简写匿名函数表达式 
+            // var fn = function(){}; 可以简写为 van fn = 箭头函数
+            // function add (){} 没办法简写成箭头函数表达式,因为不是匿名函数表达式
+            
+
+            let fn = function(){
+                console.log(789);
+            }; 
+            let fn1 = () => {console.log(123)}; 
+            //语法: (形参列表) =>{函数体};
+            
+            //左边简写: 
+            //若参数只有一个,()可以省略,其他任何情况(无参数或者多个参数),()都不能省略
+            let fn2 = i => {console.log(i)}; //只有一个参数情况下省略()
+            fn2();
+            let fn3 = (x,y) => {console.log(1,2)};
+            fn3();
+
+            //右边简写:
+            //若函数体只有一条语句,则{}可以省略,省略后返回值是此唯一一条语句的执行结果,若不省略{},返回值还是看return 
+            //若是多条语句,花括号不能省,返回值看return,若无return 默认返undefined
+            // 口诀: 有{}看return 无{}唯一语句执行结果就是返回值
+            let fn4 = () => {return  100+200};
+            fn4();
+
+            let fn5 = n => 100+n ;
+            console.log(fn5(20000));
+            //单参省略(),单句省略{},单句结果当作返回值 
+
+            let fn6 = n =>{console.log(n);return `fn6${n}`}
+            console.log(fn6('FN6'));
+
+            //箭头函数的特点:
+            //箭头函数没有自己的this,箭头函数的this是在定义时决定的;
+            //若定义时被外部函数嵌套,则箭头函数的this与外部函数的this相同
+            //若定义未被外部函数嵌套,箭头函数指向window
+            //箭头函数没有arguments这个伪数组
+
+            let fn7 = () => console.log(this); //省略了{} 返回console.log的执行结果 是undefined
+            fn7(); //WINDOW
+            
+            var obj = {
+                fn(){
+                    console.log(this);
+                    return ()=> {console.log(this);} //没有省略{},也没有return,则返回默认值undefined 
+                }
+            }
+            obj.fn()(); //匿名函数自调用 , obj.fn()等于匿名函数的首地址;
+            //被外部函数fn包含,所以this与外部函数的this一致 此处打印obj
+            obj.fn.call(window)();
+            //被外部函数fn包含,所以this与外部函数的this一致 此处obj.fn被call给了window,所以fn中的this是window,所以内部箭头函数的this也随外部函数fn的this而改成了window
+       </script>
+   </body>
+</html>

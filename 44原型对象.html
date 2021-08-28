@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            function Car (name,color,brand){        //构造函数=类概念 this是Car函数里的内置变量,而不是属性,所以不能通过 Car.this调用
+                this.name  = name;
+                this.color = color;  
+                this.brand = brand;
+                this.load = function(){
+                    console.log("装载东西");
+                };
+            }
+                Car.run = function(){
+                    console.log("跑得很快");
+                };
+                // 个人理解超级重大错误: 本人以为上述三行代码可以给Car 的实例化对象c1,c2 增加方法run 
+                // 实际上不可以,上述Car.run 相当于在Car这个函数对象内增加了一个方法 :run方法
+                // 而不是给Car函数 的 实例化对象 增加了run方法 实例化过程都是靠this 指向来完成的.
+                // 要不然要this 干嘛呢? this 就是要指向 将来的实例化对象,通过this来添加 实例化对象的属性和方法
+
+            var c1 = new Car("迈凯伦","yellow","雪佛兰");
+            var c2 = new Car("帕萨特","black","大众");
+            console.log(c1);//c1.run();
+            console.log(c2); //c1.run is not a function
+            /*
+                    brand: "雪佛兰"
+                    color: "yellow"
+                    load: ƒ ()
+                    name: "迈凯伦"
+                    run: ƒ ()
+                    __proto__: Object         brand: "大众"
+                                            color: "black"
+                                            load: ƒ ()
+                                            name: "帕萨特"
+                                            run: ƒ ()
+                                            __proto__: Object
+
+            */
+            //  实例化了两个车对象 c1 c2
+            //  c1,c2为对象,各自在堆内存开辟一定的空间存储对象内容.
+            // 并且两个实例都有各自两个方法(run和load),这些方法又会各自(四个,c1的run和load  和c2的run和load)在堆内存开辟空间存取方法内容
+            // 两个实例就开辟了四个堆内存用来存储方法内容 ,但是其方法功能(两个run,两个load)都是一样的,造成了空间上的浪费,若实例化对象变多,则这种浪费将十分可怕
+            
+
+            // 原型对象就是为了解决这种空间浪费
+            
+            // 所有的  !!函数对象!!  ,天生的伴随它有另外一个对象存在,这个对象就是函数对象下的prototype属性的值
+            // 我们称prototype就是指向这个函数对象的原型对象(显式原型对象);
+            // 详细打印 构造函数 Car
+            console.dir(Car);
+            // prototype: {constructor: ƒ} 详细打印函数Car会发现 ,函数对象有一个属性prototype ,
+            // prototype 是一个对象数据类型,其指向一个{constructor: ƒ},而protetype指向的对象就是原型对象,prototype本质是变量,存储原型对象堆内存首地址
+
+
+            // 将公共函数写入 原型对象中 
+            function CarObject (name,color,brand){        //构造函数=类概念
+                this.name  = name;
+                this.color = color;
+                this.brand = brand;
+                // this.run = function(){
+                //     console.log("跑得很快");
+                // };
+                // this.load = function(){
+                //     console.log("装载东西");
+                // };
+            }
+            // 原型对象是函数对象的一个属性. 以下将两个函数写入CarObject()构造函数的原型对象中 所有通过CarObject()创建的实例 都会指向这两个函数
+            // 注意 c1 c1 Car1 Car2 是没有原型对象的,因为他们不是函数,只是c1,c2内部都有一个变量_proto_,此变量指向了 CreateObject()(妈)的函数原型 CarObject.prototype,此函数原型包含了run和load方法
+            CarObject.prototype.run = function(){
+                console.log("RUN!!!!!!");
+            };
+            CarObject.prototype.load = function(){
+                console.log("LOAD!!!!!!");
+            }
+            CarObject.prototype.Buyer = "洪江"; //原型,每个对象都有一个属性 Buyer = "洪江";
+
+            var Car1 = new CarObject("迈凯伦","yellow","雪佛兰");
+            var Car2 = new CarObject("帕萨特","black","大众");
+            console.log(Car1); Car1.run();
+            console.log(Car2);
+            // 再次打印
+            /*
+            brand: "雪佛兰"
+            color: "yellow"
+            name: "迈凯伦"
+            __proto__: Object
+
+            brand: "大众"
+            color: "black"
+            name: "帕萨特"
+            
+            两个对象没有重复的公共方法 run 和load了,但是也能成功调用run和load
+            */
+
+            // 全局环境拿不到局部变量的根本原因: 当代码在全局环境,其余函数环境已经死了,那局部变量也肯定死了(无值可取)
+        </script>
+    </body>
+</html>

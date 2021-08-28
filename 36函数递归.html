@@ -1,0 +1,61 @@
+<!-- 
+    堆内存存放的是 函数内容,对于同一函数,只会在堆内存分配一个空间装载堆内容
+    栈内存存放的是 函数名及地址 , 以及每一次函数调用的执行环境
+    因此,假若递归函数 没有设置好结束条件 则 会无限次调用本身 导致爆栈.
+
+    function recursion(){
+        console.log("helloworld\n");
+        recursion();
+    } 
+    recursion(); 爆栈
+
+    你理解函数的执行过程就是入栈过程的话，其实递归就是不断入栈的过程，然后最深层的函数执行完毕，然后函数依次出栈。
+ -->
+
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        
+        <script>
+
+            // 函数递归:函数自己调用自己
+            // 1.明确你这个函数想要干什么
+            // 1.函数要有一个明确的结束条件
+            // 2.函数要有一个逐渐靠近结束条件的趋势
+           
+
+            // 理解: 把函数理解成一个功能 , 这个功能(函数)可以降级成 更小规模同类问题(函数)的实现,并且有明显的结束条件
+            //       F(N) = F(n-1) 的某种关系
+
+            // 案例一 求阶乘  n! = (n-1)! * n   ---->  函数(n) = 
+            function factoral(n){
+                if(n <= 1){ //结束条件
+                    return 1;
+                }
+                else{
+                    return arguments.callee(n-1) * n; //(n-1)更小规模的同类问题, 趋近结束的趋势！
+                }
+            }console.log(factoral(parseInt(prompt("请输入数字"))));
+            // 解析 factoral(n) 的功能是求n的阶乘
+            // 而n的阶乘可以降级成 ！更小规模的同类问题 ！  n！ = (n-1)! *n;
+            // 并且结束条件是 当n=1时,n的阶乘=1;
+            // 那么就可以利用递归实现n的阶乘
+            //  函数执行过程:
+            /*
+                1输入参数n , 进入函数factoral(n);
+                2进行判断,若参数n<=1; 则return 1; factoral(n)整体的值为1,并且结束factoral(1) 函数的执行,factoral(1)后面剩余代码不执行
+                3若参数n>1,则return factoral(n-1) * n , 则factroal(n)的整体值为 factoral(n-1) * n; 返回值的途中又调用了更小规模的函数factoral(n-1);
+                4当 问题规模减少到 n=1 时候, return 1 返回factoral(1) = 1,此时不再有更小规模的同类函数被调用,层层往上 ,递归完成 .
+            */
+           
+        
+        </script>
+    </body>
+</html>

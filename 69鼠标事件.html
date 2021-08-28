@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<!-- !!!!! 当获取元素方法返回的是伪数组,在调用事件的时候需要一个一个数组元素arr[i].checked = true 进行调用,哪怕伪数组只有一个元素 -->
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div.box{
+            width: 100px;
+            height: 100px;
+            background: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box"></div>
+    <button>按钮</button>
+    
+    <script>
+        window.onload = function () {
+            //鼠标事件 onclick/onmousemove/onmouseover/onmouseout/onmouseenter/onmouseleave/onmousedowm/onmouseup
+            //          点击   鼠标移动时   鼠标移入时    鼠标移出      鼠标移入     鼠标移出  鼠标按住不动   鼠标松开
+            // onmouseover和onmouseout 一对 与 onmouseenter和onmouseleave 区别以后讲 必须成对写
+            // down up鼠标事件分别是鼠标按下 时候触发 的事件和鼠标松开的时候触发 的事件
+
+            //此次更改样式与以往更改className不同,以往更改样式是通过更换类名className来达到目的的,代码冗余度高
+            // 下面利用 元素对象的属性style 来进行更改样式
+            //  语法: 元素对象名.style.需要更改的属性名   div.style.width ; div.sytle.positon = "absolute";
+            
+            var btn = document.getElementsByTagName("button"); //返回的是伪数组对象
+            var div = document.querySelector(".box"); //类名勿忘. id别忘记# 因为query系列获取元素依靠的是选择器名
+
+            btn[0].onmousedown =  function(){ //btn是伪数组对象,需要轮询for或者下标[i]选择一个确切的元素对象
+               
+                div.style.width="300px";
+                div.style.height="300px";
+                div.style.backgroundColor = "skyblue";
+                div.style['margin-left'] = "100px";
+                // div.style['margin-top'] = "200px";  //
+                // js中改变div.style.样式属性时需要注意,不符合标识符规则的样式属性(backgroud-color margin-left 等 改为小驼峰命名方式),或者使用['']语法解决问题
+            }
+        }
+        
+        /* 操作结果:<div class="box" style="width: 300px; height: 300px; background-color: skyblue; margin-left: 100px;"></div>     
+
+              ！！！！！关键点 
+              通过 元素对象名.style.属性名 这种方式操作范围只在行内
+              js写入的样式也是在行内样式设置的(为了保持更高的权限),这没问题
+              但js读取的样式也是只读取行内样式,内嵌式和外链式样式读取不到
+
+              所以 元素对象名.style.xxx  这种方法只适用于 进行 写入样式(行内样式权重高), 不适用于查询样式(只能查到行内式,内嵌式和外链式的都查不到)
+
+               console.log(div.style); //该法只查行内样式内容 一开始为空
+查询结果               
+
+
+        */
+
+    </script>
+</body>
+
+</html>

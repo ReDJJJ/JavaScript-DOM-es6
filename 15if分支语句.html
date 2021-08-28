@@ -1,0 +1,112 @@
+<!-- 
+    分支语句 if
+
+    提示输入语句prompt();
+
+    在这节课学到的东西, 哪怕有隐形转换也能达到目的,最好还是自己进行强制转换或者手动转换,来提高程序可读性
+ -->
+
+ 
+ <html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+            //提示输入语句prompt();
+            // 输入的值会赋予prompt语句(值以字符串形式), 可以在prompt("提示文本")中添加提示文本
+            // 输入的内容是以字符串形式存储！！！
+          
+            console.log(prompt("请输入一个金额"));
+            //  也可以 var inputText=prompt("提示文本"), console.log(inputText);
+
+
+
+            // if 判断分支语句
+            /*
+                    单分支 
+                    if(一般是一个表达式,最终有值就行,并且这个表达式的值会转化为布尔值,若括号内布尔值为true,进入,为false,不进入){
+                                代码块;
+                    }
+             */
+
+            var x = '100' ;
+            if ( '1a0' > x ) {
+                console.log("分支语句1"+('1a0'>x));
+            }
+            if (typeof x == NaN) { //NaN 与任何单位不相等 包括自己 所以分支语句不出现
+                console.log("分支语句2");
+            }
+            if (NaN || '' || 0 || null || undefined){ //以上5个值转换成布尔值都是false,所以括号内都是false,整体也是false 分支语句3不出现
+                console.log("分支语句3");
+            }
+            if ("string" && "123" && 10){ 
+                console.log("分支语句4");
+            }
+
+            // 以后字符转数字,可以使用parseInt 和parseFloat 两个手动转型,因为这两个兼容性更高,而Number()中间一旦有空格,直接转成NaN,而pp还可以出结果
+            if (parseFloat(prompt("请输入一数字"))>= 60){
+                console.log("分支语句5");
+            }
+
+
+            /* 
+                双分支
+                if(条件(布尔值)){
+                    true代码块1;
+                }else{
+                    false代码块2;
+                }
+
+                若if else双语句分支,但是每个分支代码块只有一条语句,尽量用三元表达式(简洁效率高);
+            */
+            var age = parseInt(prompt("请输入年龄"))
+            // if(age >= 18){
+            //     console.log("成年人");
+            // }else{
+            //     console.log("未成年人");
+            // }
+            age >= 18 ? console.log("成年人") : console.log("未成年人") ;
+            
+            var num1 = 1 ;
+            num1  = num1 > 0? num1--:num1++ ; console.log(num1);
+            // 当num1大于0时, 执行:前面的(num1--),(num1--)赋值完给num1,后num1就是(num1--)的值1,相当于num1 没变,没起到减1的效果,--应该放在num1前面
+
+            /* 
+               
+                多分支
+                if(条件1){
+                    符合条件1
+                }else if(条件2){
+                    条件1不符合且符合条件2
+                }else if(条件3){
+                    条件1,2都不符合且 符合条件3
+                }else{
+                    条件1,2,3都不符合
+                }
+            */
+
+            //  分支语句 只会进入第一条符合条件语句块 来执行;     
+            //  下例中, mark=90 只会进入第一条(mark>=90)的语句块执行,并不会进入else if(mark>=60)  (跳楼现象)
+            //  因此else if (mark>=60)不用写成(mark >= 60 && mark < 90) ,>=90的都进入了if第一层语句,然后跳楼。
+           var mark = 90 ;
+           if (mark >=90 && mark <=100) {
+            console.log("A");
+           }else if (mark >=60){
+            console.log("及格");
+           }else if (mark <=0){
+            console.log("不及格");
+            // else 没有逻辑代码语句,else 可以省略不写.
+           }else {
+            console.log("请输入正确的成绩");
+           }
+
+
+        </script>
+    </body>
+</html>

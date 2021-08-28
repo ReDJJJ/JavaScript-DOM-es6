@@ -1,0 +1,92 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+
+        </style>
+    </head>
+    <body>
+        <script>
+            // for in 循环就是专门针对 对象数据类型使用的 循环
+
+            // 数组是数组,数组也是对象
+
+
+            //以数组身份去遍历   其实 arr.length 就已经暗示了 arr是数组也是对象了, 因为符合a.b 的特征 , length是a.b的属性
+            var arr = new Array(1,2,3,4);
+            for (var i = 0; i < arr.length; i++){
+                console.log(arr[i]);
+            }
+           
+
+            //以对象身份去遍历 
+            for(var key in arr){
+                console.log(key,arr[key]);
+            }
+            // 遍历打印 arr所有属性以及属性值 ,但是情况特殊
+            // 因为js作者将 arr.length限定死了 ,arr.length永远显示的是 数组元素的个数(有效长度) ,有效长度靠的是数组对象 由最后一个数字属性名的数字大小决定
+            
+            // 往数组对象添加 属性 name;
+            arr["name"] = "RedJJJ";
+            console.log(arr);
+            for(var key in arr){
+                console.log(key,arr[key]);
+            }
+            // arr.length长度依旧是4;
+
+            // 往数组对象添加 属性 10:10,5属性不符合标识符规则
+             arr["10"] = 10;
+            console.log(arr);
+            // arr.length长度变成了是11,因为最后一个属性的属性名为10;
+            // 此时以数组身份遍历数组,数组长度为11,中间多了几个undefined类型数组元素 
+            for (var i = 0; i < arr.length; i++){
+                console.log(arr[i]);
+            }
+
+            // 可以这么理解:数组是数组,数组也是对象,数组对象中的 纯数字属性名的键值对集合 是数组元素 例如
+            // Array(11)
+            // 0: 1
+            // 1: 2
+            // 2: 3
+            // 3: 4
+            // 10: 10            以上是数组组成部分
+            // name: "RedJJJ"    //体现对象
+            // length: 11
+            // __proto__: Array(0)
+            
+
+            // 函数是函数,函数也是对象
+            function add(x,y){
+                return x+y;
+            }
+            add(1,2); //把函数当作函数用 , 函数名()调用函数
+
+            add.haha = "HAHAHA"; //把函数当作对象看待,添加haha属性 值为HAHAHA
+            console.log(add); //普通打印函数 , 打印函数内容 
+            console.dir(add); //详情打印函数 , dir 只在打印函数时用的上
+
+            // 以下是dir详细打印函数  看得出来 函数本身就是对象
+            // ƒ add(x,y)
+            // haha: "HAHAHA"
+            // arguments: null
+            // caller: null
+            // length: 2  //形参个数  arguments.length 是实参个数
+            // name: "add" // 函数名 只读属性
+            // prototype: {constructor: ƒ}
+            // __proto__: ƒ ()
+            // [[FunctionLocation]]: 40数组和函数的身份.html:60
+            // [[Scopes]]: Scopes[1]
+
+            // 为什么arguments 是null ; 因为打印的是堆内存存放的函数内容,堆内存存放的是函数定义时函数内容,此时函数还没调用,怎么可能会有实际参数呢???
+
+            // 在js对象中, 某些属性是严格管控的,只读的,打印出来是浅色的,不能进行更改,例如 数组.length  和函数.name 等等等等
+
+
+
+            // A.B 并且运行成功的 
+            // A一定是对象,并且B一定是A对象的一个属性(或者原型里面的属性)
+            
+        </script>
+    </body>
+</html>
