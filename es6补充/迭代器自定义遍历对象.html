@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                let team = {
+                    className : '三年二班',
+                    floor : '二楼',
+                    stus:[
+                        {name : 'xiaoming'},
+                        {name : 'ming'},
+                        {name : 'xiao'},
+                    ]
+                }
+
+                let iterator = null;
+                //首先iterator是一个函数,函数返回一个对象A,该对象A内包含next方法,而next方法返回两种情况的对象B
+                iterator = function(){
+                    let index = 0;
+                         //获取属性数组
+                    let arr = Reflect.ownKeys(this);
+                    return {
+                        //个人疏忽:此处的this指向外层return这个对象,而我们想要使用外部的this 所以两种办法:使用箭头函数 或者 that
+                        next:() => {
+                            if(index < arr.length){
+                                return {value:this[arr[index++]],done:false};
+                            }else{
+                                return {value:undefined,done:true};
+                                //done:true 会自动给黑箱 捕获暂停遍历循环 
+                            }
+                        }
+                    }
+                }
+
+
+                //为什么要大费周章的去自定义迭代器呢? 不直接获取其属性内容更好?
+                // 注意 思想:自定义迭代器后 可以直接操作对象来遍历属性 , 是面向对象的一种编程思维,而不用管对象内部的结构
+            }
+        </script>
+    </body>
+</html>

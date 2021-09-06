@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                //变量的解构赋值
+                let arr = ['赵四','张三','刘能','宋小宝']
+                const [a,b,c,d,e] = arr;
+                console.log(a,b,c,d,e);
+                //语法 [变量一，变量二...] = 数组;
+                // 数量上不需要对应,就是按顺序将数组的value依次赋值给[]内的变量
+
+                let obj = {
+                    name : '洪江',
+                    age : '22',
+                }
+                let {name,age1,age} = obj;
+                //语法 {变量列表} = 对象;
+                // 与数组不同,对象的解构变量赋值 是同名属性才进行赋值 并不是依次赋值
+                console.log(name,age1,age);
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                //rest参数就是三点运算符
+                function fu(...arg){
+                    console.log(arg,arguments);//Array(4) Arguments(4)
+                    //...将剩余不定长的参数打包成了数组放入arg(arg只是名称)变量中
+                    //而arugments不是真数组,没办法用真数组一系列办法
+                }
+                fu(1,3,4,5);
+
+                function fn(a,b,...arg){
+                    console.log(a,b,arg,arguments);//Array(4) Arguments(4)
+                    //...将剩余不定长的参数打包成了数组放入arg(arg只是名称)变量中
+                    //而arugments不是真数组,没办法用真数组一系列办法
+                }
+                fn(1,2,4,5);
+            }
+        </script>
+    </body>
+</html>

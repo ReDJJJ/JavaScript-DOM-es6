@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                
+                //es5 
+                function Phone(brand,price){
+                    this.brand = brand;
+                    this.price = price;
+                } 
+                Phone.prototype.play = function(){
+                    console.log("玩游戏");
+                }
+
+                let huawei = new Phone("华为",1999);
+                console.log(huawei);
+
+                class Phone1{
+                    //构造方法constructor
+                    //只能包含一个
+                    constructor(brand,price){
+                        this.brand = brand;
+                        this.price = price;
+                    }
+                    play(){
+                        console.log('玩游戏');
+                    }
+                    play2(){
+                        console.log('玩游戏2');
+                    }
+                }
+                let oppo = new Phone1('OPPO',1000);
+                console.log(oppo);
+
+                //es5 继承
+                function SmartPhone(brand,price,pixel){
+                    Phone.call(this,brand,price);
+                    this.pixel = pixel;
+                }
+                SmartPhone.prototype = new Phone();
+                SmartPhone.prototype.constructor = SmartPhone;
+                //让子构造函数的原型成为父的实例化对象 (改变SmartPhone.prototype.__proto的指向)
+
+                //静态成员:(就是构造函数自己的属性和方法)
+                class Person {
+                    constructor(name,age){
+                        this.name=name;
+                        this.age=age;
+                    }
+                    eat(){
+                        console,log('吃饭');
+                    }
+                    //以上内容都是给实例对象添加属性和方法;
+                    //静态成员,给Person这个构造函数对象自己添加属性和方法
+                    static ABC = 'Person类本身的属性';
+                    static printf = ()=>{console.log(Person)};
+                }
+                Person.printf(); //Person构造函数本身的属性和方法就是静态成员
+
+                //es6 继承
+                class Techer extends Person{
+                    constructor(name,age,gender){
+                        super(name,age);
+                        this.gender = gender;
+                    }
+                    //extends已经继承了方法了,而super用来继承属性,两者必须同时出现: value writable和set方法get方法不能
+                }
+                
+                //本文的重点 在class中使用 set方法和get方法 进行属性拦截 
+            
+             }
+        </script>
+    </body>
+</html>

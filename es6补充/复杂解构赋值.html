@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                //基础解构赋值
+
+                //数组基础篇:按顺序依次赋值 , 默认值为undefined
+                let [x,y,z] = [1,2,3];
+                console.log(x,y,z); //1  2  3 
+
+                let [x1,y1,z1]  = [{num:1},{num:2},{num:3}]; 
+                console.log(x1,y1,z1); // {num:1} {num:2} {num:3}
+
+                let [x2,...y2] = [1,2,3,4,5];
+                console.log(x2,y2); // 1 [2,3,4,5]; 
+
+                //对象基础篇:同名属性的值而不是按顺序 , 默认值为undefined
+                let {num2,num1,num3,num4} = {num1:1,num2:()=>{},num3:'age'}
+                console.log(num1,num2,num3,num4); //1 f  age undefined
+
+                let {x3,...y3} = {x3:100,x1:`helloworld`,x2:100,x4:()=>{}};
+                console.log(x3,y3); //100 {x1: "helloworld", x2: 100, x4: ƒ}
+
+                //进阶篇 
+                //解构赋值可以在函数的返回值中使用(重要功能 可以一次性返回多个值给多个变量接收,之前只可以返回给一个变量接收;
+                function fn(){
+                    return ['a','b'];
+                }
+                let [x4,y4] = fn();
+                console.log(x4,y4);
+                //同理:解构赋值可以在函数中的参数传递中使用
+                function fn1([x,y,z]){
+                    console.log(x,y,z);
+                }
+                fn1([1,2,3]); // 1 2 3 
+
+                function fn2({x,y,z}){
+                    console.log(x,y,z);
+                }
+                fn2({x:'HJ',y:22,z:`male`}); // HJ 22 male
+
+                //默认值
+                let [x5=10,y5=20] = [1];
+                console.log(x5,y5); //1 20
+                let [x6=10,y6=x6] = [1];
+                console.log(x6,y6); //1,1
+                let {name1=`HJ`,age1=20} ={name1:`male`};
+                console.log(name1,age1); //male 20
+                let {name2=`HJ`,age2=name2} ={name2:`male`};
+                console.log(name2,age2); //male male
+                //可以看出解构赋值的执行过程: 按顺序依次声明变量和赋值;
+
+                
+
+                //解构对象重命名(数组没有,因为数组都是按顺序不需要名字对应)
+                let {f1:f3 , f2} = {f1:1,f2:"wuhu"};
+                //console.log(f1,f2,f3); //f1 is not defined  f1的值赋给f3了 f1就被系统回收了
+                console.log(f2,f3);
+                
+                //嵌套解构 ******
+                var [a,b,c] = [11,[1,2,3],33];
+                console.log(a,b,c); //11 [1,2,3] 33
+                var [a,[b,d],c] = [11,[1,2,3],33];
+                console.log(a,b,c,d); //11 1 33 2
+
+                var {a,b,c} = {a:11,b:{d:11,e:11},c:'kkk'};
+                console.log(a,b,c); // 11 {x:11,y:11} 'kkk'
+                var {a,b:{d,e},c} = {a:11,b:{d:11,e:11},c:'kkk'};
+                console.log(d,e); //11 11
+                
+                //语法总结 数组的嵌套 直接嵌套[] ,对象嵌套{}, 不过形式上要和 = 右边一致
+
+                let testVar = ['123',{name:'redjjj',parent:{father:'dad',mother:'mon'}},123];
+                var [a,{parent:{father:ff1,mother}},c] = testVar;
+                console.log(ff1,mother);
+            }
+        </script>
+    </body>
+</html>

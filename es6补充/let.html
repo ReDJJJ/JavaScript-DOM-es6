@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                // let的特性: 
+                    // 不允许重复声明
+                    // 不参与变量提升
+                    // 块级作用域 {}包裹的代码 都具有块级特性
+                let a;
+                let b,c;
+                let d=200,E;
+
+                if(1){
+                    let A = 100; //let声明的变量是块级作用域,所以A只在这个if块内有效
+                    var B = 100; //B是全局变量
+                }
+
+                {
+                    let name = "洪江";//直接使用{}生成块级
+                    //let可以很好的保护全局作用域,不会污染作用域
+                }
+            }
+        </script>
+    </body>
+</html>

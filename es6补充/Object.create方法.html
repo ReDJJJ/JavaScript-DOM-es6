@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Object.create</title>
+        <style>
+
+        </style>
+    </head>
+    <body>
+        <script>
+            //三种方法创建变量  构造函数法 字面量法 和 Object.create
+
+            //Object.create方法: 创建对象,以指定对象为原型proto创建新对象
+
+            //基本演示
+            var a = {a:100};
+            var b = Object.create(a); //b是一个以a为原型的空对象
+
+            //Object.create 可以实现对象继承(改变原型链)()
+            var car = {
+                objName:"汽车",
+                run(){
+                    console.log("行驶");
+                }
+            }
+            var tesla = Object.create(car,{
+                carName:{
+                    value:"特斯拉",
+                    writable:true,
+                    configurable:true,
+                    enumerable:true,
+                    //三个属性,分别代表carName 是否 可写 可删 可遍历
+                }
+            })//注意第二个参数结构 首先是一个对象,然后每个属性也都是一个属性描述对象
+            console.log(tesla.objName,tesla.carName,tesla.run);
+
+
+            //属性设置的两个方法 set 和 get 方法
+            //深层理解: set方法和get方法,这两个分别是设置属性和获取属性时的回调函数 (就是设置属性和获取属性的时候会自动执行这set 或者 get 函数)
+            var carNameList = ["特斯拉","大众",'丰田'];
+            var vw = Object.create(car,{
+                carName:{
+                    configurable:true,
+                    enumerable:true,
+                    //get和set的设置不能与value和writable同时存在 !!个人盲区 value writable不能和setget方法同时出现
+                    set:function(v){
+                            //在进行复制的时候,复制内容会自动的给第一个形参 
+                            //set函数利用this.carName.value来设置属性值
+                            carNameList[1] = v;
+
+                            //前往不能写this.carName = v 会导致爆栈 (无限次递归 )
+                    },
+                    get:function(){
+                        return carNameList[1];
+                    }
+                    //set和get方法此处指向新创建的对象
+                }
+            })
+            console.log(vw.carName);
+            vw.carName = "保时捷";
+            console.log(vw.carName);
+            
+            //set 方法和 get 方法主要还是 属性本身或者属性之间有一定的逻辑  里面的this指向新创建的对象
+            //否则 get方法中 return this.carName 和 set方法中 this.carName = v ; 这不是脱裤子放屁么?
+            // 例如 余额属性,要存款了,设置时要判断存款是否合法 是否安全等等之类的逻辑 就可以写在set方法里面了 而读取余额的时候的安全判断就可以写在get函数里面
+            
+             
+            
+        </script>
+    </body>
+</html>

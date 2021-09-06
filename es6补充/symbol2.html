@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                //for in 循环是遍历不到 symbol类型的属性方法的
+                let i = Symbol("跑步"),gender = "gender";
+                let obj = {
+                    name:"HJ",
+                    age:23,
+                    [gender]:"male",
+                    [i](){
+                        console.log('run');
+                    }
+                }
+
+                for (const key in obj) {
+                    console.log(key,obj[key]);
+                }
+                console.log(Object.getOwnPropertySymbols(obj)); //获取所以的symbol类型的属性名 ,返回   数组
+                console.log(Reflect.ownKeys(obj)); //获取所有属性方法(包括symbol),返回数组
+            }
+        </script>
+    </body>
+</html>

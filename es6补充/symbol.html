@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                //Symbol 每个Symbol的值都是独一无二的,哪怕字符串描述一样(除非使用Symbol.for方法,因为.for方法的Symbol的值是根据字符串描述生成的),后台也都是不一样的
+
+                //创建symbol类型的值 
+                let i = Symbol();  
+                console.log(i);
+
+                 //添加字符串描述
+                 let j = Symbol("字符串描述");
+                console.log(j);
+                
+                //调用Symbol.for 方法来创建symbol类型的值,此处会根据字符串描述生成symbol值
+                let k = Symbol.for("字符串描述");
+                console.log(k);
+               
+
+
+                //Symbol 应用场景: 避免命名冲突 例如为一个很大的对象不清楚内部情况下添加属性方法时
+                let obj = {
+                    run(){
+                        console.log('run');
+                    }
+                }
+                let run = Symbol('run');
+                obj[run] = () => console.log("TEST");
+                //注意,symbol添加的属性或者方法调用的时候,需要使用[]语法 obj[run]() 因为run是一个变量;
+
+                //语法不允许情况 ,在对象内部使用symbol函数
+                // let obj1 = {
+                //     Symbol("方法"):function(){} //语法不通过
+                // }
+
+                //补充知识点:对象的属性想使用变量怎么办呢? 使用动态特征 也就是[]语法在对象内部的体现
+                let name = 'name' , age = Symbol("age");
+                let obj2 = {
+                    [name]:"HJ",
+                    [age]:"22",
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,39 @@
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                class Person {
+                    constructor(firstName,lastName,age){
+                        this.firstName = firstName;
+                        this.lastName = lastName;
+                        this.age = age;
+                    }
+                    eat(){
+                        console.log("eat");
+                    }
+                    //set方法和get方法,在类中设置可以给所有的实例化对象使用
+                    //语法略有不同,在Object.create 和Object.definedProperties中,set和get是在属性对象中的
+                    //而class类中 
+                    //get 属性名(){}   set 属性名(value){} //其中value是用户设置的值,默认传递给第一个参数
+                    get fullName (){
+                        return `${this.firstName}${this.lastName}`;
+                    }
+                    set fullName (value){
+                        let arr = value.split("-");
+                        this.firstName = arr[0];
+                        this.lastName = arr[1];
+                    }
+                }
+
+                let p1 = new Person('H','j',23);
+                console.log(p1.fullName);
+                p1.fullName ='HJ-JIJ';
+                console.log(p1.fullName);
+            }
+        </script>
+    </body>
+</html>

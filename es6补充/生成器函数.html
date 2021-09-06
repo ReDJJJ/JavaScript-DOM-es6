@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+    <script>
+        window.onload = function () {
+            //生成器函数
+            //* 的位置只要在function 与函数名之间即可
+            function * gen(){
+                //绝大部分语句都与普通函数无区别,但是有个yield语句
+                console.log("测试");
+
+                //yield语句后面书写js的表达式
+                yield "可这世间疾苦";
+                yield '照样没放过我';
+                yield function fn (){console.log(123)};
+                return 'DONE RETURN' ; 
+            }
+
+            //生成器函数调用起来语法一致()  但是生成器函数调用是为了生成一个迭代器返回
+            let iterator = gen();
+            console.log(iterator.next());
+            console.log(iterator.next());
+            console.log(iterator.next());
+            console.log(iterator.next());
+             
+            //生成初体验  *放置在function和函数名之间  yield语句后面可以放置js的表达式 yield将代码分割成了多个部分,每次执行迭代器对象的next方法都会按照顺序执行一部分 
+        }
+    </script>
+</body>
+
+</html>

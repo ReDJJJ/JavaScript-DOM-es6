@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                function getUser(){
+                    setTimeout(function(){
+                        let data = "用户数据"; //抽象的获取数据模块
+                        iterator.next(data); //首个关键点:下一步执行过程由上一步实现过程开启
+                        //第二个关键点, 在第一块获取的数据可以作为next()的实参 
+                        //!!!所以上一节那么奇怪的next的实参特征在此就用上了
+                    },1000)
+                }
+
+                function getGoods(){
+                    setTimeout(function(){
+                        let data = "商品数据";
+                    },1000)
+                }
+
+                function * gen(){
+                    let UserData = yield  getUser();
+                    console.log(UserData); //UserData数据从next函数传递的实参中得到;
+                    let GoodsData= yield  getGoods();
+                    console.log(GoodsData) ;  
+                }
+                let iterator = gen();
+                iterator.next(); //第一次next函数的实参无意义
+
+
+                //将异步任务各个封装成函数模块
+                //将各个异步模块放入生成器函数,并插入关键字yield进行生成器函数中的代码分块
+                //生成器函数调用,生成迭代器对象;
+                //迭代器对象.next();执行第一模块;
+                //第一模块中的结尾 启动第二模块 iterator.next(); 并且可以将第一模块获取的数据作为此次next()的实参,然后在生产器函数中用一个变量接收;
+            }
+        </script>
+    </body>
+</html>

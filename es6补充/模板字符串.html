@@ -1,0 +1,25 @@
+模板字符串格式一句话: `${变量}普通字符串`
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                "use strict";
+                let a = 100
+                let str = `${a}hahah`;
+                console.log(str);
+
+                str = `
+                    <li>
+                        ...    
+                    </li>
+                `
+                //应用场景  ``内部允许换行  而" '' 都不支持换行 一换行就报错
+                // 所以在构建的字符串为 HTML标签语句的时候  用``就很可以 就像在BODY内部增加标签的格式一样
+            }
+        </script>
+    </body>
+</html>

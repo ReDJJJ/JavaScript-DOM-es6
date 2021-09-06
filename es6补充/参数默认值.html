@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+
+                //函数参数的默认值
+                function fn(a,b=10){
+                    b = b | 10; //ES5写法
+                    return a+b;
+                    //参数的默认值,具有默认值的参数往后靠,才能体现默认值的作用,因为一般没有赋值容易变成undefined的都是靠后的参数
+                }
+
+                // 利用解构赋值一次性 完成多个形参的参数传递
+                function send({method,url,data}){
+                    console.log(method);
+                    console.log(url);
+                    console.log(data);
+                }
+                obj = {
+                    method:"GET",
+                    url:"http://www.baidu.com",
+                    data:{a:100,b:200},
+                }
+                send(obj);
+                //解构赋值的一个应用 {形参列表} = 对象  [形参列表] = 数组;
+                //而对象和数组就是传递的实参
+
+
+                // 解构赋值和函数参数默认值结合使用
+                function send({method="POST",url="www.helloworld",data}){
+                    console.log(method); //POST
+                    console.log(url);
+                    console.log(data);
+                }
+                send({
+                    //不穿method 的值,则method的值就为默认值POST
+                    url:"http://www.baidu.com",
+                    data:{a:100,b:200},
+                });
+            }
+        </script>
+    </body>
+</html>

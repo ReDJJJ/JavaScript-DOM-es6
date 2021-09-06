@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+
+                // Object.definedProperties(obj,{属性列表对象})
+                // 主要功能:加一些需要安全权限的属性,或者属性之间拥有一定的逻辑
+
+                var car = {
+                    objName:'汽车',
+                    run:function(){
+                        console.log('run');
+                    }
+                }
+
+                Object.defineProperties(car,{
+                    price:{
+                        value:'$10000',
+                        writable:false,
+                        configurable:false,
+                        enumerable:true,
+                    },
+                    age:{
+                        value:2000,
+                        writable:false,
+                        configurable:false,
+                        enumerable:true,
+                    }
+                    //为car 添加不可更改删除 只可以遍历的price age属性
+                })
+
+                var person = {
+                    firstName : '刘',
+                    lastName : "德华",
+                }
+
+                Object.defineProperties(person,{
+                    fullname:{
+                        get:function(){
+                            return this.firstName+this.lastName;
+                        },
+                        set:function(value){
+                            var nameArr = value.split("-");
+                            this.firstName = nameArr[0];
+                            this.lastName = nameArr[1];
+                        }
+                    }
+                })
+                console.log(person.fullname);
+                person.fullname = `洪-江`;
+                console.log(person.fullname);
+            }
+                
+        </script>
+    </body>
+</html>

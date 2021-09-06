@@ -1,0 +1,32 @@
+
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                //需求 利用get方法求总数
+                let stu={
+                    name:'3',score:70,
+                }
+
+                Object.defineProperties(stu,{
+                    total:{
+                        configurable:true,
+                        enumerable:true,
+                        get:function(){
+                            for (const key in stu) {
+                                console.log(this);
+                                //此处get的调用者是stu ,所以this指向stu , 没毛病 , obj.方法或者obj.total, 会触发get回调函数,所以此处的this是指向stu这个对象的,没毛病
+                            }
+                        }
+                    }
+                })
+             console.log(stu.total);
+            
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                // const 特性 
+                    // 1 声明的变量是不可更改的
+                    // 2 具有块级作用域
+                    // 3 不参与预解析
+                    // 4 在声明的同时必须赋值
+                    // 5 不可重复声明
+                    
+                    // 比起let 多了两个特性 (声明必须赋值 还有不可更改)
+
+                    const PLAYER = "UZI" ;
+                    // const 声明的变量一般为大写(书写规范)
+
+                    // 注意const 是变量的值不变,但是变量的值指向的内容 可以改变
+                    const RNG = ['XIAOHU','GALA','MING','WEI','CYING'];
+                    //RNG 这个变量不可更改只能指向这个地址,但是RNG数组的内容是可以改变的
+                    //RNG = 100 ; 报错,不允许修改常量值
+                    RNG.push("uzi,letme");
+                    // 其内容可以改变
+            }
+        </script>
+    </body>
+</html>

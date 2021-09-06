@@ -1,0 +1,25 @@
+//了解 
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                //Symbol内部还有十一个方法,这些方法指向语言内部,在待定场景会自动执行;
+                //Symbol内部属性都是为了 扩展对象的功能 
+                // 并且Symbol内部的属性方法 不是固定的字符串 而也是一个独一无二的值(js语言特性)
+                // 所以引用的使用也要[]语法 obj[Symbol.iteator] = ..
+
+                let school = {
+                    name:'福建师范大学',
+                    [Symbol.hasInstance]:function(){
+                        console.log('instanceof 判断时会自动触发Symbol.hasInstance这个方法,并且返回结果由这个函数决定');
+                        return true;
+                    }
+                }
+                console.log(school instanceof Array);
+            }
+        </script>
+    </body>
+</html>

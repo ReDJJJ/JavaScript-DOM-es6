@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                //set是ES6的一种数据结构,是元素都是唯一值的集合(自动去重);
+                let s1 = new Set(); //创建空集合
+                console.log(s1); //Set(0)
+                let s2 = new Set([1,2,3,1,2]); //set不允许重复元素,每个元素都是唯一的
+                console.log(s2);//Set(3) {1, 2, 3} 自动查重
+
+                //属性
+                console.log(s2.size) ; // 3  类似[].length
+
+                //添加
+                s2.add(6);  //类似 arr.push
+                console.log(s2);//  Set(4) {1, 2, 3, 6}
+                //删除 
+                s2.delete(6);
+                console.log(s2);//  Set(4) {1, 2, 3}
+                //检测
+                console.log(s2.has(10)); 
+                //清空
+                s2.clear()
+                console.log(s2);
+                //遍历set
+                s2 = new Set([1,2,3]);
+                for (const value of s2) {
+                    console.log(value); 
+                }
+
+                //set实践:数组去重
+                let arr = [1,2,3,1,2];
+                let s3 = new Set(arr); //将数组存入set集合中去重
+                let newArr = [...s3]; //利用...将运算符拆包 并[]存入新的数组中;
+
+                
+
+            }
+        </script>
+    </body>
+</html>

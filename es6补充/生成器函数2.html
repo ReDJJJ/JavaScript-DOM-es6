@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+    <img src="./images/1.jpg.png" alt="">
+    <script>
+        window.onload = function () {
+            function * gen(arg){
+                //绝大部分语句都与普通函数无区别,但是有个yield语句
+                console.log(123);
+                console.log(arg);
+                yield "1";
+                yield "2";
+                yield "3";
+            }
+
+            //生成器函数调语法()  但是生成器函数调用是为了生成一个迭代器返回,而不会执行内部代码,执行内部代码看iterator的next方法
+            let iterator = gen("AAA");
+            //并不会打印123 和arg 生成器调用的时候目的是为了产生迭代器对象
+
+            console.log(iterator.next()); //执行第一段代码 输出123 和arg和 "1"
+            // console.log(iterator.next());
+            // console.log(iterator.next());
+            // console.log(iterator.next());
+             
+            //yield 关键字后面语句的执行结果 将是next函数的返回值
+            //而next函数的实参 将作为上部分yield语句的执行结果
+
+            function * fn (){
+                console.log('A');
+                let result1 = yield 1;
+                console.log(result1);
+                let result2 = yield 2;
+                console.log(result2);
+                let result3 = yield 3;
+                console.log(result3);
+            }
+            let iterator2 = fn(); //获取迭代器对象
+            console.log(iterator.next());
+            console.log(iterator.next());
+            console.log(iterator.next());
+            //在获取迭代器对象之后 首个next的实参是没有什么作用的.而后续的next的实参就是上一条yield语句的返回结果
+            //而yield语句后面的js语句的执行结果就是next函数的返回值 
+            //注意顺序: 第几个yield语句后面语句的执行结果就是第几个next()的返回值 
+            //          next函数传递的实参就是上一条 yield语句的返回值 yield也是一个函数 yield语句的返回值分别给了变量result1 result2 result3
+
+            //总结:Generator函数是ES6提供的一种异步编程解决方案,生成器函数在执行时候能分段分时(可暂停);
+            //调用生成器函数不会马上执行内容语句,而是返回迭代器对象
+            //当此迭代器的next方法调用时候,将会执行到首次遇见的yield语句为止;
+            //next方法返回的是一个对象{value : XXX , done : T/F} value的值取决于yield语句后面的执行结果 而done代表是否还有剩余语句未执行
+            // yield 语句后面js语句为此次next方法的返回值对象中的value属性的值
+            // 调用next方法 ,如果传入了参数,那么这个参数会传给上一条执行的yield语句左边的变量 例如上面的result1 2 3
+
+        }
+    </script>
+</body>
+
+</html>

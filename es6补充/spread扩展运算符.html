@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <script>
+            window.onload = function(){
+                let X = [1,2,3,4,5];
+                let fn1 = function ([a,b,c,d=10,e]) {
+                    console.log(a,b,c,d,e);
+                }
+                fn1(X); //解构赋值一次性完成多个参数传递 (与rest和spread都无关)
+
+
+                //...运算符分为打包和拆包,打包一般出现在形参中...args(用来替代arguments),而拆包拆的对象有两个:一个是数组一个是对象
+                //spread运算符 相当于 rest运算符的逆运算(前者拆包,后者打包)
+                //spread运算符之一作用 将数组转换成参数的序列
+                let arr = [1,2,3,4,5];
+                let arr1 = ['ABC',2,3,{name:"HJ"},5];
+
+                console.log(...arr);  //1,2,3,4,5
+                console.log(...arr1); //ABC 2 3 Object 5   ...运算符直接解包成这样子,...特别难接收,所以...拆包一般用于传递传输的时候使用,此时会自动按序接收,个数多或少也没关系
+
+                
+
+                let fn2 = function(...args) {
+                    console.log(args);
+                }
+                fn2(...arr); //将arr拆包,然后收集起来给args  (rest和spread互相逆运算)
+
+                let fn3 = function() {
+                    console.log(arguments);
+                }
+                fn3(...arr);  //...拆包 相当于fn(1,2,3,4,5) 
+
+                //可以利用...完成深拷贝 
+                let ARR = arr ; //浅拷贝
+                let ARR1 = [...arr]; //!!!深拷贝 因为...拆包是要创建堆内存的,...拆包完后又[]包裹起来成为数组,相当于获取了内容并创建了一个独立的新数组.
+
+                //spread运算符在对象中的情况
+                let obj1 = {
+                    name:'HJ',
+                    age:23
+                }
+                let obj2 = {
+                    gender:'HJ',
+                }
+               obj3 = {...obj1,...obj2};
+               console.log(obj3);   //{name: "HJ", age: 23, gender: "HJ"} ...将对象拆包(砍掉{})
+                console.log(...obj1);// Found non-callable @@iterator 没有迭代器,所以说特别奇怪 上面拆包成功而下面拆包打印会报错
+
+               //...运算符拆包的时候 会开辟堆内存！！！！！所以配合拆包后配合 [] 和 {} 会创建一个新的数组或者对象
+
+               //...spread运算符的应用
+               // newArr= [...arr1]; //复制内容并创建新数组
+               // newArr= [...arr1,...arr2] ;  //合并两个数组并创建新数组
+               // newArr = [...arguments] ; //将伪数组转化为真数组 (...获取内容,然后[]成为数组)
+            }
+        </script>
+    </body>
+</html>

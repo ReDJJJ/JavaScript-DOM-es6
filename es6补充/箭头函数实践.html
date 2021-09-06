@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <style>
+            div{
+                width: 30%;
+                height: 30%;
+                background: blue;
+            }
+        </style>
+    </head>
+    <body>
+        <div></div>
+        <script>
+            window.onload = function(){
+                let div = document.querySelector("div");
+                // div.onclick = function(){
+                //     setTimeout(function(){
+                //         div.style.background = `pink`;
+                //         //this.style.background = 'pink'; 不生效,此处的this指向window而不是指向事件源,因为该this虽然在事件内部,但是又是在事件内部的定时器的回调函数中,所以就是普通的函数调用,this指向window
+                //         //console.log(this) window
+                //     },2000)
+                // }
+                //点击两秒后 盒子变粉色 
+
+                //但是利用箭头函数this的静态性和依赖性 可以在定时器的内部内部中使用this指向事件源
+                div.addEventListener("click",function(){ //注意此处不能用箭头函数,否则定时器内部的箭头函数就会根据外部这个箭头函数进行this指向,并且这个事件内的this根本不会指向事件源
+                    var that = this ; //es5办法 保留this值传给定时器 
+                    setTimeout(()=>{
+                        console.log(this);
+                        this.style.background = 'green';
+                        //箭头函数的这个定时器应用场景非常重要
+                    })
+                }) 
+                //箭头函数 适合与this无关的回调函数 例如定时器,数组方法的回调函数等 (内部this等同外部的this)
+                //箭头函数 不适合于this 有关的函数 例如DOM的事件绑定或者对象中的方法等等
+
+                let obj1 = {
+                    consoleName:function(){
+                        console.log(this);
+                    }
+                }
+                let obj2 = {
+                    consoleName:()=>{
+                        console.log(this);
+                    }
+                }
+                obj1.consoleName(); //obj1
+                obj2.consoleName(); //window
+
+                //所以 使用箭头函数简写的时候 一定要注意this,
+            }
+        </script>
+    </body>
+</html>

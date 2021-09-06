@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+    <script>
+        window.onload = function () {
+            let add = (a, b) => {
+                alert(a + b);
+                console.log(this);
+            }
+
+            //1 this是静态的,this始终指向箭头函数定义时所在作用域下的this的值,无法通过apply call等改变
+            //2 不能作为构造函数使用(实际上就是this指向静态所导致的 会直接报错constructor)
+            //3 不能使用arguments伪数组
+            function getName() {
+                console.log(this.name);
+            }
+            let gName = () => {
+                console.log(this.name);
+            }
+            window.name = "1234";
+            let obj = { name: "ABCD" };
+            //箭头函数this为静态的,看定义时候的this,并不会改变
+            getName.call(obj); //ABCD
+            gName.call(obj); //1234
+
+
+            //语法:
+            // 省略小括号 当形参只有一个的时候
+            // 省略花括号 当代码体只有一条语句的时候,语句的执行结果就是函数返回值
+        }
+    </script>
+</body>
+
+</html>

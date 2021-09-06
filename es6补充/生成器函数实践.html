@@ -1,0 +1,76 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+    <script>
+        window.onload = function () {
+            //生成器 : 用于异步编程 异步行为  体现在I/0 文件读写 网络请求 数据的交互 (其实就是操作系统中的数据之间的同步问题)
+
+            //1s 后控制台输出111 2s 后控制台输出 222  3s后输出333
+            //用定时器可以很简单的完成,而此处用生成器函数generator
+
+            // function * gen (){
+            //     console.log(111);
+            //     yield  ;
+            //     console.log(222);
+            //     yield  ;
+            //     console.log("333")
+            //     yield  ;
+            //     //yield 的感觉很像残缺的return yield后续语句的结果作为next返回值(一个对象)中的value的值;
+            // }
+            // let iterators = gen(); //获取迭代器;
+            // let flag = 0; 
+            // var timer = setInterval(function(){
+            //     console.log(iterators.next());
+            //     if(flag++ == 3){
+            //         clearInterval(timer);
+            //     }
+            // },1000)
+            //以上理解错误 上述个人设计的是第1s 2s 3s 分别打印
+            //实际上是第1s  第3s  第6s 打印
+
+            //不用生成器直接写:
+            //下面这种状态 称之为回调地狱; 回调里面又套回调 消耗资源十分庞大,并且在实际开发中遇到那些体积庞大的IO进程,就会导致崩溃
+            // setTimeout(() => {
+            //     console.log(111);
+            //     setTimeout(() => {
+            //         console.log(222);
+            //         setTimeout(() => {
+            //             console.log(333);
+            //         }, 3000)
+            //     }, 2000)
+            // }, 1000)
+
+            //利用生成器
+            function one(){
+                setTimeout(() => {console.log(1);iterator3.next()},1000)
+            }
+            //关键思路,利用yield制造暂停(异步);然后上一层代码块的末尾结束暂停,开始执行下一块的代码;
+            function two(){
+                setTimeout(() => {console.log(2);iterator3.next();},2000)
+            }
+            function three(){
+                setTimeout(() => {console.log(3);iterator3.next();},3000)
+            }
+
+            function * gen3(){
+                yield one();
+                yield two();
+                yield three();
+                //假若没有yield语句,三个定时器并行计时
+                //此处若又yield语句, 则可以让三个函数串行执行!! 因为有些数据之间是由前后关系的,有了这个生成器就可以保证数据之间的先后顺序关系; (经典同步问题)
+            }
+
+            let iterator3 = gen3();
+            iterator3.next();
+
+
+
+        }
+    </script>
+</body>
+
+</html>
